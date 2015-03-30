@@ -1,0 +1,16 @@
+package org.jrapidoc.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Created by papa on 4.1.15.
+ */
+@Target({ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface EntityParam{
+    Class<?> clazz();
+    boolean includeSubTypes() default false;
+}

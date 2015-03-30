@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>jRAPIDoc</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script src="js/utils/Properties.js"></script>
+    <script src="js/utils/Utils.js"></script>
+    <script src="js/model/apimodel.js"></script>
+    <script src="js/controller/listeners.js"></script>
+    <script src="js/controller/tester/tester.js"></script>
+    <script src="js/view/Graphics.js"></script>
+    <script src="js/controller/Initializer.js"></script>
+    <script>
+        var windowloaded = function () {
+            new Initialiser().initialise();
+        };
+        window.addEventListener("load", windowloaded);
+    </script>
+</head>
+<body>
+<div id="header"></div>
+<div id="menu">
+    <ul></ul>
+</div>
+<div id="content">
+
+</div>
+<div id="typesContent"></div>
+<div id="typeTemplate">
+    <span></span>
+
+</div>
+<div id="descriptionTemplate" class="description">
+    <span class="descriptionLabel">Description: </span><span class="descriptionValue"></span>
+</div>
+<div id="propertiesTemplate" class="properties">
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+    </table>
+</div>
+<div id="optionsTemplate">
+    <span class="optionsLabel">Options: </span>
+</div>
+<div id="typerefTemplate">
+    <span class="typerefLabel">Type: </span><span></span>
+</div>
+<div id="requiredTemplate">
+    <span class="requiredLabel">Required: </span><span></span>
+</div>
+<div id="paramTemplate">
+    <span class="parameterName"></span>
+    <!--description templ-->
+    <!--typeref templ-->
+    <!--options templ-->
+    <!--required templ-->
+</div>
+<div id="parameterTypeTemplate">
+    <span class="paramTypeLabel"></span>
+</div>
+<div id="requestTemplate">
+    <span class="requestLabel"></span>
+</div>
+<div id="responsesTemplate">
+    <span class="responsesLabel"></span>
+</div>
+<div id="responseTemplate">
+    <span class="responseLabel"></span>
+</div>
+<div id="statusTemplate">
+    <span class="statusLabel">Status: </span><span></span>
+</div>
+<div id="methodTemplate">
+    <span class="methodLabel"></span>
+</div>
+<div id="methodsTemplate">
+    <span class="methodsLabel"></span>
+</div>
+<div id="resourceTemplate">
+</div>
+<div id="subresourceTemplate" class="subresource">
+</div>
+<div id="pathTemplate">
+    <span class="pathLabel"></span>
+</div>
+</body>
+</html>

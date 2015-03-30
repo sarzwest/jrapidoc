@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.jrapidoc</groupId>
+    <artifactId>jrapidoc-pom</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <org.jrapidoc.version>1.0-SNAPSHOT</org.jrapidoc.version>
+        <com.fasterxml.jackson.version>2.5.0</com.fasterxml.jackson.version>
+    </properties>
+
+    <modules>
+        <module>jrapidoc-rest-plugin</module>
+        <module>jrapidoc-soap-plugin</module>
+        <module>rest-dependency</module>
+        <!--<module>../airserviceopenshift</module>-->
+        <module>jrapidoc-gui</module>
+        <module>jrapidoc-model</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.3</version>
+                    <executions>
+                        <execution>
+                            <id>generated-helpmojo</id>
+                            <goals>
+                                <goal>helpmojo</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>mojo-descriptor</id>
+                            <phase>process-classes</phase>
+                            <goals>
+                                <goal>descriptor</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+                        <extractors>
+                            <extractor>java-annotations</extractor>
+                        </extractors>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--JRAPIDoc BEGIN-->
+            <dependency>
+                <groupId>org.jrapidoc</groupId>
+                <artifactId>jrapidoc-model</artifactId>
+                <version>${org.jrapidoc.version}</version>
+            </dependency>
+            <!--JRAPIDoc END-->
+            <!--StringUtils BEGIN-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.0</version>
+            </dependency>
+            <!--StringUtils END-->
+            <dependency>
+                <groupId>org.apache.maven.plugin-tools</groupId>
+                <artifactId>maven-plugin-annotations</artifactId>
+                <version>3.3</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-plugin-api</artifactId>
+                <version>2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-core</artifactId>
+                <version>3.0.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jrapidoc</groupId>
+                <artifactId>rest-dependency</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--Jackson fasterxml BEGIN-->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <!-- Note: core-annotations version x.y.0 is generally compatible with
+                     (identical to) version x.y.1, x.y.2, etc. -->
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-jaxb-annotations</artifactId>
+                <version>${com.fasterxml.jackson.version}</version>
+            </dependency>
+            <!--Jackson fasterxml END-->
+            <!--JUnit BEGIN-->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
+            </dependency>
+            <!--JUnit END-->
+        </dependencies>
+    </dependencyManagement>
+</project>
