@@ -1,7 +1,6 @@
 package org.jboss.resteasy.spi.metadata;
 
 import org.jrapidoc.annotation.*;
-import org.jrapidoc.exception.EmptyReturnTypeException;
 import org.jboss.resteasy.annotations.Body;
 import org.jboss.resteasy.annotations.Form;
 import org.jboss.resteasy.annotations.Suspend;
@@ -11,19 +10,16 @@ import org.jboss.resteasy.util.IsHttpMethod;
 import org.jboss.resteasy.util.MethodHashing;
 import org.jboss.resteasy.util.PickConstructor;
 import org.jboss.resteasy.util.Types;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import javax.ws.rs.*;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.jboss.resteasy.util.FindAnnotation.findAnnotation;
 
@@ -412,26 +408,10 @@ public class ResourceBuilder {
             return (T) this;
         }
 
-        public T response(HttpStatus httpStatus) throws EmptyReturnTypeException {
-            ResponseObjectBuilder responseObjectBuilder = new ResponseObjectBuilder();
-            responseObjectBuilder.status(httpStatus.http());
-            for (Cookie cookie : httpStatus.cookies()) {
-                responseObjectBuilder.cookie(cookie.value());
-            }
-            for (ReturnTypes returnTypes : httpStatus.types()) {
-                for (ReturnType returnType : returnTypes.value()) {
-                    if (returnType.value().length == 0) {
-                        throw new EmptyReturnTypeException("ReturnType annotation does not contain value");
-                    }
-//                    if(){
-
-//                    }
-                }
-            }
-//            for (ReturnType type : httpStatus.types()) {
-//                responseObjectBuilder.type(type.value(), type.includeSubTypes());
-//            }
-            locator.responseObjects.add(responseObjectBuilder.buildReturnType());
+        public T response(int http, String[] headers, String[] cookies,Class<?> type,Type parameterized,  Return.Structure structure) {
+            ResponseObjectBuilder responseBuilder = new ResponseObjectBuilder();
+            ReturnOption option = responseBuilder.status(http).headers(Arrays.asList(headers)).cookies(Arrays.asList(cookies)).type(type).parameterized(parameterized).structure(structure).buildReturnOption();
+            locator.returnOptions.add(option);
             return (T) this;
         }
     }
@@ -570,29 +550,44 @@ public class ResourceBuilder {
 
     public static class ResponseObjectBuilder {
 
-        ResponseObject responseObject;
+        ReturnOption returnOption;
 
         public ResponseObjectBuilder() {
-            responseObject = new ResponseObject();
+            returnOption = new ReturnOption();
         }
 
         public ResponseObjectBuilder status(int status) {
-            responseObject.status = status;
+            returnOption.status = status;
             return this;
         }
 
-        public ResponseObjectBuilder cookie(String cookie) {
-            responseObject.cookies.add(cookie);
+        public ResponseObjectBuilder headers(List<String> headers) {
+            returnOption.headers.addAll(headers);
             return this;
         }
 
-        public ResponseObjectBuilder type(Class<?> clazz, boolean includeSubTypes) {
-            responseObject.addReturnType(clazz, includeSubTypes);
+        public ResponseObjectBuilder cookies(List<String> cookies) {
+            returnOption.cookies.addAll(cookies);
             return this;
         }
 
-        public ResponseObject buildReturnType() {
-            return responseObject;
+        public ResponseObjectBuilder parameterized(Type parameterized) {
+            returnOption.parameterized(parameterized);
+            return this;
+        }
+
+        public ResponseObjectBuilder type(Class<?> clazz) {
+            returnOption.setReturnClass(clazz);
+            return this;
+        }
+
+        public ResponseObjectBuilder structure(Return.Structure structure) {
+            returnOption.setStructure(structure);
+            return this;
+        }
+
+        public ReturnOption buildReturnOption() {
+            return returnOption;
         }
     }
 
@@ -663,7 +658,7 @@ public class ResourceBuilder {
     }
 
     private static ResourceClass fromAnnotations(boolean isLocator, Class<?> clazz) {
-        // stupid hack for Weld as it loses generic type information, but retains annotations.
+        // stupid hack for Weld as it loses parameterized type information, but retains annotations.
         if (!clazz.isInterface() && clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Object.class) && isWeldProxy(clazz)) {
             clazz = clazz.getSuperclass();
         }
@@ -859,10 +854,14 @@ public class ResourceBuilder {
                     consumes = resourceClassBuilder.resourceClass.getClazz().getAnnotation(Consumes.class);
                 if (consumes == null) consumes = method.getDeclaringClass().getAnnotation(Consumes.class);
                 if (consumes != null) resourceMethodBuilder.consumes(consumes.value());
-                if (method.isAnnotationPresent(ResponseHttpStatuses.class)) {
-                    for (HttpStatus httpStatus : method.getAnnotation(ResponseHttpStatuses.class).value()) {
-//                        resourceMethodBuilder.response(httpStatus);//todo
+                if (method.isAnnotationPresent(Return.class)) {
+                    createResponse(method.getAnnotation(Return.class), resourceMethodBuilder);
+                }else if(method.isAnnotationPresent(Returns.class)){
+                    for(Return ret: method.getAnnotation(Returns.class).value()){
+                        createResponse(ret, resourceMethodBuilder);
                     }
+                }else{
+//                    responseFromReturn(method.retu);TODO
                 }
             }
             Path methodPath = method.getAnnotation(Path.class);
@@ -871,6 +870,21 @@ public class ResourceBuilder {
                 resourceLocatorBuilder.param(i).fromAnnotations();
             }
             resourceLocatorBuilder.buildMethod();
+        }
+    }
+
+    private static void createResponse(Return ret, ResourceMethodBuilder resourceMethodBuilder) {
+        Type parameterizedType = null;
+        Return.Structure structure = ret.structure();
+        if(structure == Return.Structure.OBJECT){
+            parameterizedType = ret.type();
+            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), ret.type(), ret.type(), ret.structure());
+        }else if(structure == Return.Structure.ARRAY){
+            parameterizedType = ParameterizedTypeImpl.make(List.class, new Type[]{ret.type()}, null);
+            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), List.class, parameterizedType, ret.structure());
+        }else if(structure == Return.Structure.MAP){
+            parameterizedType = ParameterizedTypeImpl.make(Map.class, new Type[]{String.class, ret.type()}, null);
+            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), Map.class, parameterizedType, ret.structure());
         }
     }
 

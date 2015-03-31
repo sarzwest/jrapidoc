@@ -2,7 +2,6 @@ package org.jboss.resteasy.spi.metadata;
 
 import org.jboss.resteasy.util.Types;
 
-import javax.ws.rs.core.Response;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -23,14 +22,14 @@ public class ResourceLocator {
     protected String path;
     protected String pathExample;
     protected String description;
-    protected List<ResponseObject> responseObjects = new ArrayList<ResponseObject>();
+    protected List<ReturnOption> returnOptions = new ArrayList<ReturnOption>();
 
     public ResourceLocator(ResourceClass resourceClass, Method method, Method annotatedMethod) {
         this.resourceClass = resourceClass;
         this.annotatedMethod = annotatedMethod;
         this.method = method;
-        // we initialize generic types based on the method of the resource class rather than the Method that is actually
-        // annotated.  This is so we have the appropriate generic type information.
+        // we initialize parameterized types based on the method of the resource class rather than the Method that is actually
+        // annotated.  This is so we have the appropriate parameterized type information.
         this.genericReturnType = Types.resolveTypeVariables(resourceClass.getClazz(), method.getGenericReturnType());
         this.returnType = Types.getRawType(genericReturnType);
         this.params = new MethodParameter[method.getParameterTypes().length];
@@ -91,14 +90,14 @@ public class ResourceLocator {
         return description;
     }
 
-    public List<ResponseObject> getResponseObjects() {
-        return responseObjects;
+    public List<ReturnOption> getReturnOptions() {
+        return returnOptions;
     }
 
-    public ResponseObject getResponseObjectByStatus(int status) {
-        for (ResponseObject responseObject : responseObjects) {
-            if (responseObject.getStatus() == status) {
-                return responseObject;
+    public ReturnOption getResponseObjectByStatus(int status) {
+        for (ReturnOption returnOption : returnOptions) {
+            if (returnOption.getStatus() == status) {
+                return returnOption;
             }
         }
         return null;

@@ -14,7 +14,7 @@ public @interface Return {
     int http();
     String[] headers() default {};
     String[] cookies() default {};
-    Class<?> type();
+    Class<?> type() default Void.class;
     Structure structure() default Structure.OBJECT;
 
     enum Structure {
