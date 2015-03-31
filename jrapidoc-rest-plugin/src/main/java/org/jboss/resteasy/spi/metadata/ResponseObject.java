@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class ResponseObject {
 
-    Response.Status status;
+    int status;
     Set<String> cookies = new HashSet<String>();
     List<ReturnType> returnTypes = new ArrayList<ReturnType>();
 
@@ -19,7 +19,7 @@ public class ResponseObject {
         returnTypes.add(new ReturnType(clazz, includeSubtypes));
     }
 
-    public Response.Status getStatus() {
+    public int getStatus() {
         return status;
     }
 

@@ -23,11 +23,11 @@ public class Method {
 //    private List<String> produces = new ArrayList<String>();
     private String path;
     private String pathExample;
-    private List<Return> returnOption;
+    private List<Return> returnOptions;
     private Type parameter;
     private String httpMethodType;
 
-    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, /*List<String> consumes, List<String> produces,*/ String path, String pathExample, List<Return> returnOption, Type parameter, String httpMethodType) {
+    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, /*List<String> consumes, List<String> produces,*/ String path, String pathExample, List<Return> returnOptions, Type parameter, String httpMethodType) {
         this.isAsynchronous = isAsynchronous;
         this.headerParams = headerParams;
         this.cookieParams = cookieParams;
@@ -39,13 +39,13 @@ public class Method {
 //        this.produces = produces;
         this.path = path;
         this.pathExample = pathExample;
-        this.returnOption = returnOption;
+        this.returnOptions = returnOptions;
         this.parameter = parameter;
         this.httpMethodType = httpMethodType;
     }
 
-    public MethodBuilder returnOption(Return returnOption) {
-        return new MethodBuilder().returnOption(returnOption);
+    public MethodBuilder returnOption(List<Return> returnOptions) {
+        return new MethodBuilder().returnOptions(returnOptions);
     }
 
     public MethodBuilder path(String path) {
@@ -85,7 +85,7 @@ public class Method {
     
     public Method clone(String httpMethod){
         return new Method(this.isAsynchronous, this.headerParams, this.cookieParams, this.formParams, this.matrixParams,
-                this.pathParams, this.queryParams, this.path, this.pathExample, this.returnOption,
+                this.pathParams, this.queryParams, this.path, this.pathExample, this.returnOptions,
                 this.parameter, httpMethod);
     }
 
@@ -102,7 +102,7 @@ public class Method {
         private List<String> produces = new ArrayList<String>();
         private String path;
         private String pathExample;
-        private List<Return> returnOption;
+        private List<Return> returnOptions;
         private Type parameter;
         private String httpMethodType;
 
@@ -131,8 +131,8 @@ public class Method {
             return this;
         }
 
-        public MethodBuilder returnOption(Return returnOption) {
-            this.returnOption.add(returnOption);
+        public MethodBuilder returnOptions(List<Return> returnOptions) {
+            this.returnOptions.addAll(returnOptions);
             return this;
         }
 
@@ -193,7 +193,7 @@ public class Method {
         }
 
         public Method build(){
-            return new Method(isAsynchronous, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams,/* consumes, produces,*/ path, pathExample, returnOption, parameter, httpMethodType);
+            return new Method(isAsynchronous, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams,/* consumes, produces,*/ path, pathExample, returnOptions, parameter, httpMethodType);
         }
     }
 }

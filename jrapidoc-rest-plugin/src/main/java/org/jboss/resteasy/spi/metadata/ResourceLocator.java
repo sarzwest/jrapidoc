@@ -95,7 +95,7 @@ public class ResourceLocator {
         return responseObjects;
     }
 
-    public ResponseObject getResponseObjectByStatus(Response.Status status) {
+    public ResponseObject getResponseObjectByStatus(int status) {
         for (ResponseObject responseObject : responseObjects) {
             if (responseObject.getStatus() == status) {
                 return responseObject;

@@ -2,10 +2,7 @@ package org.jrapidoc.processor;
 
 import org.jboss.resteasy.spi.metadata.*;
 import org.jrapidoc.RestUtil;
-import org.jrapidoc.model.Method;
-import org.jrapidoc.model.ModelUtil;
-import org.jrapidoc.model.Resource;
-import org.jrapidoc.model.ResourceListing;
+import org.jrapidoc.model.*;
 import org.jrapidoc.model.object.type.Type;
 import org.jrapidoc.model.param.*;
 import org.jrapidoc.model.type.TypeProvider;
@@ -100,8 +97,13 @@ public class ResourceClassProcessor {
             resourceMethod.getHttpMethods().remove(httpMethod);
             break;
         }
-        //TODO methodBuilder.returnOption();
+        methodBuilder.returnOptions(createReturnOptions(resourceMethod));
         return methodBuilder.build();
+    }
+
+    List<Return> createReturnOptions(ResourceMethod resourceMethod){
+        //TODO implement
+        return null;
     }
 
     void addPaths(Method.MethodBuilder methodBuilder, ResourceClass resourceClass, ResourceMethod resourceMethod) {

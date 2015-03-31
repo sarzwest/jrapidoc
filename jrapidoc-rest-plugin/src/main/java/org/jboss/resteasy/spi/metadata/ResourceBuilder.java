@@ -576,7 +576,7 @@ public class ResourceBuilder {
             responseObject = new ResponseObject();
         }
 
-        public ResponseObjectBuilder status(Response.Status status) {
+        public ResponseObjectBuilder status(int status) {
             responseObject.status = status;
             return this;
         }
