@@ -1,5 +1,6 @@
 package org.jboss.resteasy.spi.metadata;
 
+import org.jrapidoc.annotation.*;
 import org.jrapidoc.exception.EmptyReturnTypeException;
 import org.jboss.resteasy.annotations.Body;
 import org.jboss.resteasy.annotations.Form;
