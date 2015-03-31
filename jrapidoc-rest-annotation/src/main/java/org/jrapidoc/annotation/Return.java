@@ -6,10 +6,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by papa on 5.1.15.
+ * Created by papa on 4.1.15.
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Headers {
-    Header[] value();
+public @interface Return {
+    int http();
+    String[] headers() default {};
+    String[] cookies() default {};
+    Class<?> type();
+    Structure structure() default Structure.OBJECT;
+
+    enum Structure {
+        OBJECT, ARRAY, MAP
+    }
 }
