@@ -102,7 +102,7 @@ public class Method {
         private List<String> produces = new ArrayList<String>();
         private String path;
         private String pathExample;
-        private List<Return> returnOptions;
+        private List<Return> returnOptions = new ArrayList<Return>();
         private Type parameter;
         private String httpMethodType;
 

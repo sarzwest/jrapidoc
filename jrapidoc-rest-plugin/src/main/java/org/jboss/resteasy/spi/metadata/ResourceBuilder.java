@@ -1,6 +1,5 @@
 package org.jboss.resteasy.spi.metadata;
 
-import org.jrapidoc.annotation.*;
 import org.jboss.resteasy.annotations.Body;
 import org.jboss.resteasy.annotations.Form;
 import org.jboss.resteasy.annotations.Suspend;
@@ -10,13 +9,15 @@ import org.jboss.resteasy.util.IsHttpMethod;
 import org.jboss.resteasy.util.MethodHashing;
 import org.jboss.resteasy.util.PickConstructor;
 import org.jboss.resteasy.util.Types;
+import org.jrapidoc.annotation.Description;
+import org.jrapidoc.annotation.PathExample;
+import org.jrapidoc.annotation.Return;
+import org.jrapidoc.annotation.Returns;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import javax.ws.rs.*;
 import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
@@ -408,7 +409,7 @@ public class ResourceBuilder {
             return (T) this;
         }
 
-        public T response(int http, String[] headers, String[] cookies,Class<?> type,Type parameterized,  Return.Structure structure) {
+        public T response(int http, String[] headers, String[] cookies, Class<?> type, Type parameterized, Return.Structure structure) {
             ResponseObjectBuilder responseBuilder = new ResponseObjectBuilder();
             ReturnOption option = responseBuilder.status(http).headers(Arrays.asList(headers)).cookies(Arrays.asList(cookies)).type(type).parameterized(parameterized).structure(structure).buildReturnOption();
             locator.returnOptions.add(option);
@@ -475,7 +476,7 @@ public class ResourceBuilder {
             for (String produce : produces) {
                 String[] split = produce.split(",");
                 for (String s : split) {
-                    MediaType mediaType = (MediaType)new MediaTypeHeaderDelegate().fromString(s);
+                    MediaType mediaType = (MediaType) new MediaTypeHeaderDelegate().fromString(s);
                     mediaTypes.add(mediaType);
                 }
             }
@@ -668,9 +669,9 @@ public class ResourceBuilder {
         PathExample pathExample = clazz.getAnnotation(PathExample.class);
         String pExamValue = (pathExample == null) ? null : pathExample.value();
         Produces produces = clazz.getAnnotation(Produces.class);
-        String[] producesValue = (produces == null)? null:produces.value();
+        String[] producesValue = (produces == null) ? null : produces.value();
         Consumes consumes = clazz.getAnnotation(Consumes.class);
-        String[] consumesValue = (consumes == null)?null:consumes.value();
+        String[] consumesValue = (consumes == null) ? null : consumes.value();
         if (isLocator) {
             builder = locator(clazz);
         } else {
@@ -856,12 +857,12 @@ public class ResourceBuilder {
                 if (consumes != null) resourceMethodBuilder.consumes(consumes.value());
                 if (method.isAnnotationPresent(Return.class)) {
                     createResponse(method.getAnnotation(Return.class), resourceMethodBuilder);
-                }else if(method.isAnnotationPresent(Returns.class)){
-                    for(Return ret: method.getAnnotation(Returns.class).value()){
+                } else if (method.isAnnotationPresent(Returns.class)) {
+                    for (Return ret : method.getAnnotation(Returns.class).value()) {
                         createResponse(ret, resourceMethodBuilder);
                     }
-                }else{
-//                    responseFromReturn(method.retu);TODO
+                } else {
+                    responseFromReturn(method.getReturnType(), method.getGenericReturnType(), resourceMethodBuilder);
                 }
             }
             Path methodPath = method.getAnnotation(Path.class);
@@ -873,16 +874,39 @@ public class ResourceBuilder {
         }
     }
 
-    private static void createResponse(Return ret, ResourceMethodBuilder resourceMethodBuilder) {
+    static void responseFromReturn(Class<?> returnClass, Type parameterized, ResourceMethodBuilder resourceMethodBuilder) {
+        if (returnClass.getCanonicalName().equals("void")) {
+            emptyResponse(resourceMethodBuilder);
+        } else if (returnClass.equals(Response.class)) {
+            resourceMethodBuilder.response(200, new String[]{}, new String[]{}, Object.class, Object.class, null);
+        } else if (returnClass.equals(GenericEntity.class)) {
+            if (parameterized.equals(GenericEntity.class)) {
+                emptyResponse(resourceMethodBuilder);
+            } else if (parameterized instanceof ParameterizedType) {
+                ParameterizedType paramType = (ParameterizedType) parameterized;
+                if(paramType.getActualTypeArguments()[0] instanceof Class){
+                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class)paramType.getActualTypeArguments()[0], paramType.getActualTypeArguments()[0], null);
+                }else if(paramType.getActualTypeArguments()[0] instanceof ParameterizedType){
+                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class)((ParameterizedType)paramType.getActualTypeArguments()[0]).getRawType(), paramType.getActualTypeArguments()[0], null);
+                }
+            }
+        }
+    }
+
+    static void emptyResponse(ResourceMethodBuilder resourceMethodBuilder) {
+        resourceMethodBuilder.response(204, new String[]{}, new String[]{}, null, null, null);
+    }
+
+    static void createResponse(Return ret, ResourceMethodBuilder resourceMethodBuilder) {
         Type parameterizedType = null;
         Return.Structure structure = ret.structure();
-        if(structure == Return.Structure.OBJECT){
+        if (structure == Return.Structure.OBJECT) {
             parameterizedType = ret.type();
             resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), ret.type(), ret.type(), ret.structure());
-        }else if(structure == Return.Structure.ARRAY){
+        } else if (structure == Return.Structure.ARRAY) {
             parameterizedType = ParameterizedTypeImpl.make(List.class, new Type[]{ret.type()}, null);
             resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), List.class, parameterizedType, ret.structure());
-        }else if(structure == Return.Structure.MAP){
+        } else if (structure == Return.Structure.MAP) {
             parameterizedType = ParameterizedTypeImpl.make(Map.class, new Type[]{String.class, ret.type()}, null);
             resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), Map.class, parameterizedType, ret.structure());
         }
