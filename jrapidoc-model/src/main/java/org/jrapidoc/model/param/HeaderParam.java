@@ -71,7 +71,7 @@ public class HeaderParam extends Param  {
         }
 
         @Override
-        public Param build() {
+        public HeaderParam build() {
             return new HeaderParam(name, isRequired, typeref, options, Type.HEADER_PARAM);
         }
     }

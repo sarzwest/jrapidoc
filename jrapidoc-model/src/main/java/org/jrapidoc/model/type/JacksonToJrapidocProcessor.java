@@ -125,7 +125,9 @@ public class JacksonToJrapidocProcessor {
             JavaType keyType = jacksonType.getKeyType();
             JavaType valueType = jacksonType.getContentType();
             Class<?> containerClass = jacksonType.getRawClass();
-            MapTypeJrapidoc type = new MapTypeJrapidoc(containerClass.getName(), signature, keyType.getRawClass().getName(), keyType.toString(), valueType.getRawClass().getName(), valueType.toString());
+            String keySignature = JacksonSignature.createSignature(keyType);
+            String valSignature = JacksonSignature.createSignature(valueType);
+            MapTypeJrapidoc type = new MapTypeJrapidoc(containerClass.getName(), signature, keyType.getRawClass().getName(), keySignature, valueType.getRawClass().getName(), valSignature);
             if (cache.containsKey(signature)) {
                 return cache.get(signature);
             }

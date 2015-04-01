@@ -4,6 +4,7 @@ import org.jrapidoc.model.object.type.Type;
 import org.jrapidoc.model.param.CookieParam;
 import org.jrapidoc.model.param.HeaderParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,12 +28,12 @@ public class Return {
         return new ReturnBuilder().httpStatus(httpStatus);
     }
 
-    public static ReturnBuilder  headerParam(HeaderParam headerParam) {
-        return new ReturnBuilder().headerParam(headerParam);
+    public static ReturnBuilder headerParams(List<HeaderParam> headerParams) {
+        return new ReturnBuilder().headerParams(headerParams);
     }
 
-    public static ReturnBuilder  cookieParam(CookieParam cookieParam) {
-        return new ReturnBuilder().cookieParam(cookieParam);
+    public static ReturnBuilder cookieParams(List<CookieParam> cookieParams) {
+        return new ReturnBuilder().cookieParams(cookieParams);
     }
 
     public static ReturnBuilder  returnType(Type returnType) {
@@ -42,8 +43,8 @@ public class Return {
     public static class ReturnBuilder{
 
         private int httpStatus;
-        private List<HeaderParam> headerParams;
-        private List<CookieParam> cookieParams;
+        private List<HeaderParam> headerParams = new ArrayList<HeaderParam>();
+        private List<CookieParam> cookieParams = new ArrayList<CookieParam>();
         private Type returnType;
 
         public ReturnBuilder httpStatus(int httpStatus) {
@@ -51,13 +52,13 @@ public class Return {
             return this;
         }
 
-        public ReturnBuilder headerParam(HeaderParam headerParam) {
-            this.headerParams.add(headerParam);
+        public ReturnBuilder headerParams(List<HeaderParam> headerParams) {
+            this.headerParams.addAll(headerParams);
             return this;
         }
 
-        public ReturnBuilder cookieParam(CookieParam cookieParam) {
-            this.cookieParams.add(cookieParam);
+        public ReturnBuilder cookieParams(List<CookieParam> cookieParams) {
+            this.cookieParams.addAll(cookieParams);
             return this;
         }
 

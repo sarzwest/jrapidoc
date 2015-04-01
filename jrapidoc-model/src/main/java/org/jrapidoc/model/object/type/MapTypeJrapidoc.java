@@ -7,15 +7,15 @@ package org.jrapidoc.model.object.type;
 public class MapTypeJrapidoc extends org.jrapidoc.model.object.type.Type {
 
     private String keyType;
-    private String keyTypeJacksonToString;
+    private String keyTypeRef;
     private String valueType;
-    private String valueTypeJacksonToString;
+    private String valueTypeRef;
 
-    public MapTypeJrapidoc(String typeName, String jacksonToString, String keyType, String keyTypeJacksonToString, String valueType, String valueTypeJacksonToString) {
-        super(typeName, jacksonToString);
+    public MapTypeJrapidoc(String typeName, String typeRef, String keyType, String keyTypeRef, String valueType, String valueTypeRef) {
+        super(typeName, typeRef);
         this.keyType = keyType;
-        this.keyTypeJacksonToString = keyTypeJacksonToString;
+        this.keyTypeRef = keyTypeRef;
         this.valueType = valueType;
-        this.valueTypeJacksonToString = valueTypeJacksonToString;
+        this.valueTypeRef = valueTypeRef;
     }
 }

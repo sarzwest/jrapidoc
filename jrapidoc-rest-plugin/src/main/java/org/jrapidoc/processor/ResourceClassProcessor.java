@@ -102,8 +102,34 @@ public class ResourceClassProcessor {
     }
 
     List<Return> createReturnOptions(ResourceMethod resourceMethod){
-        //TODO implement
-        return null;
+        List<Return> returnObjects = new ArrayList<Return>();
+        for(ReturnOption returnOption:resourceMethod.getReturnOptions()){
+            returnObjects.add(createReturnOption(returnOption));
+        }
+        return returnObjects;
+    }
+
+    Return createReturnOption(ReturnOption returnOption){
+        Type returnType = typeProvider.createType(returnOption.getParameterized());
+        List<HeaderParam> headerParams = createReturnHeaders(returnOption.getHeaders());
+        List<CookieParam> cookieParams = createReturnCookies(returnOption.getCookies());
+        return Return.httpStatus(returnOption.getStatus()).headerParams(headerParams).cookieParams(cookieParams).returnType(returnType).build();
+    }
+
+    List<HeaderParam> createReturnHeaders(List<String> headersString){
+        List<HeaderParam> items = new ArrayList<HeaderParam>();
+        for(String header:headersString){
+            items.add(new HeaderParam.HeaderParamBuilder().setName(header).setTyperef(ModelUtil.getSimpleTypeSignature(String.class, null)).build());
+        }
+        return items;
+    }
+
+    List<CookieParam> createReturnCookies(List<String> cookiesString){
+        List<CookieParam> items = new ArrayList<CookieParam>();
+        for(String header:cookiesString){
+            items.add(new CookieParam.CookieParamBuilder().setName(header).setTyperef(ModelUtil.getSimpleTypeSignature(String.class, null)).build());
+        }
+        return items;
     }
 
     void addPaths(Method.MethodBuilder methodBuilder, ResourceClass resourceClass, ResourceMethod resourceMethod) {

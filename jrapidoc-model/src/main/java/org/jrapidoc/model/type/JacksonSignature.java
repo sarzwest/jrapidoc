@@ -55,6 +55,6 @@ public class JacksonSignature {
     }
 
     public static String createSignature(MapLikeType mapLikeType) {
-        throw new RuntimeException("not implemented yet");
+        return "map<" + createSignature(mapLikeType.getKeyType()) + "," + createSignature(mapLikeType.getContentType()) + ">";
     }
 }
