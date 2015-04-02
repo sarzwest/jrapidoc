@@ -7,9 +7,7 @@ import org.jrapidoc.model.object.type.Type;
 import org.jrapidoc.model.param.*;
 import org.jrapidoc.model.type.TypeProvider;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by papa on 26.1.15.
@@ -71,6 +69,24 @@ public class ResourceClassProcessor {
         resourceBuilder.path(RestUtil.trimSlash(resourceClass.getPath()));
         resourceBuilder.pathExample(resourceClass.getPathExample());
         resourceBuilder.description(resourceClass.getDescription());
+        addMethods(resourceClass, resourceBuilder);
+        addLocatorMethods(resourceClass, resourceBuilder);
+        return resourceBuilder.build();
+    }
+
+    void addLocatorMethods(ResourceClass resourceClass, Resource.ResourceBuilder resourceBuilder) {
+        for(ResourceLocator resourceLocator:resourceClass.getResourceLocators()){
+            ResourceClass newResourceClass = ResourceBuilder.locatorFromAnnotations(resourceLocator.getReturnType());
+            newResourceClass.setPath(resourceLocator.getFullpath());
+            newResourceClass.setConstructor(resourceClass.getConstructor());
+            ResourceListing locatorListing = createListing(new HashSet<ResourceClass>(Arrays.asList(new ResourceClass[]{newResourceClass})), null);
+            for(Method method:locatorListing.getResources().get(0).getMethods()){
+                resourceBuilder.method(method);
+            }
+        }
+    }
+
+    void addMethods(ResourceClass resourceClass, Resource.ResourceBuilder resourceBuilder) {
         for (ResourceMethod resourceMethod : resourceClass.getResourceMethods()) {
             Method method = createMethod(resourceMethod, resourceClass);
             resourceBuilder.method(method);
@@ -79,7 +95,6 @@ public class ResourceClassProcessor {
                 resourceBuilder.method(method);
             }
         }
-        return resourceBuilder.build();
     }
 
     Method createMethod(ResourceMethod resourceMethod, ResourceClass resourceClass) {
@@ -90,15 +105,20 @@ public class ResourceClassProcessor {
         addConsumesParam(methodBuilder, resourceClass, resourceMethod);
         addProducesParam(methodBuilder, resourceClass, resourceMethod);
         addMethodParams(methodBuilder, resourceMethod);
+        addConstructorParams(methodBuilder, resourceClass);
         addPaths(methodBuilder, resourceClass, resourceMethod);
         methodBuilder.parameter(createParameterType(resourceMethod.getParams()));
+        removeThisMethodFromResource(resourceMethod, methodBuilder);
+        methodBuilder.returnOptions(createReturnOptions(resourceMethod));
+        return methodBuilder.build();
+    }
+
+    void removeThisMethodFromResource(ResourceMethod resourceMethod, Method.MethodBuilder methodBuilder) {
         for (String httpMethod : resourceMethod.getHttpMethods()) {
             methodBuilder.httpMethodType(httpMethod);
             resourceMethod.getHttpMethods().remove(httpMethod);
             break;
         }
-        methodBuilder.returnOptions(createReturnOptions(resourceMethod));
-        return methodBuilder.build();
     }
 
     List<Return> createReturnOptions(ResourceMethod resourceMethod){
@@ -133,7 +153,7 @@ public class ResourceClassProcessor {
     }
 
     void addPaths(Method.MethodBuilder methodBuilder, ResourceClass resourceClass, ResourceMethod resourceMethod) {
-        methodBuilder.path(RestUtil.trimSlash(resourceClass.getPath()) + "/" + RestUtil.trimSlash(resourceMethod.getPath()));
+        methodBuilder.path(RestUtil.trimSlash(RestUtil.trimSlash(resourceClass.getPath()) + "/" + RestUtil.trimSlash(resourceMethod.getPath())));
         methodBuilder.pathExample(resourceMethod.getPathExample());
     }
 
@@ -150,6 +170,15 @@ public class ResourceClassProcessor {
         for (FieldParameter fieldParameter : resourceClass.getFields()) {
             Param param = createParam(fieldParameter);
             methodBuilder.param(param.getType(), param);
+        }
+    }
+
+    void addConstructorParams(Method.MethodBuilder methodBuilder, ResourceClass resourceClass){
+        for (ConstructorParameter constructorParameter : resourceClass.getConstructor().getParams()) {
+            if (RestUtil.isHttpParam(constructorParameter)) {
+                Param param = createParam(constructorParameter);
+                methodBuilder.param(param.getType(), param);
+            }
         }
     }
 

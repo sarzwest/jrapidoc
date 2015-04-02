@@ -55,8 +55,16 @@ public class ResourceClass {
         this.description = description;
     }
 
+    public void setConstructor(ResourceConstructor constructor) {
+        this.constructor = constructor;
+    }
+
     public String getPath() {
         return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getPathExample() {

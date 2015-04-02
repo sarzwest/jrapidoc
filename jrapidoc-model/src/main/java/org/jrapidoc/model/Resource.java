@@ -92,6 +92,10 @@ public class Resource {
         return description;
     }
 
+    public List<Method> getMethods() {
+        return methods;
+    }
+
     public static class ResourceBuilder{
 
         private String path;

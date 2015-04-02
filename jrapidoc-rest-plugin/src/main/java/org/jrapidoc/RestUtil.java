@@ -2,6 +2,7 @@ package org.jrapidoc;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.resteasy.spi.metadata.MethodParameter;
+import org.jboss.resteasy.spi.metadata.Parameter;
 import org.jrapidoc.model.param.Param;
 
 import java.util.Set;
@@ -24,9 +25,9 @@ public class RestUtil {
         return urlPath;
     }
 
-    public static boolean isHttpParam(MethodParameter methodParameter){
+    public static boolean isHttpParam(Parameter parameter){
         try{
-            Param.Type.valueOf(methodParameter.getParamType().name());
+            Param.Type.valueOf(parameter.getParamType().name());
             return true;
         }catch (IllegalArgumentException e){
             return false;

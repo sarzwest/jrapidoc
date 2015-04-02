@@ -667,7 +667,7 @@ public class ResourceBuilder {
         Description description = clazz.getAnnotation(Description.class);
         String descValue = (description == null) ? null : description.value();
         PathExample pathExample = clazz.getAnnotation(PathExample.class);
-        String pExamValue = (pathExample == null) ? null : pathExample.value();
+        String pExamValue = (pathExample == null) ? "" : pathExample.value();
         Produces produces = clazz.getAnnotation(Produces.class);
         String[] producesValue = (produces == null) ? null : produces.value();
         Consumes consumes = clazz.getAnnotation(Consumes.class);
@@ -677,7 +677,7 @@ public class ResourceBuilder {
         } else {
             Path path = clazz.getAnnotation(Path.class);
             if (path == null) {
-                builder = rootResource(clazz, null);
+                builder = rootResource(clazz, "");
             } else {
                 builder = rootResource(clazz, path.value());
             }
@@ -866,7 +866,11 @@ public class ResourceBuilder {
                 }
             }
             Path methodPath = method.getAnnotation(Path.class);
-            if (methodPath != null) resourceLocatorBuilder.path(methodPath.value());
+            if (methodPath != null) {
+                resourceLocatorBuilder.path(methodPath.value());
+            }else{
+                resourceLocatorBuilder.path("");
+            }
             for (int i = 0; i < resourceLocatorBuilder.locator.params.length; i++) {
                 resourceLocatorBuilder.param(i).fromAnnotations();
             }
@@ -884,10 +888,10 @@ public class ResourceBuilder {
                 emptyResponse(resourceMethodBuilder);
             } else if (parameterized instanceof ParameterizedType) {
                 ParameterizedType paramType = (ParameterizedType) parameterized;
-                if(paramType.getActualTypeArguments()[0] instanceof Class){
-                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class)paramType.getActualTypeArguments()[0], paramType.getActualTypeArguments()[0], null);
-                }else if(paramType.getActualTypeArguments()[0] instanceof ParameterizedType){
-                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class)((ParameterizedType)paramType.getActualTypeArguments()[0]).getRawType(), paramType.getActualTypeArguments()[0], null);
+                if (paramType.getActualTypeArguments()[0] instanceof Class) {
+                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) paramType.getActualTypeArguments()[0], paramType.getActualTypeArguments()[0], null);
+                } else if (paramType.getActualTypeArguments()[0] instanceof ParameterizedType) {
+                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) ((ParameterizedType) paramType.getActualTypeArguments()[0]).getRawType(), paramType.getActualTypeArguments()[0], null);
                 }
             }
         }
