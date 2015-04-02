@@ -192,6 +192,10 @@ public class ResourceClassProcessor {
             paramBuilder = new PathParam.PathParamBuilder();
         }else if(parameter.getParamType().name().equals(Param.Type.MATRIX_PARAM.name())){
             paramBuilder = new MatrixParam.MatrixParamBuilder();
+        }else if(parameter.getParamType().name().equals(Param.Type.COOKIE_PARAM.name())){
+            paramBuilder = new CookieParam.CookieParamBuilder();
+        }else if(parameter.getParamType().name().equals(Param.Type.FORM_PARAM.name())){
+            paramBuilder = new FormParam.FormParamBuilder();
         }
         paramBuilder.setName(parameter.getParamName());
         Type type = createParameterType(parameter);
