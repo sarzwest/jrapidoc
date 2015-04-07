@@ -1,5 +1,6 @@
 package org.jrapidoc.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.jrapidoc.model.object.type.Type;
 import org.jrapidoc.model.param.*;
 
@@ -9,7 +10,9 @@ import java.util.List;
 /**
  * Created by papa on 23.12.14.
  */
-
+@JsonPropertyOrder({"path", "httpMethodType", "pathExample", "headerParams",
+        "pathParams", "queryParams", "matrixParams", "cookieParams",
+        "formParams", "isAsynchronous", "parameter", "returnOptions"})
 public class Method {
 
     private boolean isAsynchronous;
@@ -19,15 +22,14 @@ public class Method {
     private List<MatrixParam> matrixParams = new ArrayList<MatrixParam>();
     private List<PathParam> pathParams = new ArrayList<PathParam>();
     private List<QueryParam> queryParams = new ArrayList<QueryParam>();
-//    private List<String> consumes = new ArrayList<String>();
-//    private List<String> produces = new ArrayList<String>();
     private String path;
     private String pathExample;
     private List<Return> returnOptions;
     private Type parameter;
     private String httpMethodType;
+    private String description;
 
-    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, /*List<String> consumes, List<String> produces,*/ String path, String pathExample, List<Return> returnOptions, Type parameter, String httpMethodType) {
+    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, String path, String pathExample, List<Return> returnOptions, Type parameter, String httpMethodType, String description) {
         this.isAsynchronous = isAsynchronous;
         this.headerParams = headerParams;
         this.cookieParams = cookieParams;
@@ -35,13 +37,12 @@ public class Method {
         this.matrixParams = matrixParams;
         this.pathParams = pathParams;
         this.queryParams = queryParams;
-//        this.consumes = consumes;
-//        this.produces = produces;
         this.path = path;
         this.pathExample = pathExample;
         this.returnOptions = returnOptions;
         this.parameter = parameter;
         this.httpMethodType = httpMethodType;
+        this.description = description;
     }
 
     public MethodBuilder returnOption(List<Return> returnOptions) {
@@ -86,7 +87,7 @@ public class Method {
     public Method clone(String httpMethod){
         return new Method(this.isAsynchronous, this.headerParams, this.cookieParams, this.formParams, this.matrixParams,
                 this.pathParams, this.queryParams, this.path, this.pathExample, this.returnOptions,
-                this.parameter, httpMethod);
+                this.parameter, httpMethod, description);
     }
 
     public static class MethodBuilder {
@@ -105,6 +106,63 @@ public class Method {
         private List<Return> returnOptions = new ArrayList<Return>();
         private Type parameter;
         private String httpMethodType;
+        private String description;
+
+        public boolean isAsynchronous() {
+            return isAsynchronous;
+        }
+
+        public List<HeaderParam> getHeaderParams() {
+            return headerParams;
+        }
+
+        public List<CookieParam> getCookieParams() {
+            return cookieParams;
+        }
+
+        public List<FormParam> getFormParams() {
+            return formParams;
+        }
+
+        public List<MatrixParam> getMatrixParams() {
+            return matrixParams;
+        }
+
+        public List<PathParam> getPathParams() {
+            return pathParams;
+        }
+
+        public List<QueryParam> getQueryParams() {
+            return queryParams;
+        }
+
+        public List<String> getConsumes() {
+            return consumes;
+        }
+
+        public List<String> getProduces() {
+            return produces;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public String getPathExample() {
+            return pathExample;
+        }
+
+        public List<Return> getReturnOptions() {
+            return returnOptions;
+        }
+
+        public Type getParameter() {
+            return parameter;
+        }
+
+        public String getHttpMethodType() {
+            return httpMethodType;
+        }
 
         public MethodBuilder isAsynchronous(boolean isAsynchronous) {
             this.isAsynchronous = isAsynchronous;
@@ -143,6 +201,11 @@ public class Method {
 
         public MethodBuilder httpMethodType(String httpMethodType) {
             this.httpMethodType = httpMethodType;
+            return this;
+        }
+
+        public MethodBuilder description(String description) {
+            this.description = description;
             return this;
         }
 
@@ -193,7 +256,7 @@ public class Method {
         }
 
         public Method build(){
-            return new Method(isAsynchronous, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams,/* consumes, produces,*/ path, pathExample, returnOptions, parameter, httpMethodType);
+            return new Method(isAsynchronous, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, path, pathExample, returnOptions, parameter, httpMethodType, description);
         }
     }
 }

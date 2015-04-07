@@ -13,6 +13,7 @@ import org.jrapidoc.annotation.Description;
 import org.jrapidoc.annotation.PathExample;
 import org.jrapidoc.annotation.Return;
 import org.jrapidoc.annotation.Returns;
+import org.jrapidoc.logger.Logger;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import javax.ws.rs.*;
@@ -409,9 +410,9 @@ public class ResourceBuilder {
             return (T) this;
         }
 
-        public T response(int http, String[] headers, String[] cookies, Class<?> type, Type parameterized, Return.Structure structure) {
+        public T response(int http, String[] headers, String[] cookies, Class<?> type, Type parameterized, Return.Structure structure, String description) {
             ResponseObjectBuilder responseBuilder = new ResponseObjectBuilder();
-            ReturnOption option = responseBuilder.status(http).headers(Arrays.asList(headers)).cookies(Arrays.asList(cookies)).type(type).parameterized(parameterized).structure(structure).buildReturnOption();
+            ReturnOption option = responseBuilder.status(http).headers(Arrays.asList(headers)).cookies(Arrays.asList(cookies)).type(type).parameterized(parameterized).structure(structure).description(description).buildReturnOption();
             locator.returnOptions.add(option);
             return (T) this;
         }
@@ -587,6 +588,11 @@ public class ResourceBuilder {
             return this;
         }
 
+        public ResponseObjectBuilder description(String description) {
+            returnOption.setDescription(description);
+            return this;
+        }
+
         public ReturnOption buildReturnOption() {
             return returnOption;
         }
@@ -630,10 +636,12 @@ public class ResourceBuilder {
      * @return
      */
     public static ResourceClass rootResourceFromAnnotations(Class<?> clazz) {
+        Logger.debug("Creating meta root resource class {0}", clazz.getCanonicalName());
         return fromAnnotations(false, clazz);
     }
 
     public static ResourceClass locatorFromAnnotations(Class<?> clazz) {
+        Logger.debug("Creating meta resource locator class {0}", clazz.getCanonicalName());
         return fromAnnotations(true, clazz);
     }
 
@@ -818,6 +826,7 @@ public class ResourceBuilder {
     }
 
     protected static void processMethod(boolean isLocator, ResourceClassBuilder resourceClassBuilder, Class<?> root, Method implementation) {
+        Logger.info("Start processing method {0}", implementation.getName());
         Method method = findAnnotatedMethod(root, implementation);
         if (method != null) {
             Set<String> httpMethods = IsHttpMethod.getHttpMethods(method);
@@ -829,7 +838,7 @@ public class ResourceBuilder {
             } else {
                 ResourceMethodBuilder resourceMethodBuilder = resourceClassBuilder.method(implementation, method);
                 resourceLocatorBuilder = resourceMethodBuilder;
-                Description description = method.getAnnotation(Description.class);//moje
+                Description description = method.getAnnotation(Description.class);
                 String descValue = (description == null) ? null : description.value();
                 resourceMethodBuilder.description(descValue);
                 PathExample pathExample = method.getAnnotation(PathExample.class);
@@ -882,23 +891,29 @@ public class ResourceBuilder {
         if (returnClass.getCanonicalName().equals("void")) {
             emptyResponse(resourceMethodBuilder);
         } else if (returnClass.equals(Response.class)) {
-            resourceMethodBuilder.response(200, new String[]{}, new String[]{}, Object.class, Object.class, null);
+            resourceMethodBuilder.response(200, new String[]{}, new String[]{}, Object.class, Object.class, null, null);
         } else if (returnClass.equals(GenericEntity.class)) {
             if (parameterized.equals(GenericEntity.class)) {
                 emptyResponse(resourceMethodBuilder);
             } else if (parameterized instanceof ParameterizedType) {
                 ParameterizedType paramType = (ParameterizedType) parameterized;
                 if (paramType.getActualTypeArguments()[0] instanceof Class) {
-                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) paramType.getActualTypeArguments()[0], paramType.getActualTypeArguments()[0], null);
+                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) paramType.getActualTypeArguments()[0], paramType.getActualTypeArguments()[0], null, null);
                 } else if (paramType.getActualTypeArguments()[0] instanceof ParameterizedType) {
-                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) ((ParameterizedType) paramType.getActualTypeArguments()[0]).getRawType(), paramType.getActualTypeArguments()[0], null);
+                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) ((ParameterizedType) paramType.getActualTypeArguments()[0]).getRawType(), paramType.getActualTypeArguments()[0], null, null);
                 }
             }
+        }else if(returnClass.isArray()){
+//            Class<?> componentType = returnClass.getComponentType();
+//            if(componentType.isPrimitive()){
+//
+//            }
+            resourceMethodBuilder.response(204, new String[]{}, new String[]{}, returnClass, returnClass, null, null);
         }
     }
 
     static void emptyResponse(ResourceMethodBuilder resourceMethodBuilder) {
-        resourceMethodBuilder.response(204, new String[]{}, new String[]{}, null, null, null);
+        resourceMethodBuilder.response(204, new String[]{}, new String[]{}, null, null, null, null);
     }
 
     static void createResponse(Return ret, ResourceMethodBuilder resourceMethodBuilder) {
@@ -906,13 +921,13 @@ public class ResourceBuilder {
         Return.Structure structure = ret.structure();
         if (structure == Return.Structure.OBJECT) {
             parameterizedType = ret.type();
-            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), ret.type(), ret.type(), ret.structure());
+            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), ret.type(), ret.type(), ret.structure(), ret.description());
         } else if (structure == Return.Structure.ARRAY) {
             parameterizedType = ParameterizedTypeImpl.make(List.class, new Type[]{ret.type()}, null);
-            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), List.class, parameterizedType, ret.structure());
+            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), List.class, parameterizedType, ret.structure(), ret.description());
         } else if (structure == Return.Structure.MAP) {
             parameterizedType = ParameterizedTypeImpl.make(Map.class, new Type[]{String.class, ret.type()}, null);
-            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), Map.class, parameterizedType, ret.structure());
+            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), Map.class, parameterizedType, ret.structure(), ret.description());
         }
     }
 

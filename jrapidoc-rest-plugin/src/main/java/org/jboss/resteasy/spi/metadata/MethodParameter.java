@@ -1,5 +1,7 @@
 package org.jboss.resteasy.spi.metadata;
 
+import org.jrapidoc.annotation.Description;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Type;
@@ -13,9 +15,9 @@ public class MethodParameter extends Parameter
    protected Annotation[] annotations = {};
    protected ResourceLocator locator;
 
-   protected MethodParameter(ResourceLocator locator, Class<?> type, Type genericType, Annotation[] annotations)
+   protected MethodParameter(ResourceLocator locator, Class<?> type, Type genericType, Annotation[] annotations, Description description)
    {
-      super(locator.getResourceClass(), type, genericType);
+      super(locator.getResourceClass(), type, genericType, (description == null)?null:description.value());
       this.annotations = annotations;
       this.locator = locator;
    }

@@ -1,8 +1,11 @@
 package org.jrapidoc.model.param;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * Created by papa on 23.12.14.
  */
+@JsonPropertyOrder({"name", "description", "isRequired", "type", "typeref"})
 public abstract class Param {
 
     public static enum Type {
@@ -21,11 +24,12 @@ public abstract class Param {
     private String description;
     private String typeref;
 
-    protected Param(String name, boolean isRequired, String typeref, Type type) {
+    protected Param(String name, boolean isRequired, String typeref, Type type, String description) {
         this.name = name;
         this.isRequired = isRequired;
         this.typeref = typeref;
         this.type = type;
+        this.description = description;
     }
 
     public String getDescription() {

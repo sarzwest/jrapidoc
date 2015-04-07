@@ -29,28 +29,32 @@ public class JacksonTypeProvider extends TypeProvider {
 
     private JavaType createJavaType(java.lang.reflect.Type genericType) {
         JavaType javaType = null;
-        if(genericType instanceof Class<?>){
+        if (genericType instanceof Class<?>) {
+            if (((Class) genericType).isArray()) {
+                javaType = objectMapper.getTypeFactory().constructArrayType(((Class) genericType).getComponentType());
+            } else {
 //            jedna se o custom type
-            javaType = objectMapper.getTypeFactory().constructParametrizedType((Class)genericType, (Class)genericType, new Class[]{});
-        }else if(genericType instanceof ParameterizedType){
+                javaType = objectMapper.getTypeFactory().constructParametrizedType((Class) genericType, (Class) genericType, new Class[]{});
+            }
+        } else if (genericType instanceof ParameterizedType) {
             //jedna se o parametrizovany typ
-            ParameterizedType paramType = (ParameterizedType)genericType;
+            ParameterizedType paramType = (ParameterizedType) genericType;
             java.lang.reflect.Type[] genericTypes = paramType.getActualTypeArguments();
             //Kdyz je typ genericky napr <T>, nahrad ho za Object
-            for(int i = 0;i < genericTypes.length;i++){
-                if(genericTypes[i] instanceof TypeVariableImpl){
+            for (int i = 0; i < genericTypes.length; i++) {
+                if (genericTypes[i] instanceof TypeVariableImpl) {
                     genericTypes[i] = Object.class;
                 }
             }
             JavaType[] javaTypes = new JavaType[genericTypes.length];
-            for (int i = 0;i < javaTypes.length;i++){
+            for (int i = 0; i < javaTypes.length; i++) {
                 javaTypes[i] = createJavaType(genericTypes[i]);
             }
             //prochazej generictypes a vytvarej z kazdeho JavaType a davej do pole
 //            Class[] typeArguments = Arrays.copyOf(genericTypes, genericTypes.length, Class[].class);
 //          bad  javaType = JacksonUtil.objectMapperInstance().getTypeFactory().constructParametrizedType(genericType, genericType, typeArguments);
-            javaType = objectMapper.getTypeFactory().constructParametrizedType((Class)paramType.getRawType(), (Class)paramType.getRawType(), javaTypes);
-        }else if(genericType instanceof TypeVariableImpl){
+            javaType = objectMapper.getTypeFactory().constructParametrizedType((Class) paramType.getRawType(), (Class) paramType.getRawType(), javaTypes);
+        } else if (genericType instanceof TypeVariableImpl) {
             javaType = objectMapper.getTypeFactory().constructParametrizedType(Object.class, Object.class, new Class<?>[]{});
         }
         return javaType;

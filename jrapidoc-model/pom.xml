@@ -13,6 +13,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.jrapidoc</groupId>
+            <artifactId>jrapidoc-logger</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>

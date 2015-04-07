@@ -75,12 +75,12 @@ public class ResourceClassProcessor {
     }
 
     void addLocatorMethods(ResourceClass resourceClass, Resource.ResourceBuilder resourceBuilder) {
-        for(ResourceLocator resourceLocator:resourceClass.getResourceLocators()){
+        for (ResourceLocator resourceLocator : resourceClass.getResourceLocators()) {
             ResourceClass newResourceClass = ResourceBuilder.locatorFromAnnotations(resourceLocator.getReturnType());
             newResourceClass.setPath(resourceLocator.getFullpath());
             newResourceClass.setConstructor(resourceClass.getConstructor());
             ResourceListing locatorListing = createListing(new HashSet<ResourceClass>(Arrays.asList(new ResourceClass[]{newResourceClass})), null);
-            for(Method method:locatorListing.getResources().get(0).getMethods()){
+            for (Method method : locatorListing.getResources().get(0).getMethods()) {
                 resourceBuilder.method(method);
             }
         }
@@ -101,6 +101,7 @@ public class ResourceClassProcessor {
         resourceMethod.messageBodyCheck();
         Method.MethodBuilder methodBuilder = new Method.MethodBuilder();
         methodBuilder.isAsynchronous(resourceMethod.isAsynchronous());
+        methodBuilder.description(resourceMethod.getDescription());
         addClassParams(methodBuilder, resourceClass);
         addConsumesParam(methodBuilder, resourceClass, resourceMethod);
         addProducesParam(methodBuilder, resourceClass, resourceMethod);
@@ -121,32 +122,35 @@ public class ResourceClassProcessor {
         }
     }
 
-    List<Return> createReturnOptions(ResourceMethod resourceMethod){
+    List<Return> createReturnOptions(ResourceMethod resourceMethod) {
         List<Return> returnObjects = new ArrayList<Return>();
-        for(ReturnOption returnOption:resourceMethod.getReturnOptions()){
+        for (ReturnOption returnOption : resourceMethod.getReturnOptions()) {
             returnObjects.add(createReturnOption(returnOption));
         }
         return returnObjects;
     }
 
-    Return createReturnOption(ReturnOption returnOption){
-        Type returnType = typeProvider.createType(returnOption.getParameterized());
+    Return createReturnOption(ReturnOption returnOption) {
+        Type returnType = null;
+        if (returnOption.getReturnClass() != null) {
+            returnType = typeProvider.createType(returnOption.getParameterized());
+        }
         List<HeaderParam> headerParams = createReturnHeaders(returnOption.getHeaders());
         List<CookieParam> cookieParams = createReturnCookies(returnOption.getCookies());
-        return Return.httpStatus(returnOption.getStatus()).headerParams(headerParams).cookieParams(cookieParams).returnType(returnType).build();
+        return Return.httpStatus(returnOption.getStatus()).headerParams(headerParams).cookieParams(cookieParams).returnType(returnType).description(returnOption.getDescription()).build();
     }
 
-    List<HeaderParam> createReturnHeaders(List<String> headersString){
+    List<HeaderParam> createReturnHeaders(List<String> headersString) {
         List<HeaderParam> items = new ArrayList<HeaderParam>();
-        for(String header:headersString){
+        for (String header : headersString) {
             items.add(new HeaderParam.HeaderParamBuilder().setName(header).setTyperef(ModelUtil.getSimpleTypeSignature(String.class, null)).build());
         }
         return items;
     }
 
-    List<CookieParam> createReturnCookies(List<String> cookiesString){
+    List<CookieParam> createReturnCookies(List<String> cookiesString) {
         List<CookieParam> items = new ArrayList<CookieParam>();
-        for(String header:cookiesString){
+        for (String header : cookiesString) {
             items.add(new CookieParam.CookieParamBuilder().setName(header).setTyperef(ModelUtil.getSimpleTypeSignature(String.class, null)).build());
         }
         return items;
@@ -168,12 +172,14 @@ public class ResourceClassProcessor {
 
     void addClassParams(Method.MethodBuilder methodBuilder, ResourceClass resourceClass) {
         for (FieldParameter fieldParameter : resourceClass.getFields()) {
-            Param param = createParam(fieldParameter);
-            methodBuilder.param(param.getType(), param);
+            if (RestUtil.isHttpParam(fieldParameter)) {
+                Param param = createParam(fieldParameter);
+                methodBuilder.param(param.getType(), param);
+            }
         }
     }
 
-    void addConstructorParams(Method.MethodBuilder methodBuilder, ResourceClass resourceClass){
+    void addConstructorParams(Method.MethodBuilder methodBuilder, ResourceClass resourceClass) {
         for (ConstructorParameter constructorParameter : resourceClass.getConstructor().getParams()) {
             if (RestUtil.isHttpParam(constructorParameter)) {
                 Param param = createParam(constructorParameter);
@@ -188,18 +194,19 @@ public class ResourceClassProcessor {
             paramBuilder = new QueryParam.QueryParamBuilder();
         } else if (parameter.getParamType().name().equals(Parameter.ParamType.HEADER_PARAM.name())) {
             paramBuilder = new HeaderParam.HeaderParamBuilder();
-        }else if(parameter.getParamType().name().equals(Param.Type.PATH_PARAM.name())){
+        } else if (parameter.getParamType().name().equals(Param.Type.PATH_PARAM.name())) {
             paramBuilder = new PathParam.PathParamBuilder();
-        }else if(parameter.getParamType().name().equals(Param.Type.MATRIX_PARAM.name())){
+        } else if (parameter.getParamType().name().equals(Param.Type.MATRIX_PARAM.name())) {
             paramBuilder = new MatrixParam.MatrixParamBuilder();
-        }else if(parameter.getParamType().name().equals(Param.Type.COOKIE_PARAM.name())){
+        } else if (parameter.getParamType().name().equals(Param.Type.COOKIE_PARAM.name())) {
             paramBuilder = new CookieParam.CookieParamBuilder();
-        }else if(parameter.getParamType().name().equals(Param.Type.FORM_PARAM.name())){
+        } else if (parameter.getParamType().name().equals(Param.Type.FORM_PARAM.name())) {
             paramBuilder = new FormParam.FormParamBuilder();
         }
         paramBuilder.setName(parameter.getParamName());
         Type type = createParameterType(parameter);
         paramBuilder.setTyperef(type.getTypeRef());
+        paramBuilder.setDescription(parameter.getDescription());
 //        paramBuilder.setRequired();
         return paramBuilder.build();
     }

@@ -16,12 +16,14 @@ public class Return {
     private List<HeaderParam> headerParams;
     private List<CookieParam> cookieParams;
     private Type returnType;
+    private String description;
 
-    private Return(int httpStatus, List<HeaderParam> headerParams, List<CookieParam> cookieParams, Type returnType) {
+    private Return(int httpStatus, List<HeaderParam> headerParams, List<CookieParam> cookieParams, Type returnType, String description) {
         this.httpStatus = httpStatus;
         this.headerParams = headerParams;
         this.cookieParams = cookieParams;
         this.returnType = returnType;
+        this.description = description;
     }
 
     public static ReturnBuilder  httpStatus(int httpStatus) {
@@ -46,6 +48,7 @@ public class Return {
         private List<HeaderParam> headerParams = new ArrayList<HeaderParam>();
         private List<CookieParam> cookieParams = new ArrayList<CookieParam>();
         private Type returnType;
+        private String description;
 
         public ReturnBuilder httpStatus(int httpStatus) {
             this.httpStatus = httpStatus;
@@ -67,8 +70,13 @@ public class Return {
             return this;
         }
 
+        public ReturnBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
         public Return build(){
-            return new Return(httpStatus, headerParams, cookieParams, returnType);
+            return new Return(httpStatus, headerParams, cookieParams, returnType, description);
         }
     }
 }

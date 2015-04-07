@@ -40,11 +40,12 @@ abstract public class Parameter
    protected long suspendTimeout; // deprecated
     protected String description;
 
-   protected Parameter(ResourceClass resourceClass, Class<?> type, Type genericType)
+   protected Parameter(ResourceClass resourceClass, Class<?> type, Type genericType, String description)
    {
       this.resourceClass = resourceClass;
       this.genericType = Types.resolveTypeVariables(resourceClass.getClazz(), genericType);
       this.type = Types.getRawType(this.genericType);
+       this.description = description;
    }
 
    public ResourceClass getResourceClass()
@@ -89,4 +90,8 @@ abstract public class Parameter
 
    public abstract AccessibleObject getAccessibleObject();
    public abstract Annotation[] getAnnotations();
+
+    public String getDescription() {
+        return description;
+    }
 }

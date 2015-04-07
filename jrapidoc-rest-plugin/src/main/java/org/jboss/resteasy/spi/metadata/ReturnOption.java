@@ -17,7 +17,7 @@ public class ReturnOption {
     Type parameterized;
     Class<?> returnClass;
     Return.Structure structure;
-//    List<ReturnType> returnTypes = new ArrayList<ReturnType>();
+    String description;
 
     public Class<?> getReturnClass() {
         return returnClass;
@@ -43,9 +43,13 @@ public class ReturnOption {
         this.returnClass = returnClass;
     }
 
-//    public void addReturnType(Class<?> clazz){
-//        returnTypes.add(new ReturnType(clazz));
-//    }
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public List<String> getHeaders() {
         return headers;

@@ -23,6 +23,7 @@
         <!--<module>../airserviceopenshift</module>-->
         <module>jrapidoc-gui</module>
         <module>jrapidoc-model</module>
+        <module>jrapidoc-logger</module>
     </modules>
 
     <build>
@@ -73,6 +74,16 @@
             <dependency>
                 <groupId>org.jrapidoc</groupId>
                 <artifactId>jrapidoc-model</artifactId>
+                <version>${org.jrapidoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jrapidoc</groupId>
+                <artifactId>jrapidoc-rest-annotation</artifactId>
+                <version>${org.jrapidoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jrapidoc</groupId>
+                <artifactId>jrapidoc-logger</artifactId>
                 <version>${org.jrapidoc.version}</version>
             </dependency>
             <!--JRAPIDoc END-->

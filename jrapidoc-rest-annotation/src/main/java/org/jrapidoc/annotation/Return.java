@@ -16,6 +16,7 @@ public @interface Return {
     String[] cookies() default {};
     Class<?> type() default Void.class;
     Structure structure() default Structure.OBJECT;
+    String description() default "";
 
     enum Structure {
         OBJECT, ARRAY, MAP

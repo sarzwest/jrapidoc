@@ -1,7 +1,9 @@
 package org.jboss.resteasy.spi.metadata;
 
 import org.jboss.resteasy.util.Types;
+import org.jrapidoc.annotation.Description;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -34,7 +36,15 @@ public class ResourceLocator {
         this.returnType = Types.getRawType(genericReturnType);
         this.params = new MethodParameter[method.getParameterTypes().length];
         for (int i = 0; i < method.getParameterTypes().length; i++) {
-            this.params[i] = new MethodParameter(this, method.getParameterTypes()[i], method.getGenericParameterTypes()[i], annotatedMethod.getParameterAnnotations()[i]);
+            Description desc = null;
+            Annotation[] annotations = method.getParameterAnnotations()[i];
+            for(Annotation a:annotations){
+                if(a.annotationType().equals(Description.class)){
+                    desc = (Description)a;
+                    break;
+                }
+            }
+            this.params[i] = new MethodParameter(this, method.getParameterTypes()[i], method.getGenericParameterTypes()[i], annotatedMethod.getParameterAnnotations()[i], desc);
         }
     }
 

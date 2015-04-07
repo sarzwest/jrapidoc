@@ -13,8 +13,8 @@ public class HeaderParam extends Param  {
 //        super(name, isRequired, typeref, type);
 //    }
 
-    private HeaderParam(String name, boolean isRequired, String typeref, String[] options, Type type) {
-        super(name, isRequired, typeref, type);
+    private HeaderParam(String name, boolean isRequired, String typeref, String[] options, Type type, String description) {
+        super(name, isRequired, typeref, type, description);
         this.options = options;
     }
 
@@ -72,7 +72,7 @@ public class HeaderParam extends Param  {
 
         @Override
         public HeaderParam build() {
-            return new HeaderParam(name, isRequired, typeref, options, Type.HEADER_PARAM);
+            return new HeaderParam(name, isRequired, typeref, options, Type.HEADER_PARAM, description);
         }
     }
 }

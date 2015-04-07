@@ -7,8 +7,8 @@ public class MatrixParam extends Param  {
 
     private int min = 0, max = Integer.MAX_VALUE;
 
-    public MatrixParam(String name, boolean isRequired, String typeref, Type type) {
-        super(name, isRequired, typeref, type);
+    public MatrixParam(String name, boolean isRequired, String typeref, Type type, String description) {
+        super(name, isRequired, typeref, type, description);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class MatrixParam extends Param  {
 
         @Override
         public Param build() {
-            return new MatrixParam(name, isRequired, typeref, Type.MATRIX_PARAM);
+            return new MatrixParam(name, isRequired, typeref, Type.MATRIX_PARAM, description);
         }
     }
 }

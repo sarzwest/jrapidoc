@@ -1,5 +1,7 @@
 package org.jrapidoc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.jrapidoc.model.param.*;
 
 import java.util.ArrayList;
@@ -8,15 +10,22 @@ import java.util.List;
 /**
  * Created by papa on 23.12.14.
  */
+@JsonPropertyOrder({"description", "path", "pathExample", "methods"})
 public class Resource {
 
     private String path;
     private String pathExample;
+    @JsonIgnore
     private List<HeaderParam> headerParams = new ArrayList<HeaderParam>();
+    @JsonIgnore
     private List<CookieParam> cookieParams = new ArrayList<CookieParam>();
+    @JsonIgnore
     private List<FormParam> formParams = new ArrayList<FormParam>();
+    @JsonIgnore
     private List<MatrixParam> matrixParams = new ArrayList<MatrixParam>();
+    @JsonIgnore
     private List<PathParam> pathParams = new ArrayList<PathParam>();
+    @JsonIgnore
     private List<QueryParam> queryParams = new ArrayList<QueryParam>();
     private List<Method> methods = new ArrayList<Method>();
     private String description;

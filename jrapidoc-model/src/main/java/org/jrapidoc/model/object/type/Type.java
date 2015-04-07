@@ -13,15 +13,10 @@ public class Type {
     /**pouzije se v modelu a bude to hodnota ulozena v property typeref, znazornuje zobrazeni typu*/
     private String typeRef;
     private String typeName;
-//    private List<String> validations;
 
     public Type(String typeName, String typeRef) {
-//        this.variableName = variableName;
         this.typeName = typeName;
         this.typeRef = typeRef;
-//        this.enumList = enumList;
-//        this.attributes = attributes;
-//        this.validations = validations;
     }
 
     public String getTypeRef() {

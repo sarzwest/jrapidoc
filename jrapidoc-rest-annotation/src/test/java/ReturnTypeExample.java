@@ -6,7 +6,7 @@ import org.jrapidoc.annotation.Returns;
  */
 public class ReturnTypeExample {
 
-    @Return(http = 200, type = Object.class, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"})
+    @Return(http = 200, type = Object.class, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"}, description = "Some description")
     public void foo(){}
 
     @Returns({

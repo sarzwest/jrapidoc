@@ -4,8 +4,8 @@ package org.jrapidoc.model.param;
  * Created by papa on 23.12.14.
  */
 public class PathParam extends Param  {
-    public PathParam(String name, boolean isRequired, String typeref, Type type) {
-        super(name, isRequired, typeref, type);
+    public PathParam(String name, boolean isRequired, String typeref, Type type, String description) {
+        super(name, isRequired, typeref, type, description);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PathParam extends Param  {
 
         @Override
         public Param build() {
-            return new PathParam(name, isRequired, typeref, Type.PATH_PARAM);
+            return new PathParam(name, isRequired, typeref, Type.PATH_PARAM, description);
         }
     }
 }

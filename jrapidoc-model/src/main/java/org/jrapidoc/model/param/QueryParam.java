@@ -4,8 +4,8 @@ package org.jrapidoc.model.param;
  * Created by papa on 23.12.14.
  */
 public class QueryParam extends Param  {
-    public QueryParam(String name, boolean isRequired, String typeref, Type type) {
-        super(name, isRequired, typeref, type);
+    public QueryParam(String name, boolean isRequired, String typeref, Type type, String description) {
+        super(name, isRequired, typeref, type, description);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class QueryParam extends Param  {
 
         @Override
         public Param build() {
-            return new QueryParam(name, isRequired, typeref, Type.QUERY_PARAM);
+            return new QueryParam(name, isRequired, typeref, Type.QUERY_PARAM, description);
         }
     }
 }

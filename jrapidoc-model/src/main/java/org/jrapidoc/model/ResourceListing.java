@@ -1,11 +1,14 @@
 package org.jrapidoc.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by papa on 23.12.14.
  */
+@JsonPropertyOrder({"baseUrl", "resources"})
 public class ResourceListing {
 
     private String baseUrl;
