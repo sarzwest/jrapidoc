@@ -41,6 +41,9 @@ public class Logger {
     }
 
     static String format(String msg, String... tokens){
+        if(msg == null){
+            return null;
+        }
         return MessageFormat.format(msg, tokens);
     }
 }
