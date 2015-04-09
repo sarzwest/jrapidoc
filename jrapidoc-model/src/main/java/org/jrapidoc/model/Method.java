@@ -12,7 +12,7 @@ import java.util.List;
  */
 @JsonPropertyOrder({"path", "httpMethodType", "pathExample", "headerParams",
         "pathParams", "queryParams", "matrixParams", "cookieParams",
-        "formParams", "isAsynchronous", "parameter", "returnOptions"})
+        "formParams", "isAsynchronous", "parameters", "returnOptions"})
 public class Method {
 
     private boolean isAsynchronous;
@@ -25,11 +25,13 @@ public class Method {
     private String path;
     private String pathExample;
     private List<Return> returnOptions;
-    private Type parameter;
+    private List<Type> parameters;
     private String httpMethodType;
     private String description;
+    private String name;
+    private List<Type> soapInputHeaders;
 
-    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, String path, String pathExample, List<Return> returnOptions, Type parameter, String httpMethodType, String description) {
+    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, String path, String pathExample, List<Return> returnOptions, List<Type> parameters, String httpMethodType, String description, String name, List<Type> soapInputHeaders) {
         this.isAsynchronous = isAsynchronous;
         this.headerParams = headerParams;
         this.cookieParams = cookieParams;
@@ -40,9 +42,11 @@ public class Method {
         this.path = path;
         this.pathExample = pathExample;
         this.returnOptions = returnOptions;
-        this.parameter = parameter;
+        this.parameters = parameters;
         this.httpMethodType = httpMethodType;
         this.description = description;
+        this.name = name;
+        this.soapInputHeaders = soapInputHeaders;
     }
 
     public MethodBuilder returnOption(List<Return> returnOptions) {
@@ -87,7 +91,7 @@ public class Method {
     public Method clone(String httpMethod){
         return new Method(this.isAsynchronous, this.headerParams, this.cookieParams, this.formParams, this.matrixParams,
                 this.pathParams, this.queryParams, this.path, this.pathExample, this.returnOptions,
-                this.parameter, httpMethod, description);
+                this.parameters, httpMethod, this.description, this.name, this.soapInputHeaders);
     }
 
     public static class MethodBuilder {
@@ -104,9 +108,11 @@ public class Method {
         private String path;
         private String pathExample;
         private List<Return> returnOptions = new ArrayList<Return>();
-        private Type parameter;
+        private List<Type> parameters = new ArrayList<Type>();
         private String httpMethodType;
         private String description;
+        private String name;
+        private List<Type> soapInputHeaders = new ArrayList<Type>();
 
         public boolean isAsynchronous() {
             return isAsynchronous;
@@ -156,8 +162,8 @@ public class Method {
             return returnOptions;
         }
 
-        public Type getParameter() {
-            return parameter;
+        public List<Type> getParameters() {
+            return parameters;
         }
 
         public String getHttpMethodType() {
@@ -171,6 +177,11 @@ public class Method {
 
         public MethodBuilder consumes(String consumes) {
             this.consumes.add(consumes);
+            return this;
+        }
+
+        public MethodBuilder name(String name) {
+            this.name = name;
             return this;
         }
 
@@ -195,7 +206,7 @@ public class Method {
         }
 
         public MethodBuilder parameter(Type parameter) {
-            this.parameter = parameter;
+            this.parameters.add(parameter);
             return this;
         }
 
@@ -255,8 +266,12 @@ public class Method {
             this.queryParams.add(queryParam);
         }
 
+        public void soapInputHeader(Type soapHeader) {
+            this.soapInputHeaders.add(soapHeader);
+        }
+
         public Method build(){
-            return new Method(isAsynchronous, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, path, pathExample, returnOptions, parameter, httpMethodType, description);
+            return new Method(isAsynchronous, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, path, pathExample, returnOptions, parameters, httpMethodType, description, name, (soapInputHeaders.isEmpty())?null: soapInputHeaders);
         }
     }
 }

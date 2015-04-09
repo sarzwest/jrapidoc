@@ -131,13 +131,14 @@ public class ResourceClassProcessor {
     }
 
     Return createReturnOption(ReturnOption returnOption) {
-        Type returnType = null;
+        List<Type> returnTypes = new ArrayList<Type>();
         if (returnOption.getReturnClass() != null) {
-            returnType = typeProvider.createType(returnOption.getParameterized());
+            Type returnType = typeProvider.createType(returnOption.getParameterized());
+            returnTypes.add(returnType);
         }
         List<HeaderParam> headerParams = createReturnHeaders(returnOption.getHeaders());
         List<CookieParam> cookieParams = createReturnCookies(returnOption.getCookies());
-        return Return.httpStatus(returnOption.getStatus()).headerParams(headerParams).cookieParams(cookieParams).returnType(returnType).description(returnOption.getDescription()).build();
+        return Return.httpStatus(returnOption.getStatus()).headerParams(headerParams).cookieParams(cookieParams).returnTypes(returnTypes).description(returnOption.getDescription()).build();
     }
 
     List<HeaderParam> createReturnHeaders(List<String> headersString) {

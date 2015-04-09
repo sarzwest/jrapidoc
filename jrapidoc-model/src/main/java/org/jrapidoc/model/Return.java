@@ -15,15 +15,17 @@ public class Return {
     private int httpStatus;
     private List<HeaderParam> headerParams;
     private List<CookieParam> cookieParams;
-    private Type returnType;
+    private List<Type> returnTypes;
     private String description;
+    private List<Type> soapOutputHeaders;
 
-    private Return(int httpStatus, List<HeaderParam> headerParams, List<CookieParam> cookieParams, Type returnType, String description) {
+    private Return(int httpStatus, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<Type> returnTypes, String description, List<Type> soapOutputHeaders) {
         this.httpStatus = httpStatus;
         this.headerParams = headerParams;
         this.cookieParams = cookieParams;
-        this.returnType = returnType;
+        this.returnTypes = returnTypes;
         this.description = description;
+        this.soapOutputHeaders = soapOutputHeaders;
     }
 
     public static ReturnBuilder  httpStatus(int httpStatus) {
@@ -38,8 +40,8 @@ public class Return {
         return new ReturnBuilder().cookieParams(cookieParams);
     }
 
-    public static ReturnBuilder  returnType(Type returnType) {
-        return new ReturnBuilder().returnType(returnType);
+    public static ReturnBuilder  returnType(List<Type> returnTypes) {
+        return new ReturnBuilder().returnTypes(returnTypes);
     }
 
     public static class ReturnBuilder{
@@ -47,8 +49,9 @@ public class Return {
         private int httpStatus;
         private List<HeaderParam> headerParams = new ArrayList<HeaderParam>();
         private List<CookieParam> cookieParams = new ArrayList<CookieParam>();
-        private Type returnType;
+        private List<Type> returnTypes;
         private String description;
+        private List<Type> soapOutputHeaders = new ArrayList<Type>();
 
         public ReturnBuilder httpStatus(int httpStatus) {
             this.httpStatus = httpStatus;
@@ -65,8 +68,8 @@ public class Return {
             return this;
         }
 
-        public ReturnBuilder returnType(Type returnType) {
-            this.returnType = returnType;
+        public ReturnBuilder returnTypes(List<Type> returnTypes) {
+            this.returnTypes = returnTypes;
             return this;
         }
 
@@ -75,8 +78,13 @@ public class Return {
             return this;
         }
 
+        public ReturnBuilder soapOutputHeader(Type soapHeader) {
+            this.soapOutputHeaders.add(soapHeader);
+            return this;
+        }
+
         public Return build(){
-            return new Return(httpStatus, headerParams, cookieParams, returnType, description);
+            return new Return(httpStatus, headerParams, cookieParams, returnTypes, description, (soapOutputHeaders.isEmpty())?null: soapOutputHeaders);
         }
     }
 }
