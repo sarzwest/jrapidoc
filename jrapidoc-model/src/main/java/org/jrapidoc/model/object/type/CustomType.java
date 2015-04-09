@@ -14,14 +14,14 @@ public class CustomType extends org.jrapidoc.model.object.type.Type {
     private Class<?> typeClass;
     private List<String> enumerations = new ArrayList<String>();
 
-    public CustomType(String typeName, String jacksonToString, List<BeanProperty> attributes, Class<?> typeClass) {
-        super(typeName, jacksonToString);
+    public CustomType(String typeName, String typeRef, List<BeanProperty> attributes, Class<?> typeClass) {
+        super(typeName, typeRef);
         this.attributes = attributes;
         this.typeClass = typeClass;
     }
 
-    public CustomType(String typeName, String jacksonToString, Class<?> typeClass){
-        super(typeName, jacksonToString);
+    public CustomType(String typeName, String typeRef, Class<?> typeClass){
+        super(typeName, typeRef);
         this.typeClass = typeClass;
     }
 

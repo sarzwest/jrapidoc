@@ -14,7 +14,7 @@ public class Type {
     private String typeRef;
     private String typeName;
 
-    public Type(String typeName, String typeRef) {
+    protected Type(String typeName, String typeRef) {
         this.typeName = typeName;
         this.typeRef = typeRef;
     }

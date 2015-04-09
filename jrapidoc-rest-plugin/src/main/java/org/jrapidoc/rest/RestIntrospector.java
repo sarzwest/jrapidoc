@@ -41,6 +41,7 @@ public class RestIntrospector {
         TypeProvider typeProvider = TypeProviderFactory.createTypeProvider(typeProviderClass);
         ResourceClassProcessor resourceClassProcessor = new ResourceClassProcessor(typeProvider);
         ResourceListing listing = resourceClassProcessor.createListing(resourceClassesMeta, basePath);
+        //TODO add types to model
         output.getParentFile().mkdirs();
         ModelGenerator.generateModel(listing, output);
         Logger.debug("Introspection finished");
