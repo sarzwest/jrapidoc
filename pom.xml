@@ -110,11 +110,6 @@
                 <artifactId>maven-core</artifactId>
                 <version>3.0.5</version>
             </dependency>
-            <dependency>
-                <groupId>org.jrapidoc</groupId>
-                <artifactId>rest-dependency</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <!--Jackson fasterxml BEGIN-->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
@@ -139,6 +134,13 @@
                 <version>${com.fasterxml.jackson.version}</version>
             </dependency>
             <!--Jackson fasterxml END-->
+            <!--Reflections BEGIN-->
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections-maven</artifactId>
+                <version>0.9.9-RC2</version>
+            </dependency>
+            <!--Reflections END-->
             <!--JUnit BEGIN-->
             <dependency>
                 <groupId>junit</groupId>
