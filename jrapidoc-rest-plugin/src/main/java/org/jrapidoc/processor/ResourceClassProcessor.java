@@ -131,10 +131,10 @@ public class ResourceClassProcessor {
     }
 
     Return createReturnOption(ReturnOption returnOption) {
-        List<Type> returnTypes = new ArrayList<Type>();
+        List<TransportType> returnTypes = new ArrayList<TransportType>();
         if (returnOption.getReturnClass() != null) {
             Type returnType = typeProvider.createType(returnOption.getParameterized());
-            returnTypes.add(returnType);
+            returnTypes.add(new TransportType.TransportTypeBuilder().type(returnType).description(returnOption.getDescription()).build());
         }
         List<HeaderParam> headerParams = createReturnHeaders(returnOption.getHeaders());
         List<CookieParam> cookieParams = createReturnCookies(returnOption.getCookies());
@@ -226,10 +226,10 @@ public class ResourceClassProcessor {
 //        return typeProvider.createType(parameter.getGenericType());
     }
 
-    private Type createParameterType(MethodParameter[] parameters) {
+    private TransportType createParameterType(MethodParameter[] parameters) {
         for (MethodParameter methodParameter : parameters) {
             if (methodParameter.getParamType().equals(MethodParameter.ParamType.MESSAGE_BODY)) {
-                return typeProvider.createType(methodParameter.getGenericType());
+                return new TransportType.TransportTypeBuilder().type(typeProvider.createType(methodParameter.getGenericType())).description(methodParameter.getDescription()).build();
             }
         }
         //TODO nebere parametr - void

@@ -1,10 +1,12 @@
 package org.jrapidoc.processor;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jrapidoc.annotation.Description;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.Resource;
 import org.jrapidoc.model.ResourceListing;
 import org.jrapidoc.model.Return;
+import org.jrapidoc.model.TransportType;
 import org.jrapidoc.model.param.HeaderParam;
 import org.jrapidoc.model.type.TypeProvider;
 
@@ -60,6 +62,7 @@ public class SEIProcessor {
 
     Resource createEndpoint(Class<?> seiClass) {
         Resource.ResourceBuilder resourceBuilder = new Resource.ResourceBuilder();
+        resourceBuilder.description(getDescription(seiClass.getDeclaredAnnotations()));
         addMethods(seiClass, resourceBuilder);
         return resourceBuilder.build();
     }
@@ -77,8 +80,18 @@ public class SEIProcessor {
         }
     }
 
+    String getDescription(Annotation[] annotations){
+        Description description = getAnnotation(annotations, Description.class);
+        if(description == null){
+            return null;
+        }else {
+            return description.value();
+        }
+    }
+
     org.jrapidoc.model.Method createMethod(Method method) {
         org.jrapidoc.model.Method.MethodBuilder methodBuilder = new org.jrapidoc.model.Method.MethodBuilder();
+        methodBuilder.description(getDescription(method.getDeclaredAnnotations()));
         addMethodName(method, methodBuilder);
         addInputHeaders(method, methodBuilder);
         addInputParams(method, methodBuilder);
@@ -122,9 +135,11 @@ public class SEIProcessor {
     void addInputHeaders(Method method, org.jrapidoc.model.Method.MethodBuilder methodBuilder) {
         for (int i = 0; i < method.getGenericParameterTypes().length; i++) {
             Type param = extractFromHolder(method.getGenericParameterTypes()[i]);
-            if (isHeader(method.getParameterAnnotations()[i])) {
-                if (isInputMode(method.getParameterAnnotations()[i])) {
-                    methodBuilder.soapInputHeader(createType(param));
+            Annotation[] annotations = method.getParameterAnnotations()[i];
+            if (isHeader(annotations)) {
+                if (isInputMode(annotations)) {
+                    TransportType soapInputHeader = new TransportType.TransportTypeBuilder().type(createType(param)).description(getDescription(annotations)).build();
+                    methodBuilder.soapInputHeader(soapInputHeader);
                 }
             }
         }
@@ -134,10 +149,12 @@ public class SEIProcessor {
         List<org.jrapidoc.model.object.type.Type> parameterTypes = new ArrayList<org.jrapidoc.model.object.type.Type>();
         for (int i = 0; i < method.getGenericParameterTypes().length; i++) {
             Type param = extractFromHolder(method.getGenericParameterTypes()[i]);
-            org.jrapidoc.model.object.type.Type parameterType = typeProvider.createType(param);
-            if (isInputMode(method.getParameterAnnotations()[i])) {
-                if (!isHeader(method.getParameterAnnotations()[i])) {
-                    methodBuilder.parameter(parameterType);
+            org.jrapidoc.model.object.type.Type parameterType = createType(param);
+            Annotation[] annotations = method.getParameterAnnotations()[i];
+            if (isInputMode(annotations)) {
+                if (!isHeader(annotations)) {
+                    TransportType soapInputParameter = new TransportType.TransportTypeBuilder().type(createType(param)).description(getDescription(annotations)).build();
+                    methodBuilder.parameter(soapInputParameter);
                 }
             }
         }
@@ -147,9 +164,11 @@ public class SEIProcessor {
         if (!isOneWay(method)) {
             for (int i = 0; i < method.getGenericParameterTypes().length; i++) {
                 Type param = extractFromHolder(method.getGenericParameterTypes()[i]);
-                if (isHeader(method.getParameterAnnotations()[i])) {
-                    if (isOutputMode(method.getParameterAnnotations()[i])) {
-                        returnBuilder.soapOutputHeader(createType(param));
+                Annotation[] annotations = method.getParameterAnnotations()[i];
+                if (isHeader(annotations)) {
+                    if (isOutputMode(annotations)) {
+                        TransportType soapOutputHeader = new TransportType.TransportTypeBuilder().type(createType(param)).description(getDescription(annotations)).build();
+                        returnBuilder.soapOutputHeader(soapOutputHeader);
                     }
                 }
             }
@@ -159,13 +178,14 @@ public class SEIProcessor {
 
     void addOutputParams(Method method, Return.ReturnBuilder returnBuilder) {
         if (!isOneWay(method)) {
-            List<org.jrapidoc.model.object.type.Type> returnTypes = new ArrayList<org.jrapidoc.model.object.type.Type>();
+            List<TransportType> returnTypes = new ArrayList<TransportType>();
             for (int i = 0; i < method.getGenericParameterTypes().length; i++) {
                 Type param = extractFromHolder(method.getGenericParameterTypes()[i]);
-                org.jrapidoc.model.object.type.Type returnType = typeProvider.createType(param);
+                Annotation[] annotations = method.getParameterAnnotations()[i];
+                TransportType soapOutputParameter = new TransportType.TransportTypeBuilder().type(createType(param)).description(getDescription(annotations)).build();
                 if (isOutputMode(method.getParameterAnnotations()[i])) {
                     if (!isHeader(method.getParameterAnnotations()[i])) {
-                        returnTypes.add(returnType);
+                        returnTypes.add(soapOutputParameter);
                     }
                 }
             }
@@ -174,11 +194,13 @@ public class SEIProcessor {
         }
     }
 
-    void addTypeFromReturn(Method method, List<org.jrapidoc.model.object.type.Type> returnTypes) {
+    void addTypeFromReturn(Method method, List<TransportType> returnTypes) {
         if (!isHeader(method.getDeclaredAnnotations())) {
             if (!method.getGenericReturnType().equals(Void.TYPE)) {
-                org.jrapidoc.model.object.type.Type retType = typeProvider.createType(method.getGenericReturnType());
-                returnTypes.add(retType);
+                org.jrapidoc.annotation.Return returnAnno = getAnnotation(method.getDeclaredAnnotations(), org.jrapidoc.annotation.Return.class);
+                String description = ( returnAnno== null)?null:returnAnno.description();
+                TransportType soapOutputParameter = new TransportType.TransportTypeBuilder().description(description).type(createType(method.getGenericReturnType())).build();
+                returnTypes.add(soapOutputParameter);
             }
         }
     }
@@ -186,8 +208,10 @@ public class SEIProcessor {
     void addHeaderFromReturn(Method method, Return.ReturnBuilder returnBuilder) {
         if (isHeader(method.getDeclaredAnnotations())) {
             if (!method.getGenericReturnType().equals(Void.TYPE)) {
-                org.jrapidoc.model.object.type.Type outHeader = typeProvider.createType(method.getGenericReturnType());
-                returnBuilder.soapOutputHeader(outHeader);
+                org.jrapidoc.annotation.Return returnAnno = getAnnotation(method.getDeclaredAnnotations(), org.jrapidoc.annotation.Return.class);
+                String description = ( returnAnno== null)?null:returnAnno.description();
+                TransportType soapOutputHeader = new TransportType.TransportTypeBuilder().description(description).type(createType(method.getGenericReturnType())).build();
+                returnBuilder.soapOutputHeader(soapOutputHeader);
             }
         }
     }

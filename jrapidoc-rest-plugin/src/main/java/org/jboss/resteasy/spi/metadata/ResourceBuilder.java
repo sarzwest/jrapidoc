@@ -10,7 +10,7 @@ import org.jboss.resteasy.util.MethodHashing;
 import org.jboss.resteasy.util.PickConstructor;
 import org.jboss.resteasy.util.Types;
 import org.jrapidoc.annotation.Description;
-import org.jrapidoc.annotation.PathExample;
+import org.jrapidoc.annotation.rest.PathExample;
 import org.jrapidoc.annotation.Return;
 import org.jrapidoc.annotation.Returns;
 import org.jrapidoc.logger.Logger;

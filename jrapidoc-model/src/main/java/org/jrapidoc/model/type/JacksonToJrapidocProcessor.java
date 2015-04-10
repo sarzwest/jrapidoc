@@ -41,9 +41,9 @@ public class JacksonToJrapidocProcessor {
             }
             cache.put(signature, type);
             ObjectWriter objectWriter = objectMapper.writerFor(jacksonType);
-            Field prefetchFiled = objectWriter.getClass().getDeclaredField("_prefetch");
-            prefetchFiled.setAccessible(true);
-            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchFiled.get(objectWriter);
+            Field prefetchField = objectWriter.getClass().getDeclaredField("_prefetch");
+            prefetchField.setAccessible(true);
+            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchField.get(objectWriter);
             doIntrospection(prefetch.valueSerializer, type);
             return type;
         } catch (NoSuchFieldException e) {
@@ -210,7 +210,7 @@ public class JacksonToJrapidocProcessor {
                 JavaType propType = prop.getType();
                 getType(propType);
                 String signature = JacksonSignature.createSignature(propType);
-                type.addBeanProperty(new BeanProperty(prop.getName(), signature, prop.getPropertyType()));
+                type.addBeanProperty(new BeanProperty(prop.getName(), signature, prop.getPropertyType(), prop.getMetadata().getDescription(), prop.getMetadata().isRequired()));
             }
         } catch (NoSuchFieldException e) {
             e.printStackTrace();

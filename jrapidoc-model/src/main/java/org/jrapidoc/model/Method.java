@@ -25,13 +25,13 @@ public class Method {
     private String path;
     private String pathExample;
     private List<Return> returnOptions;
-    private List<Type> parameters;
+    private List<TransportType> parameters;
     private String httpMethodType;
     private String description;
     private String name;
-    private List<Type> soapInputHeaders;
+    private List<TransportType> soapInputHeaders;
 
-    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, String path, String pathExample, List<Return> returnOptions, List<Type> parameters, String httpMethodType, String description, String name, List<Type> soapInputHeaders) {
+    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, String path, String pathExample, List<Return> returnOptions, List<TransportType> parameters, String httpMethodType, String description, String name, List<TransportType> soapInputHeaders) {
         this.isAsynchronous = isAsynchronous;
         this.headerParams = headerParams;
         this.cookieParams = cookieParams;
@@ -108,11 +108,11 @@ public class Method {
         private String path;
         private String pathExample;
         private List<Return> returnOptions = new ArrayList<Return>();
-        private List<Type> parameters = new ArrayList<Type>();
+        private List<TransportType> parameters = new ArrayList<TransportType>();
         private String httpMethodType;
         private String description;
         private String name;
-        private List<Type> soapInputHeaders = new ArrayList<Type>();
+        private List<TransportType> soapInputHeaders = new ArrayList<TransportType>();
 
         public boolean isAsynchronous() {
             return isAsynchronous;
@@ -162,7 +162,7 @@ public class Method {
             return returnOptions;
         }
 
-        public List<Type> getParameters() {
+        public List<TransportType> getParameters() {
             return parameters;
         }
 
@@ -205,7 +205,7 @@ public class Method {
             return this;
         }
 
-        public MethodBuilder parameter(Type parameter) {
+        public MethodBuilder parameter(TransportType parameter) {
             this.parameters.add(parameter);
             return this;
         }
@@ -266,7 +266,7 @@ public class Method {
             this.queryParams.add(queryParam);
         }
 
-        public void soapInputHeader(Type soapHeader) {
+        public void soapInputHeader(TransportType soapHeader) {
             this.soapInputHeaders.add(soapHeader);
         }
 

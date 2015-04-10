@@ -9,11 +9,15 @@ public class BeanProperty {
     String name;
     Class<?> type;
     String typeRef;
+    String description;
+    boolean isRequired;
 
-    public BeanProperty(String name, String typeRef, Class<?> type) {
+    public BeanProperty(String name, String typeRef, Class<?> type, String description, boolean isRequired) {
         this.name = name;
         this.type = type;
         this.typeRef = typeRef;
+        this.description = description;
+        this.isRequired = isRequired;
     }
 
     public void addType(Class<?> type){
@@ -26,6 +30,8 @@ public class BeanProperty {
                 "name='" + name + '\'' +
                 ", type=" + type +
                 ", typeRef='" + typeRef + '\'' +
+                ", description='" + description + '\'' +
+                ", isRequired=" + isRequired +
                 '}';
     }
 }
