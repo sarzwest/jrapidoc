@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>org.jrapidoc</groupId>
-    <artifactId>jrapidoc-rest-annotation</artifactId>
+    <artifactId>jrapidoc-annotation</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 

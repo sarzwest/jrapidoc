@@ -1,4 +1,4 @@
-package org.jrapidoc.annotation;
+package org.jrapidoc.annotation.rest;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
