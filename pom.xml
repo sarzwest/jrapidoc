@@ -19,7 +19,7 @@
     <modules>
         <module>jrapidoc-rest-plugin</module>
         <module>jrapidoc-soap-plugin</module>
-        <module>jrapidoc-rest-annotation</module>
+        <module>jrapidoc-annotation</module>
         <!--<module>../airserviceopenshift</module>-->
         <module>jrapidoc-gui</module>
         <module>jrapidoc-model</module>
@@ -78,7 +78,7 @@
             </dependency>
             <dependency>
                 <groupId>org.jrapidoc</groupId>
-                <artifactId>jrapidoc-rest-annotation</artifactId>
+                <artifactId>jrapidoc-annotation</artifactId>
                 <version>${org.jrapidoc.version}</version>
             </dependency>
             <dependency>

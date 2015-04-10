@@ -55,7 +55,7 @@
         </dependency>
         <dependency>
             <groupId>org.jrapidoc</groupId>
-            <artifactId>jrapidoc-rest-annotation</artifactId>
+            <artifactId>jrapidoc-annotation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jrapidoc</groupId>
