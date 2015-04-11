@@ -1,5 +1,5 @@
-import org.jrapidoc.annotation.Return;
-import org.jrapidoc.annotation.Returns;
+import org.jrapidoc.annotation.rest.Return;
+import org.jrapidoc.annotation.rest.Returns;
 
 /**
  * Created by papa on 31.3.15.

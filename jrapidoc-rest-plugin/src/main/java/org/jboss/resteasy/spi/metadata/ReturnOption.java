@@ -1,6 +1,6 @@
 package org.jboss.resteasy.spi.metadata;
 
-import org.jrapidoc.annotation.Return;
+import org.jrapidoc.annotation.rest.Return;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
