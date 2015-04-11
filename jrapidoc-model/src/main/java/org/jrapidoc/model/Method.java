@@ -30,8 +30,9 @@ public class Method {
     private String description;
     private String name;
     private List<TransportType> soapInputHeaders;
+    private SoapBinding soapBinding;
 
-    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, String path, String pathExample, List<Return> returnOptions, List<TransportType> parameters, String httpMethodType, String description, String name, List<TransportType> soapInputHeaders) {
+    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, String path, String pathExample, List<Return> returnOptions, List<TransportType> parameters, String httpMethodType, String description, String name, List<TransportType> soapInputHeaders, SoapBinding soapBinding) {
         this.isAsynchronous = isAsynchronous;
         this.headerParams = headerParams;
         this.cookieParams = cookieParams;
@@ -47,6 +48,7 @@ public class Method {
         this.description = description;
         this.name = name;
         this.soapInputHeaders = soapInputHeaders;
+        this.soapBinding = soapBinding;
     }
 
     public MethodBuilder returnOption(List<Return> returnOptions) {
@@ -91,7 +93,7 @@ public class Method {
     public Method clone(String httpMethod){
         return new Method(this.isAsynchronous, this.headerParams, this.cookieParams, this.formParams, this.matrixParams,
                 this.pathParams, this.queryParams, this.path, this.pathExample, this.returnOptions,
-                this.parameters, httpMethod, this.description, this.name, this.soapInputHeaders);
+                this.parameters, httpMethod, this.description, this.name, this.soapInputHeaders, this.soapBinding);
     }
 
     public static class MethodBuilder {
@@ -113,6 +115,7 @@ public class Method {
         private String description;
         private String name;
         private List<TransportType> soapInputHeaders = new ArrayList<TransportType>();
+        private SoapBinding soapBinding;
 
         public boolean isAsynchronous() {
             return isAsynchronous;
@@ -220,6 +223,11 @@ public class Method {
             return this;
         }
 
+        public MethodBuilder soapBinding(SoapBinding soapBinding) {
+            this.soapBinding = soapBinding;
+            return this;
+        }
+
         public MethodBuilder param(Param.Type paramType, Param param) {
             if (paramType.equals(Param.Type.COOKIE_PARAM)) {
                 addCookieParam((CookieParam)param);
@@ -271,7 +279,7 @@ public class Method {
         }
 
         public Method build(){
-            return new Method(isAsynchronous, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, path, pathExample, returnOptions, parameters, httpMethodType, description, name, (soapInputHeaders.isEmpty())?null: soapInputHeaders);
+            return new Method(isAsynchronous, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, path, pathExample, returnOptions, parameters, httpMethodType, description, name, (soapInputHeaders.isEmpty())?null: soapInputHeaders, soapBinding);
         }
     }
 }

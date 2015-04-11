@@ -3,14 +3,12 @@ package org.jrapidoc.processor;
 import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.annotation.Description;
 import org.jrapidoc.logger.Logger;
-import org.jrapidoc.model.Resource;
-import org.jrapidoc.model.ResourceListing;
-import org.jrapidoc.model.Return;
-import org.jrapidoc.model.TransportType;
+import org.jrapidoc.model.*;
 import org.jrapidoc.model.param.HeaderParam;
-import org.jrapidoc.model.type.TypeProvider;
+import org.jrapidoc.model.type.provider.TypeProvider;
 
 import javax.jws.*;
+import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.Holder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -72,41 +70,57 @@ public class SEIProcessor {
             if (Modifier.isPublic(method.getModifiers())) {
                 WebMethod webMetAnnotation = method.getAnnotation(WebMethod.class);
                 if (webMetAnnotation == null) {
-                    resourceBuilder.method(createMethod(method));
+                    resourceBuilder.method(createMethod(method, seiClass));
                 } else if (!method.getAnnotation(WebMethod.class).exclude()) {
-                    resourceBuilder.method(createMethod(method));
+                    resourceBuilder.method(createMethod(method, seiClass));
                 }
             }
         }
     }
 
-    String getDescription(Annotation[] annotations){
+    String getDescription(Annotation[] annotations) {
         Description description = getAnnotation(annotations, Description.class);
-        if(description == null){
+        if (description == null) {
             return null;
-        }else {
+        } else {
             return description.value();
         }
     }
 
-    org.jrapidoc.model.Method createMethod(Method method) {
+    org.jrapidoc.model.Method createMethod(Method method, Class<?> seiClass) {
         org.jrapidoc.model.Method.MethodBuilder methodBuilder = new org.jrapidoc.model.Method.MethodBuilder();
         methodBuilder.description(getDescription(method.getDeclaredAnnotations()));
         addMethodName(method, methodBuilder);
         addInputHeaders(method, methodBuilder);
         addInputParams(method, methodBuilder);
         addReturn(method, methodBuilder);
+        addSoapBinding(method, seiClass, methodBuilder);
+        methodBuilder.isAsynchronous(true);
         return methodBuilder.build();
     }
 
-    void addReturn(Method method, org.jrapidoc.model.Method.MethodBuilder methodBuilder){
+    void addSoapBinding(Method method, Class<?> seiClass, org.jrapidoc.model.Method.MethodBuilder methodBuilder) {
+        SOAPBinding soapBindingAnno = getAnnotation(method.getDeclaredAnnotations(), SOAPBinding.class);
+        SoapBinding.SoapBindingBuilder soapBindingBuilder = new SoapBinding.SoapBindingBuilder();
+        if (soapBindingAnno == null) {
+            soapBindingAnno = getAnnotation(seiClass.getDeclaredAnnotations(), SOAPBinding.class);
+        }
+        if (soapBindingAnno != null) {
+            soapBindingBuilder.parameterStyle(soapBindingAnno.parameterStyle().name()).style(soapBindingAnno.style().name()).use(soapBindingAnno.use().name()).build();
+        }
+        methodBuilder.soapBinding(soapBindingBuilder.build());
+    }
+
+    void addReturn(Method method, org.jrapidoc.model.Method.MethodBuilder methodBuilder) {
         Return.ReturnBuilder returnBuilder = new Return.ReturnBuilder();
         addOutputHeaders(method, returnBuilder);
         addOutputParams(method, returnBuilder);
         HeaderParam headerParam = new HeaderParam.HeaderParamBuilder().setName(HeaderParam.CONTENT_TYPE).setOptions(new String[]{"application/xml"}).build();
-        returnBuilder.httpStatus(200).headerParams(Arrays.asList(new HeaderParam[]{headerParam}));
+        returnBuilder.httpStatus(200).headerParams(Arrays.asList(headerParam));
         Return returnType = returnBuilder.build();
-        methodBuilder.returnOptions(new ArrayList<Return>(Arrays.asList(new Return[]{returnType})));
+        List<Return> returnOptions = new ArrayList<Return>(Arrays.asList(new Return[]{returnType}));
+        addExceptionTypes(method, returnOptions);
+        methodBuilder.returnOptions(returnOptions);
     }
 
     org.jrapidoc.model.object.type.Type createType(Type param) {
@@ -176,6 +190,7 @@ public class SEIProcessor {
         }
     }
 
+    //udelat podporu pro soapbinding
     void addOutputParams(Method method, Return.ReturnBuilder returnBuilder) {
         if (!isOneWay(method)) {
             List<TransportType> returnTypes = new ArrayList<TransportType>();
@@ -194,11 +209,21 @@ public class SEIProcessor {
         }
     }
 
+    void addExceptionTypes(Method method, List<Return> returnOptions) {
+        for (Type exception : method.getGenericExceptionTypes()) {
+            TransportType exceptionTransport = new TransportType.TransportTypeBuilder().type(createType(exception)).description(null).build();
+            List<TransportType> transportTypes = new ArrayList<TransportType>(Arrays.asList(new TransportType[]{exceptionTransport}));
+            List<HeaderParam> httpHeaders = new ArrayList<HeaderParam>(Arrays.asList(new HeaderParam[]{new HeaderParam.HeaderParamBuilder().setName(HeaderParam.CONTENT_TYPE).setOptions(new String[]{"application/xml"}).build()}));
+            Return returnException = new Return.ReturnBuilder().httpStatus(500).description(null).returnTypes(transportTypes).headerParams(httpHeaders).build();
+            returnOptions.add(returnException);
+        }
+    }
+
     void addTypeFromReturn(Method method, List<TransportType> returnTypes) {
         if (!isHeader(method.getDeclaredAnnotations())) {
             if (!method.getGenericReturnType().equals(Void.TYPE)) {
-                org.jrapidoc.annotation.Return returnAnno = getAnnotation(method.getDeclaredAnnotations(), org.jrapidoc.annotation.Return.class);
-                String description = ( returnAnno== null)?null:returnAnno.description();
+                org.jrapidoc.annotation.soap.Return returnAnno = getAnnotation(method.getDeclaredAnnotations(), org.jrapidoc.annotation.soap.Return.class);
+                String description = (returnAnno == null) ? null : returnAnno.description();
                 TransportType soapOutputParameter = new TransportType.TransportTypeBuilder().description(description).type(createType(method.getGenericReturnType())).build();
                 returnTypes.add(soapOutputParameter);
             }
@@ -208,8 +233,8 @@ public class SEIProcessor {
     void addHeaderFromReturn(Method method, Return.ReturnBuilder returnBuilder) {
         if (isHeader(method.getDeclaredAnnotations())) {
             if (!method.getGenericReturnType().equals(Void.TYPE)) {
-                org.jrapidoc.annotation.Return returnAnno = getAnnotation(method.getDeclaredAnnotations(), org.jrapidoc.annotation.Return.class);
-                String description = ( returnAnno== null)?null:returnAnno.description();
+                org.jrapidoc.annotation.soap.Return returnAnno = getAnnotation(method.getDeclaredAnnotations(), org.jrapidoc.annotation.soap.Return.class);
+                String description = (returnAnno == null) ? null : returnAnno.description();
                 TransportType soapOutputHeader = new TransportType.TransportTypeBuilder().description(description).type(createType(method.getGenericReturnType())).build();
                 returnBuilder.soapOutputHeader(soapOutputHeader);
             }
