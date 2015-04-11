@@ -5,7 +5,7 @@ import org.jrapidoc.RestUtil;
 import org.jrapidoc.model.*;
 import org.jrapidoc.model.object.type.Type;
 import org.jrapidoc.model.param.*;
-import org.jrapidoc.model.type.TypeProvider;
+import org.jrapidoc.model.type.provider.TypeProvider;
 
 import java.util.*;
 

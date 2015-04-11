@@ -1,15 +1,16 @@
-package org.jrapidoc.model.type;
+package org.jrapidoc.model.type.provider;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import org.jrapidoc.model.object.type.Type;
 
 /**
  * Created by papa on 25.3.15.
  */
-public class JaxbTypeProvider extends JacksonTypeProvider {
+public class JacksonJaxbProvider extends JacksonJsonProvider {
 
-    public JaxbTypeProvider() {
+    public JacksonJaxbProvider() {
         super();
         objectMapper.setAnnotationIntrospector(new JaxbAnnotationIntrospector(objectMapper.getTypeFactory()));
     }

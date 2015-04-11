@@ -5,8 +5,8 @@ import org.jboss.resteasy.spi.metadata.ResourceClass;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.ResourceListing;
 import org.jrapidoc.model.generator.ModelGenerator;
-import org.jrapidoc.model.type.TypeProvider;
-import org.jrapidoc.model.type.TypeProviderFactory;
+import org.jrapidoc.model.type.provider.TypeProvider;
+import org.jrapidoc.model.type.provider.TypeProviderFactory;
 import org.jrapidoc.processor.ResourceClassProcessor;
 import org.reflections.Reflections;
 
@@ -24,14 +24,14 @@ import java.util.Set;
  */
 public class RestIntrospector {
 
-    public void introspect(URL[] urlsForClassloader, List<String> include, List<String> exclude, String basePath, String typeProviderClass, File output) {
+    public void introspect(URL[] urlsForClassloader, List<String> include, List<String> exclude, String basePath, String typeProviderClass, File output) throws Exception {
         Logger.debug("Introspection started");
         URLClassLoader loader = new URLClassLoader(urlsForClassloader,
                 Thread.currentThread().getContextClassLoader());
         // ... and now you can pass the above classloader to Reflections
         Reflections ref = getUnionOfIncludedPaths(include, loader);
         Set<Class<?>> resourceClassesAll = ref.getTypesAnnotatedWith(Path.class);
-        Logger.debug(MessageFormat.format("Root resource classes on path: {0}", new Object[]{resourceClassesAll}));
+        Logger.debug("Root resource classes on path: {0}", resourceClassesAll.toString());
         Set<Class<?>> resourceClasses = removeExcludedResourceClasses(exclude, resourceClassesAll);
         Set<ResourceClass> resourceClassesMeta = new HashSet<ResourceClass>();
         for (Class<?> rootResourceClass : resourceClasses) {
@@ -42,7 +42,12 @@ public class RestIntrospector {
         ResourceClassProcessor resourceClassProcessor = new ResourceClassProcessor(typeProvider);
         ResourceListing listing = resourceClassProcessor.createListing(resourceClassesMeta, basePath);
         //TODO add types to model
-        output.getParentFile().mkdirs();
+        if (!output.getParentFile().canWrite()) {
+            if (!output.getParentFile().mkdirs()) {
+                Logger.error("Directory {0} could not be created", output.getParentFile().getAbsolutePath());
+                throw new Exception("Directory could not be created");
+            }
+        }
         ModelGenerator.generateModel(listing, output);
         Logger.debug("Introspection finished");
     }
@@ -52,7 +57,7 @@ public class RestIntrospector {
         for (String excludePath : exclude) {
             for (Class<?> resourceClass : resourceClasses) {
                 if (resourceClass.getCanonicalName().startsWith(excludePath)) {
-                    Logger.debug(MessageFormat.format("Removing class {0} from scan (it is in exclude property)", new Object[]{resourceClass.getCanonicalName()}));
+                    Logger.debug("Removing class {0} from scan (it is in exclude property)", resourceClass.getCanonicalName());
                     resourceClassesFiltered.remove(resourceClass);
                 }
             }

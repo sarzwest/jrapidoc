@@ -1,4 +1,4 @@
-package org.jrapidoc.model.type;
+package org.jrapidoc.model.type.provider.converter;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.*;

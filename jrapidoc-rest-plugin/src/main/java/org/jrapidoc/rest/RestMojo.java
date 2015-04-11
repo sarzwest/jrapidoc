@@ -62,14 +62,13 @@ public class RestMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         long start = System.currentTimeMillis();
-        List<String> classpathElements = null;
         try {
             Logger.setLogger(getLog());
-            classpathElements = project.getCompileClasspathElements();
+            List<String> classpathElements = project.getCompileClasspathElements();
             List<URL> projectClasspathList = new ArrayList<URL>();
             for (String element : classpathElements) {
                 try {
-                    Logger.info(MessageFormat.format("Adding project classpath element {0}", new Object[]{element}));
+                    Logger.info("Adding project classpath element {0}", element);
                     projectClasspathList.add(new File(element).toURI().toURL());
                 } catch (MalformedURLException e) {
                     getLog().error(e);

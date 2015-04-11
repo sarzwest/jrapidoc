@@ -10,12 +10,12 @@ public class QueryParam extends Param  {
 
     @Override
     public QueryParamBuilder setDescription(String description) {
-        return (QueryParamBuilder) new QueryParamBuilder().setDescription(description);
+        return new QueryParamBuilder().setDescription(description);
     }
 
     @Override
     protected QueryParamBuilder setRequired(boolean isRequired) {
-        return (QueryParamBuilder) new QueryParamBuilder().setRequired(isRequired);
+        return new QueryParamBuilder().setRequired(isRequired);
     }
 
     @Override

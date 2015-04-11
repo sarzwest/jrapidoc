@@ -20,7 +20,7 @@ public class HeaderParam extends Param  {
 
     @Override
     public HeaderParamBuilder setDescription(String description) {
-        return (HeaderParamBuilder) new HeaderParamBuilder().setDescription(description);
+        return new HeaderParamBuilder().setDescription(description);
     }
 
     public String[] getOptions() {
@@ -28,17 +28,17 @@ public class HeaderParam extends Param  {
     }
 
     public HeaderParamBuilder setOptions(String[] options) {
-        return (HeaderParamBuilder) new HeaderParamBuilder().setOptions(options);
+        return new HeaderParamBuilder().setOptions(options);
     }
 
     @Override
     protected HeaderParamBuilder setRequired(boolean isRequired) {
-        return (HeaderParamBuilder) new HeaderParamBuilder().setRequired(isRequired);
+        return new HeaderParamBuilder().setRequired(isRequired);
     }
 
     @Override
     protected HeaderParamBuilder setName(String name) {
-        return (HeaderParamBuilder) new HeaderParamBuilder().setName(name);
+        return new HeaderParamBuilder().setName(name);
     }
 
     public static class HeaderParamBuilder extends ParamBuilder{

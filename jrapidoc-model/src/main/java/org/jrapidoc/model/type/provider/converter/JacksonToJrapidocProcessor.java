@@ -1,4 +1,4 @@
-package org.jrapidoc.model.type;
+package org.jrapidoc.model.type.provider.converter;
 
 import com.fasterxml.jackson.core.SerializableString;
 import com.fasterxml.jackson.databind.JavaType;
@@ -27,6 +27,14 @@ public class JacksonToJrapidocProcessor {
         this.objectMapper = objectMapper;
     }
 
+//    ObjectWriter createObjectWriter(JavaType jacksonType){
+//        if(Parent.class.isAssignableFrom(jacksonType.getRawClass())){
+//            objectMapper.setFilters();
+//            return objectMapper.writerWithView().forType(jacksonType);
+//        }else{
+//            return objectMapper.writerFor(jacksonType);
+//        }
+//    }
     /**
      * Z jackson typu vytvori apition typ, bean properties jsou ulozeny v cache
      * @param jacksonType

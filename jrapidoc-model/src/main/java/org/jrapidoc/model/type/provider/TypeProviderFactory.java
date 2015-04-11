@@ -1,4 +1,4 @@
-package org.jrapidoc.model.type;
+package org.jrapidoc.model.type.provider;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.logger.Logger;
@@ -16,11 +16,11 @@ public class TypeProviderFactory {
                 return (TypeProvider)providerImpl.newInstance();
             }else{
                 Logger.debug("Using default TypeProvider instance");
-                return new JacksonTypeProvider();
+                return new JacksonJsonProvider();
             }
         } catch (Exception e) {
-            Logger.warn(e, "Exception occured during loading creating TypeProvider, using default TypeProvider");
-            return new JacksonTypeProvider();
+            Logger.warn(e, "Exception occured during loading {0} as TypeProvider, using default TypeProvider", clazzToLoad);
+            return new JacksonJsonProvider();
         }
     }
 }

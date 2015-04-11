@@ -1,4 +1,4 @@
-package org.jrapidoc.model.type;
+package org.jrapidoc.model.type.provider;
 
 import org.jrapidoc.model.object.type.Type;
 

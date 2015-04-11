@@ -1,8 +1,9 @@
-package org.jrapidoc.model.type;
+package org.jrapidoc.model.type.provider;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jrapidoc.model.object.type.Type;
+import org.jrapidoc.model.type.provider.converter.JacksonToJrapidocProcessor;
 import sun.reflect.generics.reflectiveObjects.TypeVariableImpl;
 
 import java.lang.reflect.ParameterizedType;
@@ -10,12 +11,12 @@ import java.lang.reflect.ParameterizedType;
 /**
  * Created by papa on 25.3.15.
  */
-public class JacksonTypeProvider extends TypeProvider {
+public class JacksonJsonProvider extends TypeProvider {
 
     protected ObjectMapper objectMapper;
     protected JacksonToJrapidocProcessor processor;
 
-    public JacksonTypeProvider() {
+    public JacksonJsonProvider() {
         objectMapper = new ObjectMapper();
         processor = new JacksonToJrapidocProcessor(objectMapper);
     }
