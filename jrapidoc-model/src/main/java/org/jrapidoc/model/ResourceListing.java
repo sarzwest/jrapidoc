@@ -14,30 +14,17 @@ public class ResourceListing {
     private String baseUrl;
     private List<Resource> resources = new ArrayList<Resource>();
 
-    public ResourceListing(String baseUrl, List<Resource> resources) {
+    private ResourceListing(String baseUrl, List<Resource> resources) {
         this.baseUrl = baseUrl;
         this.resources = resources;
-    }
-
-    public static ResourceListingBuilder baseUrl(String baseUrl) {
-        return new ResourceListingBuilder().baseUrl(baseUrl);
-    }
-
-    public static ResourceListingBuilder resource(Resource resource) {
-        return new ResourceListingBuilder().resource(resource);
     }
 
     public List<Resource> getResources() {
         return resources;
     }
 
-    public Resource getResourceByPath(String path) {
-        for(Resource resource:resources){
-            if(resource.getPath().equals(path)){
-                return resource;
-            }
-        }
-        return null;
+    public String getBaseUrl() {
+        return baseUrl;
     }
 
     public static class ResourceListingBuilder{

@@ -49,6 +49,18 @@ public class Resource {
         return name;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public List<Method> getMethods() {
+        return methods;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public String getPathExample() {
         return pathExample;
     }
@@ -77,25 +89,6 @@ public class Resource {
         return queryParams;
     }
 
-    public ResourceBuilder method(Method method) {
-        return new ResourceBuilder().method(method);
-    }
-
-    public ResourceBuilder path(String path) {
-        return new ResourceBuilder().path(path);
-    }
-
-    public ResourceBuilder pathExample(String pathExample) {
-        return new ResourceBuilder().pathExample(pathExample);
-    }
-
-    public ResourceBuilder param(Param.Type paramType, Param param) {
-        return new ResourceBuilder().param(paramType, param);
-    }
-
-    public ResourceBuilder description(String description) {
-        return new ResourceBuilder().description(description);
-    }
 
     private <T extends Param> T getParam(List<T> params, String paramName){
         for (T p:params){
@@ -121,22 +114,6 @@ public class Resource {
             return getParam(queryParams, paramName);
         }
         return null;
-    }
-
-    public void addMethod(Method method) {
-        methods.add(method);
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public List<Method> getMethods() {
-        return methods;
     }
 
     public static class ResourceBuilder{

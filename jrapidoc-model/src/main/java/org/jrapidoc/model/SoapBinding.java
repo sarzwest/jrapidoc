@@ -15,6 +15,18 @@ public class SoapBinding {
         this.parameterStyle = parameterStyle;
     }
 
+    public String getStyle() {
+        return style;
+    }
+
+    public String getUse() {
+        return use;
+    }
+
+    public String getParameterStyle() {
+        return parameterStyle;
+    }
+
     public static class SoapBindingBuilder{
 
         private String style = "DOCUMENT";

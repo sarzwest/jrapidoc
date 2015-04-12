@@ -8,21 +8,6 @@ public class FormParam extends Param {
         super(name, isRequired, typeref, type, description);
     }
 
-    @Override
-    public ParamBuilder setDescription(String description) {
-        return null;
-    }
-
-    @Override
-    protected ParamBuilder setRequired(boolean isRequired) {
-        return null;
-    }
-
-    @Override
-    protected ParamBuilder setName(String name) {
-        return null;
-    }
-
     public static class FormParamBuilder extends ParamBuilder{
 
         @Override

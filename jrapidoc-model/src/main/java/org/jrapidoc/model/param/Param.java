@@ -32,29 +32,25 @@ public abstract class Param {
         this.description = description;
     }
 
+    public boolean isRequired() {
+        return isRequired;
+    }
+
+    public String getTyperef() {
+        return typeref;
+    }
+
     public String getDescription() {
         return description;
     }
-
-    public abstract ParamBuilder setDescription(String description) ;
 
     public String getName() {
         return name;
     }
 
-    protected boolean isRequired() {
-        return isRequired;
-    }
-
-    protected abstract  ParamBuilder setRequired(boolean isRequired) ;
-
     public Type getType() {
         return type;
     }
-
-//    protected abstract  ParamBuilder setType(Type type);
-
-    protected abstract  ParamBuilder setName(String name);
 
     public static abstract class ParamBuilder{
 
@@ -73,11 +69,6 @@ public abstract class Param {
             this.isRequired = isRequired;
             return this;
         }
-
-//        public ParamBuilder setType(Type type) {
-//            this.type = type;
-//            return this;
-//        }
 
         public ParamBuilder setDescription(String description) {
             this.description = description;

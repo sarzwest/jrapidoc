@@ -8,21 +8,6 @@ public class QueryParam extends Param  {
         super(name, isRequired, typeref, type, description);
     }
 
-    @Override
-    public QueryParamBuilder setDescription(String description) {
-        return new QueryParamBuilder().setDescription(description);
-    }
-
-    @Override
-    protected QueryParamBuilder setRequired(boolean isRequired) {
-        return new QueryParamBuilder().setRequired(isRequired);
-    }
-
-    @Override
-    protected QueryParamBuilder setName(String name) {
-        return (QueryParamBuilder) new QueryParamBuilder().setName(name);
-    }
-
     public static class QueryParamBuilder extends ParamBuilder{
         @Override
         public QueryParamBuilder setName(String name) {

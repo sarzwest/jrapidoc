@@ -15,6 +15,14 @@ public class TransportType {
         this.description = description;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public static class TransportTypeBuilder{
         Type type;
         String description;

@@ -5,25 +5,8 @@ package org.jrapidoc.model.param;
  */
 public class MatrixParam extends Param  {
 
-    private int min = 0, max = Integer.MAX_VALUE;
-
     public MatrixParam(String name, boolean isRequired, String typeref, Type type, String description) {
         super(name, isRequired, typeref, type, description);
-    }
-
-    @Override
-    public ParamBuilder setDescription(String description) {
-        return null;
-    }
-
-    @Override
-    protected ParamBuilder setRequired(boolean isRequired) {
-        return null;
-    }
-
-    @Override
-    protected ParamBuilder setName(String name) {
-        return null;
     }
 
     public static class MatrixParamBuilder extends ParamBuilder{

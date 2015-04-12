@@ -28,20 +28,28 @@ public class Return {
         this.soapOutputHeaders = soapOutputHeaders;
     }
 
-    public static ReturnBuilder  httpStatus(int httpStatus) {
-        return new ReturnBuilder().httpStatus(httpStatus);
+    public int getHttpStatus() {
+        return httpStatus;
     }
 
-    public static ReturnBuilder headerParams(List<HeaderParam> headerParams) {
-        return new ReturnBuilder().headerParams(headerParams);
+    public List<HeaderParam> getHeaderParams() {
+        return headerParams;
     }
 
-    public static ReturnBuilder cookieParams(List<CookieParam> cookieParams) {
-        return new ReturnBuilder().cookieParams(cookieParams);
+    public List<CookieParam> getCookieParams() {
+        return cookieParams;
     }
 
-    public static ReturnBuilder  returnType(List<TransportType> returnTypes) {
-        return new ReturnBuilder().returnTypes(returnTypes);
+    public List<TransportType> getReturnTypes() {
+        return returnTypes;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<TransportType> getSoapOutputHeaders() {
+        return soapOutputHeaders;
     }
 
     public static class ReturnBuilder{

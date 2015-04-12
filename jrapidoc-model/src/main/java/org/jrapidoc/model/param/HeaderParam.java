@@ -9,18 +9,9 @@ public class HeaderParam extends Param  {
     public static final String ACCEPT = "Accept";
     public static final String CONTENT_TYPE = "Content-Type";
 
-//    private HeaderParam(String name, boolean isRequired, String typeref, Type type) {
-//        super(name, isRequired, typeref, type);
-//    }
-
     private HeaderParam(String name, boolean isRequired, String typeref, String[] options, Type type, String description) {
         super(name, isRequired, typeref, type, description);
         this.options = options;
-    }
-
-    @Override
-    public HeaderParamBuilder setDescription(String description) {
-        return new HeaderParamBuilder().setDescription(description);
     }
 
     public String[] getOptions() {
@@ -29,16 +20,6 @@ public class HeaderParam extends Param  {
 
     public HeaderParamBuilder setOptions(String[] options) {
         return new HeaderParamBuilder().setOptions(options);
-    }
-
-    @Override
-    protected HeaderParamBuilder setRequired(boolean isRequired) {
-        return new HeaderParamBuilder().setRequired(isRequired);
-    }
-
-    @Override
-    protected HeaderParamBuilder setName(String name) {
-        return new HeaderParamBuilder().setName(name);
     }
 
     public static class HeaderParamBuilder extends ParamBuilder{
