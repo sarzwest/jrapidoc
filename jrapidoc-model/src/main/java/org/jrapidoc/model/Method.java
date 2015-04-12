@@ -55,6 +55,10 @@ public class Method {
         return new MethodBuilder().returnOptions(returnOptions);
     }
 
+    public String getName() {
+        return name;
+    }
+
     public MethodBuilder path(String path) {
         return new MethodBuilder().path(path);
     }

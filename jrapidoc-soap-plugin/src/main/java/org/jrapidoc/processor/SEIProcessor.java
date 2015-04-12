@@ -89,14 +89,25 @@ public class SEIProcessor {
 
     org.jrapidoc.model.Method createMethod(Method method, Class<?> seiClass) {
         org.jrapidoc.model.Method.MethodBuilder methodBuilder = new org.jrapidoc.model.Method.MethodBuilder();
-        methodBuilder.description(getDescription(method.getDeclaredAnnotations()));
+        methodBuilder.description(getDescription(method.getDeclaredAnnotations())).isAsynchronous(true);
+        addOperationName(method, methodBuilder);
         addMethodName(method, methodBuilder);
         addInputHeaders(method, methodBuilder);
         addInputParams(method, methodBuilder);
         addReturn(method, methodBuilder);
         addSoapBinding(method, seiClass, methodBuilder);
-        methodBuilder.isAsynchronous(true);
         return methodBuilder.build();
+    }
+
+    void addOperationName(Method method, org.jrapidoc.model.Method.MethodBuilder methodBuilder){
+        WebMethod webMethodAnno = getAnnotation(method.getDeclaredAnnotations(), WebMethod.class);
+        String operationName = method.getName();
+        if(webMethodAnno != null){
+            if(StringUtils.isNotEmpty(webMethodAnno.operationName())){
+                operationName = webMethodAnno.operationName();
+            }
+        }
+        methodBuilder.name(operationName);
     }
 
     void addSoapBinding(Method method, Class<?> seiClass, org.jrapidoc.model.Method.MethodBuilder methodBuilder) {
