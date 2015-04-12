@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by papa on 23.12.14.
  */
-@JsonPropertyOrder({"path", "httpMethodType", "pathExample", "headerParams",
+@JsonPropertyOrder({"name", "soapBinding", "path", "httpMethodType", "pathExample", "headerParams",
         "pathParams", "queryParams", "matrixParams", "cookieParams",
         "formParams", "isAsynchronous", "parameters", "returnOptions"})
 public class Method {
@@ -51,40 +51,68 @@ public class Method {
         this.soapBinding = soapBinding;
     }
 
-    public MethodBuilder returnOption(List<Return> returnOptions) {
-        return new MethodBuilder().returnOptions(returnOptions);
-    }
-
     public String getName() {
         return name;
     }
 
-    public MethodBuilder path(String path) {
-        return new MethodBuilder().path(path);
+    public boolean isAsynchronous() {
+        return isAsynchronous;
     }
 
-    public MethodBuilder pathExample(String pathExample) {
-        return new MethodBuilder().pathExample(pathExample);
+    public List<HeaderParam> getHeaderParams() {
+        return headerParams;
     }
 
-    public MethodBuilder httpMethodType(String httpMethodType) {
-        return new MethodBuilder().httpMethodType(httpMethodType);
+    public List<CookieParam> getCookieParams() {
+        return cookieParams;
     }
 
-    public MethodBuilder consumes(String mediatype) {
-        return new MethodBuilder().consumes(mediatype);
+    public List<FormParam> getFormParams() {
+        return formParams;
     }
 
-    public MethodBuilder produces(String mediatype) {
-        return new MethodBuilder().produces(mediatype);
+    public List<MatrixParam> getMatrixParams() {
+        return matrixParams;
     }
 
-    public MethodBuilder param(Param.Type paramType, Param paramName) {
-        return new MethodBuilder().param(paramType, paramName);
+    public List<PathParam> getPathParams() {
+        return pathParams;
     }
 
-    public MethodBuilder isAsynchronous(boolean asynchronous) {
-        return new MethodBuilder().isAsynchronous(isAsynchronous);
+    public List<QueryParam> getQueryParams() {
+        return queryParams;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getPathExample() {
+        return pathExample;
+    }
+
+    public List<Return> getReturnOptions() {
+        return returnOptions;
+    }
+
+    public List<TransportType> getParameters() {
+        return parameters;
+    }
+
+    public String getHttpMethodType() {
+        return httpMethodType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<TransportType> getSoapInputHeaders() {
+        return soapInputHeaders;
+    }
+
+    public SoapBinding getSoapBinding() {
+        return soapBinding;
     }
 
     @Override

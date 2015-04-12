@@ -11,11 +11,12 @@ public class TypeProviderFactory {
     public static TypeProvider createTypeProvider(String clazzToLoad) {
         try {
             if (StringUtils.isNotEmpty(clazzToLoad)) {
-                Logger.debug("Trying to load class {0} as TypeProvider instance", clazzToLoad);
+                Logger.info("Trying to load class {0}", clazzToLoad);
                 Class<?> providerImpl = Thread.currentThread().getContextClassLoader().loadClass(clazzToLoad);
+                Logger.debug("Trying to create new instance from class {0} as TypeProvider", clazzToLoad);
                 return (TypeProvider)providerImpl.newInstance();
             }else{
-                Logger.debug("Using default TypeProvider instance");
+                Logger.info("Using default TypeProvider instance");
                 return new JacksonJsonProvider();
             }
         } catch (Exception e) {
