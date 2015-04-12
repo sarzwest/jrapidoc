@@ -15,7 +15,7 @@ public class AvoidSoapOneWayMethodsHandler implements ModelHandler {
         for (Resource resource:model.getResources()){
             for(Method method:resource.getMethods()){
                 if(method.getReturnOptions().isEmpty()){
-                    throw new HandlerException(MessageFormat.format("Found one way method {1} in {0}", new Object[]{resource, method.getName()}), HandlerException.Action.STOP_ALL);
+                    throw new HandlerException(MessageFormat.format("Found one way method {1} in {0}", new Object[]{resource.getName(), method.getName()}), HandlerException.Action.STOP_ALL);
                 }
             }
         }

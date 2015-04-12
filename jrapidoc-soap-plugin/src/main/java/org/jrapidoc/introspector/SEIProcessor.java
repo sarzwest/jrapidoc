@@ -60,6 +60,7 @@ public class SEIProcessor {
 
     Resource createEndpoint(Class<?> seiClass) {
         Resource.ResourceBuilder resourceBuilder = new Resource.ResourceBuilder();
+        addServiceName(seiClass, resourceBuilder);
         resourceBuilder.description(getDescription(seiClass.getDeclaredAnnotations()));
         addMethods(seiClass, resourceBuilder);
         return resourceBuilder.build();
@@ -91,12 +92,23 @@ public class SEIProcessor {
         org.jrapidoc.model.Method.MethodBuilder methodBuilder = new org.jrapidoc.model.Method.MethodBuilder();
         methodBuilder.description(getDescription(method.getDeclaredAnnotations())).isAsynchronous(true);
         addOperationName(method, methodBuilder);
-        addMethodName(method, methodBuilder);
+//        addMethodName(method, methodBuilder);
         addInputHeaders(method, methodBuilder);
         addInputParams(method, methodBuilder);
         addReturn(method, methodBuilder);
         addSoapBinding(method, seiClass, methodBuilder);
         return methodBuilder.build();
+    }
+
+    void addServiceName(Class<?> seiClass, Resource.ResourceBuilder resourceBuilder){
+        WebService webServiceAnno = getAnnotation(seiClass.getDeclaredAnnotations(), WebService.class);
+        String serviceName = seiClass.getSimpleName() + "Service";
+        if(webServiceAnno != null){
+            if(StringUtils.isNotEmpty(webServiceAnno.serviceName())){
+                serviceName = webServiceAnno.serviceName();
+            }
+        }
+        resourceBuilder.name(serviceName);
     }
 
     void addOperationName(Method method, org.jrapidoc.model.Method.MethodBuilder methodBuilder) {

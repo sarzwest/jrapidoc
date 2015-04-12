@@ -29,8 +29,9 @@ public class Resource {
     private List<QueryParam> queryParams = new ArrayList<QueryParam>();
     private List<Method> methods = new ArrayList<Method>();
     private String description;
+    private String name;
 
-    private Resource(String path, String pathExample, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, List<Method> methods, String description) {
+    private Resource(String path, String pathExample, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, List<Method> methods, String description, String name) {
         this.path = path;
         this.pathExample = pathExample;
         this.headerParams = headerParams;
@@ -41,6 +42,39 @@ public class Resource {
         this.queryParams = queryParams;
         this.methods = methods;
         this.description = description;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPathExample() {
+        return pathExample;
+    }
+
+    public List<HeaderParam> getHeaderParams() {
+        return headerParams;
+    }
+
+    public List<CookieParam> getCookieParams() {
+        return cookieParams;
+    }
+
+    public List<FormParam> getFormParams() {
+        return formParams;
+    }
+
+    public List<MatrixParam> getMatrixParams() {
+        return matrixParams;
+    }
+
+    public List<PathParam> getPathParams() {
+        return pathParams;
+    }
+
+    public List<QueryParam> getQueryParams() {
+        return queryParams;
     }
 
     public ResourceBuilder method(Method method) {
@@ -117,9 +151,15 @@ public class Resource {
         private List<QueryParam> queryParams = new ArrayList<QueryParam>();
         private List<Method> methods = new ArrayList<Method>();
         private String description;
+        private String name;
 
         public ResourceBuilder path(String path) {
             this.path = path;
+            return this;
+        }
+
+        public ResourceBuilder name(String name) {
+            this.name = name;
             return this;
         }
 
@@ -189,7 +229,7 @@ public class Resource {
 //            for(Method method:methods){
 //
 //            }
-            return new Resource(path, pathExample, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, methods, description);
+            return new Resource(path, pathExample, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, methods, description, name);
         }
     }
 }
