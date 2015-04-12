@@ -1,8 +1,8 @@
 package org.jrapidoc.model.handler;
 
+import org.jrapidoc.model.APIModel;
 import org.jrapidoc.model.Method;
 import org.jrapidoc.model.Resource;
-import org.jrapidoc.model.ResourceListing;
 
 import java.text.MessageFormat;
 
@@ -11,7 +11,7 @@ import java.text.MessageFormat;
  */
 public class AvoidSoapOneWayMethodsHandler implements ModelHandler {
     @Override
-    public void handleModel(ResourceListing model) throws HandlerException {
+    public void handleModel(APIModel model) throws HandlerException {
         for (Resource resource:model.getResources()){
             for(Method method:resource.getMethods()){
                 if(method.getReturnOptions().isEmpty()){

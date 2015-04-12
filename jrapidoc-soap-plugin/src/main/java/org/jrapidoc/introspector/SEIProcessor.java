@@ -34,11 +34,11 @@ public class SEIProcessor {
         this.loader = loader;
     }
 
-    public void createListing(Set<Class<?>> seiClasses, ResourceListing.ResourceListingBuilder resourceListingBuilder) throws ClassNotFoundException {
+    public void createApiModel(Set<Class<?>> seiClasses, APIModel.APIModelBuilder APIModelBuilder) throws ClassNotFoundException {
         for (Class<?> seiClass : seiClasses) {
             seiClass = getSEI(seiClass);
             Resource resource = createEndpoint(seiClass);
-            resourceListingBuilder.resource(resource);
+            APIModelBuilder.resource(resource);
         }
     }
 

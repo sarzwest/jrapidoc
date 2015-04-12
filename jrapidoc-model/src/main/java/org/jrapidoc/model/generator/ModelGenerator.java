@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jrapidoc.logger.Logger;
-import org.jrapidoc.model.ResourceListing;
+import org.jrapidoc.model.APIModel;
 
 import java.io.*;
 
@@ -13,7 +13,7 @@ import java.io.*;
  */
 public class ModelGenerator {
 
-    public static void generateModel(ResourceListing model, File output) throws FileNotFoundException {
+    public static void generateModel(APIModel model, File output) throws FileNotFoundException {
         FileOutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(output);
@@ -29,7 +29,7 @@ public class ModelGenerator {
         }
     }
 
-    public static void generateModel(ResourceListing model, OutputStream output) {
+    public static void generateModel(APIModel model, OutputStream output) {
         ObjectMapper mapper = new ObjectMapper();
 //        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.setVisibilityChecker(mapper.getSerializationConfig().getDefaultVisibilityChecker()

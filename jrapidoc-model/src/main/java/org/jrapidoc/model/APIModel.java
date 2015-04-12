@@ -11,13 +11,13 @@ import java.util.Map;
  * Created by papa on 23.12.14.
  */
 @JsonPropertyOrder({"baseUrl", "resources"})
-public class ResourceListing {
+public class APIModel {
 
     private String baseUrl;
     private List<Resource> resources = new ArrayList<Resource>();
     private Map<String, Type> types;
 
-    private ResourceListing(String baseUrl, List<Resource> resources, Map<String, Type> types) {
+    private APIModel(String baseUrl, List<Resource> resources, Map<String, Type> types) {
         this.baseUrl = baseUrl;
         this.resources = resources;
         this.types = types;
@@ -31,33 +31,33 @@ public class ResourceListing {
         return baseUrl;
     }
 
-    public static class ResourceListingBuilder{
+    public static class APIModelBuilder {
         private String baseUrl;
         private List<Resource> resources = new ArrayList<Resource>();
         private Map<String, Type> types;
 
-        public  ResourceListingBuilder baseUrl(String baseUrl) {
+        public APIModelBuilder baseUrl(String baseUrl) {
             this.baseUrl = baseUrl;
             return this;
         }
 
-        public  ResourceListingBuilder resource(Resource resource) {
+        public APIModelBuilder resource(Resource resource) {
             this.resources.add(resource);
             return this;
         }
 
-        public  ResourceListingBuilder resources(List<Resource> resources) {
+        public APIModelBuilder resources(List<Resource> resources) {
             this.resources.addAll(resources);
             return this;
         }
 
-        public  ResourceListingBuilder types(Map<String, Type> types) {
+        public APIModelBuilder types(Map<String, Type> types) {
             this.types = types;
             return this;
         }
 
-        public ResourceListing build(){
-            return new ResourceListing(baseUrl, resources, types);
+        public APIModel build(){
+            return new APIModel(baseUrl, resources, types);
         }
     }
 }

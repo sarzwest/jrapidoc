@@ -1,7 +1,7 @@
 package org.jrapidoc.introspector;
 
 import org.jrapidoc.logger.Logger;
-import org.jrapidoc.model.ResourceListing;
+import org.jrapidoc.model.APIModel;
 import org.jrapidoc.model.generator.ModelGenerator;
 import org.jrapidoc.model.handler.HandlerException;
 import org.jrapidoc.model.handler.HandlerFactory;
@@ -27,18 +27,18 @@ public abstract class AbstractIntrospector {
 
     public abstract void run(URL[] urlsForClassloader, List<String> include, List<String> exclude, String basePath, String typeProviderClass, File output, List<String> modelHandlerClasses) throws Exception;
 
-    void writeModelToFile(ResourceListing listing, File output) throws FileNotFoundException {
-        ModelGenerator.generateModel(listing, output);
+    void writeModelToFile(APIModel apiModel, File output) throws FileNotFoundException {
+        ModelGenerator.generateModel(apiModel, output);
     }
 
-    void processHandlers(List<ModelHandler> modelHandlers, ResourceListing listing) throws Exception {
+    void processHandlers(List<ModelHandler> modelHandlers, APIModel apiModel) throws Exception {
         if(modelHandlers == null || modelHandlers.isEmpty()){
             Logger.debug("No model handlers found");
             return;
         }
         for (ModelHandler modelHandler:modelHandlers){
             try {
-                modelHandler.handleModel(listing);
+                modelHandler.handleModel(apiModel);
             }catch (HandlerException e){
                 if(e.getBehaviour() == HandlerException.Action.CONTINUE){
                     Logger.info("Exception occured in handler {0}, continue with processing next handler", modelHandler.getClass().getCanonicalName());

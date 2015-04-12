@@ -21,15 +21,15 @@ public class ResourceClassProcessor {
     }
 
     /**
-     * Hlavni metoda, z metadat vytvari vysledny resource listing
+     * Main method, creates API model from metadata
      *
      * @param resourceClasses
      * @return
      */
-    public void createListing(Set<ResourceClass> resourceClasses, ResourceListing.ResourceListingBuilder resourceListingBuilder) {
+    public void createApiModel(Set<ResourceClass> resourceClasses, APIModel.APIModelBuilder APIModelBuilder) {
         for (ResourceClass resourceClass : resourceClasses) {
             Resource resource = createResource(resourceClass);
-            resourceListingBuilder.resource(resource);
+            APIModelBuilder.resource(resource);
         }
     }
 
@@ -76,10 +76,10 @@ public class ResourceClassProcessor {
             ResourceClass newResourceClass = ResourceBuilder.locatorFromAnnotations(resourceLocator.getReturnType());
             newResourceClass.setPath(resourceLocator.getFullpath());
             newResourceClass.setConstructor(resourceClass.getConstructor());
-            ResourceListing.ResourceListingBuilder resourceListingBuilder = new ResourceListing.ResourceListingBuilder();
-            createListing(new HashSet<ResourceClass>(Arrays.asList(new ResourceClass[]{newResourceClass})), resourceListingBuilder);
-            ResourceListing locatorListing = resourceListingBuilder.build();
-            for (Method method : locatorListing.getResources().get(0).getMethods()) {
+            APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
+            createApiModel(new HashSet<ResourceClass>(Arrays.asList(new ResourceClass[]{newResourceClass})), APIModelBuilder);
+            APIModel locatorSubModel = APIModelBuilder.build();
+            for (Method method : locatorSubModel.getResources().get(0).getMethods()) {
                 resourceBuilder.method(method);
             }
         }

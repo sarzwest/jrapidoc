@@ -1,11 +1,11 @@
 package org.jrapidoc.model.handler;
 
-import org.jrapidoc.model.ResourceListing;
+import org.jrapidoc.model.APIModel;
 
 /**
  * Created by papa on 12.4.15.
  */
 public interface ModelHandler {
 
-    void handleModel(ResourceListing model) throws HandlerException;
+    void handleModel(APIModel model) throws HandlerException;
 }

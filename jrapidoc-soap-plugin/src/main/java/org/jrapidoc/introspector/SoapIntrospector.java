@@ -2,20 +2,15 @@ package org.jrapidoc.introspector;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.logger.Logger;
-import org.jrapidoc.model.ResourceListing;
-import org.jrapidoc.model.generator.ModelGenerator;
-import org.jrapidoc.model.handler.HandlerFactory;
+import org.jrapidoc.model.APIModel;
 import org.jrapidoc.model.handler.ModelHandler;
 import org.jrapidoc.model.type.provider.JacksonJaxbJsonProvider;
 import org.jrapidoc.model.type.provider.TypeProvider;
-import org.jrapidoc.model.type.provider.TypeProviderFactory;
-import org.reflections.Reflections;
 
 import javax.jws.WebService;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,20 +29,20 @@ public class SoapIntrospector extends AbstractIntrospector{
         Set<Class<?>> seiClasses = getScannedClasses(include, exclude, loader, WebService.class);
         seiClasses = removeInterfaces(seiClasses);
         seiClasses = removeExcludedResourceClasses(exclude, seiClasses);
-        ResourceListing listing = createModel(basePath, seiClasses, typeProviderClass, loader);
-        processHandlers(modelHandlers, listing);
-        writeModelToFile(listing, output);
+        APIModel apiModel = createModel(basePath, seiClasses, typeProviderClass, loader);
+        processHandlers(modelHandlers, apiModel);
+        writeModelToFile(apiModel, output);
         Logger.debug("Introspection finished");
     }
 
-    ResourceListing createModel(String basePath, Set<Class<?>> seiClasses, String typeProviderClass, URLClassLoader loader) throws ClassNotFoundException {
+    APIModel createModel(String basePath, Set<Class<?>> seiClasses, String typeProviderClass, URLClassLoader loader) throws ClassNotFoundException {
         TypeProvider typeProvider = getTypeProvider(typeProviderClass);
         SEIProcessor seiProcessor = getSeiClassProcessor(typeProviderClass, loader);
-        ResourceListing.ResourceListingBuilder resourceListingBuilder = new ResourceListing.ResourceListingBuilder();
-        resourceListingBuilder.baseUrl(basePath);
-        seiProcessor.createListing(seiClasses, resourceListingBuilder);
-        resourceListingBuilder.types(typeProvider.getUsedTypes());
-        return resourceListingBuilder.build();
+        APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
+        APIModelBuilder.baseUrl(basePath);
+        seiProcessor.createApiModel(seiClasses, APIModelBuilder);
+        APIModelBuilder.types(typeProvider.getUsedTypes());
+        return APIModelBuilder.build();
     }
 
     SEIProcessor getSeiClassProcessor(String typeProviderClass, URLClassLoader loader) {
