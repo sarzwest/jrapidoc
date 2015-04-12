@@ -24,16 +24,13 @@ public class ResourceClassProcessor {
      * Hlavni metoda, z metadat vytvari vysledny resource listing
      *
      * @param resourceClasses
-     * @param basePath
      * @return
      */
-    public ResourceListing createListing(Set<ResourceClass> resourceClasses, String basePath) {
-        List<Resource> resources = new ArrayList<Resource>();
+    public void createListing(Set<ResourceClass> resourceClasses, ResourceListing.ResourceListingBuilder resourceListingBuilder) {
         for (ResourceClass resourceClass : resourceClasses) {
             Resource resource = createResource(resourceClass);
-            resources.add(resource);
+            resourceListingBuilder.resource(resource);
         }
-        return new ResourceListing(basePath, resources);
     }
 
     void addConsumesParam(Method.MethodBuilder methodBuilder, ResourceClass resourceClass, ResourceMethod resourceMethod) {
@@ -79,7 +76,9 @@ public class ResourceClassProcessor {
             ResourceClass newResourceClass = ResourceBuilder.locatorFromAnnotations(resourceLocator.getReturnType());
             newResourceClass.setPath(resourceLocator.getFullpath());
             newResourceClass.setConstructor(resourceClass.getConstructor());
-            ResourceListing locatorListing = createListing(new HashSet<ResourceClass>(Arrays.asList(new ResourceClass[]{newResourceClass})), null);
+            ResourceListing.ResourceListingBuilder resourceListingBuilder = new ResourceListing.ResourceListingBuilder();
+            createListing(new HashSet<ResourceClass>(Arrays.asList(new ResourceClass[]{newResourceClass})), resourceListingBuilder);
+            ResourceListing locatorListing = resourceListingBuilder.build();
             for (Method method : locatorListing.getResources().get(0).getMethods()) {
                 resourceBuilder.method(method);
             }
@@ -138,7 +137,7 @@ public class ResourceClassProcessor {
         }
         List<HeaderParam> headerParams = createReturnHeaders(returnOption.getHeaders());
         List<CookieParam> cookieParams = createReturnCookies(returnOption.getCookies());
-        return Return.httpStatus(returnOption.getStatus()).headerParams(headerParams).cookieParams(cookieParams).returnTypes(returnTypes).description(returnOption.getDescription()).build();
+        return new Return.ReturnBuilder().httpStatus(returnOption.getStatus()).headerParams(headerParams).cookieParams(cookieParams).returnTypes(returnTypes).description(returnOption.getDescription()).build();
     }
 
     List<HeaderParam> createReturnHeaders(List<String> headersString) {

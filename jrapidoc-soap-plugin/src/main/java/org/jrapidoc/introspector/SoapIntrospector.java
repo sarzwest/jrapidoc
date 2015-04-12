@@ -34,15 +34,20 @@ public class SoapIntrospector extends AbstractIntrospector{
         Set<Class<?>> seiClasses = getScannedClasses(include, exclude, loader, WebService.class);
         seiClasses = removeInterfaces(seiClasses);
         seiClasses = removeExcludedResourceClasses(exclude, seiClasses);
-        SEIProcessor seiProcessor = getSeiClassProcessor(typeProviderClass, loader);
-        ResourceListing listing = createModel(basePath, seiClasses, seiProcessor);
+        ResourceListing listing = createModel(basePath, seiClasses, typeProviderClass, loader);
         processHandlers(modelHandlers, listing);
         writeModelToFile(listing, output);
         Logger.debug("Introspection finished");
     }
 
-    ResourceListing createModel(String basePath, Set<Class<?>> seiClasses, SEIProcessor seiProcessor) throws ClassNotFoundException {
-        return seiProcessor.createListing(seiClasses, basePath);
+    ResourceListing createModel(String basePath, Set<Class<?>> seiClasses, String typeProviderClass, URLClassLoader loader) throws ClassNotFoundException {
+        TypeProvider typeProvider = getTypeProvider(typeProviderClass);
+        SEIProcessor seiProcessor = getSeiClassProcessor(typeProviderClass, loader);
+        ResourceListing.ResourceListingBuilder resourceListingBuilder = new ResourceListing.ResourceListingBuilder();
+        resourceListingBuilder.baseUrl(basePath);
+        seiProcessor.createListing(seiClasses, resourceListingBuilder);
+        resourceListingBuilder.types(typeProvider.getUsedTypes());
+        return resourceListingBuilder.build();
     }
 
     SEIProcessor getSeiClassProcessor(String typeProviderClass, URLClassLoader loader) {

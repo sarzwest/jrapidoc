@@ -30,21 +30,25 @@ public class RestIntrospector extends AbstractIntrospector {
         List<ModelHandler> modelHandlers = getModelHandlers(modelHandlerClasses);
         URLClassLoader loader = getProjectUrlClassLoader(urlsForClassloader);
         Set<Class<?>> resourceClasses = getScannedClasses(include, exclude, loader, Path.class);
-        Set<ResourceClass> resourceClassesMeta = doPreIntrospection(resourceClasses);
-        ResourceClassProcessor resourceClassProcessor = getResourceClassProcessor(typeProviderClass);
-        ResourceListing listing = createModel(basePath, resourceClassesMeta, resourceClassProcessor);
+        ResourceListing listing = createModel(basePath, resourceClasses, typeProviderClass);
         //TODO add types to model
         processHandlers(modelHandlers, listing);
         writeModelToFile(listing, output);
         Logger.debug("Introspection finished");
     }
 
-    ResourceListing createModel(String basePath, Set<ResourceClass> resourceClassesMeta, ResourceClassProcessor resourceClassProcessor) {
-        return resourceClassProcessor.createListing(resourceClassesMeta, basePath);
+    ResourceListing createModel(String basePath, Set<Class<?>> resourceClasses, String typeProviderClass) {
+        TypeProvider typeProvider = getTypeProvider(typeProviderClass);
+        ResourceClassProcessor resourceClassProcessor = getResourceClassProcessor(typeProvider);
+        ResourceListing.ResourceListingBuilder resourceListingBuilder = new ResourceListing.ResourceListingBuilder();
+        resourceListingBuilder.baseUrl(basePath);
+        Set<ResourceClass> resourceClassesMeta = doPreIntrospection(resourceClasses);
+        resourceClassProcessor.createListing(resourceClassesMeta, resourceListingBuilder);
+        resourceListingBuilder.types(typeProvider.getUsedTypes());
+        return resourceListingBuilder.build();
     }
 
-    ResourceClassProcessor getResourceClassProcessor(String typeProviderClass) {
-        TypeProvider typeProvider = getTypeProvider(typeProviderClass);
+    ResourceClassProcessor getResourceClassProcessor(TypeProvider typeProvider) {
         return new ResourceClassProcessor(typeProvider);
     }
 

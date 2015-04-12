@@ -34,14 +34,12 @@ public class SEIProcessor {
         this.loader = loader;
     }
 
-    public ResourceListing createListing(Set<Class<?>> seiClasses, String basePath) throws ClassNotFoundException {
-        List<Resource> resources = new ArrayList<Resource>();
+    public void createListing(Set<Class<?>> seiClasses, ResourceListing.ResourceListingBuilder resourceListingBuilder) throws ClassNotFoundException {
         for (Class<?> seiClass : seiClasses) {
             seiClass = getSEI(seiClass);
             Resource resource = createEndpoint(seiClass);
-            resources.add(resource);
+            resourceListingBuilder.resource(resource);
         }
-        return new ResourceListing(basePath, resources);
     }
 
     Class<?> getSEI(Class<?> seiClass) throws ClassNotFoundException {

@@ -7,6 +7,7 @@ import org.jrapidoc.model.type.provider.converter.JacksonToJrapidocProcessor;
 import sun.reflect.generics.reflectiveObjects.TypeVariableImpl;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Map;
 
 /**
  * Created by papa on 25.3.15.
@@ -26,6 +27,11 @@ public class JacksonJsonProvider extends TypeProvider {
         JavaType javaType = createJavaType(genericType);
         Type loadType = processor.loadType(javaType);
         return loadType;
+    }
+
+    @Override
+    public Map<String, Type> getUsedTypes() {
+        return JacksonToJrapidocProcessor.cache;
     }
 
     private JavaType createJavaType(java.lang.reflect.Type genericType) {
