@@ -1,4 +1,4 @@
-package org.jrapidoc.processor;
+package org.jrapidoc.introspector;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.annotation.Description;
@@ -99,11 +99,11 @@ public class SEIProcessor {
         return methodBuilder.build();
     }
 
-    void addOperationName(Method method, org.jrapidoc.model.Method.MethodBuilder methodBuilder){
+    void addOperationName(Method method, org.jrapidoc.model.Method.MethodBuilder methodBuilder) {
         WebMethod webMethodAnno = getAnnotation(method.getDeclaredAnnotations(), WebMethod.class);
         String operationName = method.getName();
-        if(webMethodAnno != null){
-            if(StringUtils.isNotEmpty(webMethodAnno.operationName())){
+        if (webMethodAnno != null) {
+            if (StringUtils.isNotEmpty(webMethodAnno.operationName())) {
                 operationName = webMethodAnno.operationName();
             }
         }
@@ -123,15 +123,17 @@ public class SEIProcessor {
     }
 
     void addReturn(Method method, org.jrapidoc.model.Method.MethodBuilder methodBuilder) {
-        Return.ReturnBuilder returnBuilder = new Return.ReturnBuilder();
-        addOutputHeaders(method, returnBuilder);
-        addOutputParams(method, returnBuilder);
-        HeaderParam headerParam = new HeaderParam.HeaderParamBuilder().setName(HeaderParam.CONTENT_TYPE).setOptions(new String[]{"application/xml"}).build();
-        returnBuilder.httpStatus(200).headerParams(Arrays.asList(headerParam));
-        Return returnType = returnBuilder.build();
-        List<Return> returnOptions = new ArrayList<Return>(Arrays.asList(new Return[]{returnType}));
-        addExceptionTypes(method, returnOptions);
-        methodBuilder.returnOptions(returnOptions);
+        if (!isOneWay(method)) {
+            Return.ReturnBuilder returnBuilder = new Return.ReturnBuilder();
+            addOutputHeaders(method, returnBuilder);
+            addOutputParams(method, returnBuilder);
+            HeaderParam headerParam = new HeaderParam.HeaderParamBuilder().setName(HeaderParam.CONTENT_TYPE).setOptions(new String[]{"application/xml"}).build();
+            returnBuilder.httpStatus(200).headerParams(Arrays.asList(headerParam));
+            Return returnType = returnBuilder.build();
+            List<Return> returnOptions = new ArrayList<Return>(Arrays.asList(new Return[]{returnType}));
+            addExceptionTypes(method, returnOptions);
+            methodBuilder.returnOptions(returnOptions);
+        }
     }
 
     org.jrapidoc.model.object.type.Type createType(Type param) {

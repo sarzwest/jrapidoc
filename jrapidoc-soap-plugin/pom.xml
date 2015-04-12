@@ -52,6 +52,10 @@
     <dependencies>
         <dependency>
             <groupId>org.jrapidoc</groupId>
+            <artifactId>jrapidoc-plugin-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jrapidoc</groupId>
             <artifactId>jrapidoc-annotation</artifactId>
         </dependency>
         <dependency>

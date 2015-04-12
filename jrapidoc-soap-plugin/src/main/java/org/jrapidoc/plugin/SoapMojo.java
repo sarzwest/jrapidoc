@@ -1,4 +1,4 @@
-package org.jrapidoc.rest;
+package org.jrapidoc.plugin;
 
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.execution.MavenSession;
@@ -12,6 +12,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.component.annotations.Component;
 import org.jrapidoc.logger.Logger;
+import org.jrapidoc.introspector.SoapIntrospector;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -22,15 +23,11 @@ import java.util.List;
 
 /**
  * Created by papa on 14.3.15.
- *
- * @phase compile
  */
-@Mojo(name = "run", defaultPhase = LifecyclePhase.COMPILE/*,
-        requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME*//*,
-        configurator = "include-project-dependencies"*/
+@Mojo(name = "run", defaultPhase = LifecyclePhase.COMPILE
 )
-@Component(role = RestMojo.class)
-public class RestMojo extends AbstractMojo {
+@Component(role = SoapMojo.class)
+public class SoapMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${session}", readonly = true)
     MavenSession session;
@@ -59,6 +56,9 @@ public class RestMojo extends AbstractMojo {
     @Parameter(name = "typeProviderClass")
     String typeProviderClass;
 
+    @Parameter(name = "modelHandlers")
+    List<String> modelHandlers;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         long start = System.currentTimeMillis();
@@ -68,7 +68,7 @@ public class RestMojo extends AbstractMojo {
             List<URL> projectClasspathList = new ArrayList<URL>();
             for (String element : classpathElements) {
                 try {
-                    Logger.info("Adding project classpath element {0}", element);
+                    Logger.info(MessageFormat.format("Adding project classpath element {0}", new Object[]{element}));
                     projectClasspathList.add(new File(element).toURI().toURL());
                 } catch (MalformedURLException e) {
                     getLog().error(e);
@@ -76,13 +76,13 @@ public class RestMojo extends AbstractMojo {
                 }
             }
             URL[] urls = projectClasspathList.toArray(new URL[projectClasspathList.size()]);
-            RestIntrospector restIntrospector = new RestIntrospector();
-            restIntrospector.introspect(urls, includes, excludes, baseUrl, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.rest.model.json"));
+            SoapIntrospector soapIntrospector = new SoapIntrospector();
+            soapIntrospector.run(urls, includes, excludes, baseUrl, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.soap.model.json"), modelHandlers);
         } catch (DependencyResolutionRequiredException e) {
             getLog().error(e);
             throw new MojoExecutionException(e.getMessage(), e);
         } catch (Exception e) {
-              Logger.error(e, e.getMessage());
+            Logger.error(e, e.getMessage());
             e.printStackTrace();
         } finally {
             Logger.info("Finished in " + ((System.currentTimeMillis() - start) / 1000) + " seconds");

@@ -1,5 +1,6 @@
-package org.jrapidoc.rest;
+package org.jrapidoc.introspector;
 
+import org.jrapidoc.introspector.RestIntrospector;
 import org.junit.Test;
 import org.reflections.Reflections;
 

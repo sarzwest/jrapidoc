@@ -24,6 +24,7 @@
         <module>jrapidoc-gui</module>
         <module>jrapidoc-model</module>
         <module>jrapidoc-logger</module>
+        <module>jrapidoc-plugin-base</module>
     </modules>
 
     <build>
@@ -71,6 +72,11 @@
     <dependencyManagement>
         <dependencies>
             <!--JRAPIDoc BEGIN-->
+            <dependency>
+                <groupId>org.jrapidoc</groupId>
+                <artifactId>jrapidoc-plugin-base</artifactId>
+                <version>${org.jrapidoc.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.jrapidoc</groupId>
                 <artifactId>jrapidoc-model</artifactId>

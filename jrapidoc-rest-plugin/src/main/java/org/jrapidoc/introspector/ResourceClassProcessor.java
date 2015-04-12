@@ -1,4 +1,4 @@
-package org.jrapidoc.processor;
+package org.jrapidoc.introspector;
 
 import org.jboss.resteasy.spi.metadata.*;
 import org.jrapidoc.RestUtil;
