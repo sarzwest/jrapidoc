@@ -33,6 +33,7 @@ ApiModel.prototype.loadModel = function(modelUrl){
  */
 ApiModel.prototype.checkAndGetModel = function(givenModel){
     try {
+        givenModel = givenModel.replace(/[<]/g, "&lt;").replace(/[>]/g, "&gt;");
         var modelJSON = JSON.parse(givenModel);
         return modelJSON;
     }catch (e){

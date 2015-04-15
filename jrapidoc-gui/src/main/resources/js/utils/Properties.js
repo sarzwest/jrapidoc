@@ -5,7 +5,9 @@ var Properties = function(){
 
 };
 
-Properties.apiModelPath = "model.example.json";
+Properties.restModelPath = "jrapidoc.rest.model.json";
+Properties.restSoapPath = "jrapidoc.soap.model.json";
+Properties.modelRootName = "Remote API documentation";
 Properties.headers = "HTTP headers";
 Properties.cookies = "Cookies";
 Properties.pathParams = "Path parameters";
