@@ -1,5 +1,6 @@
 package org.jrapidoc.model.object.type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jrapidoc.model.object.BeanProperty;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class Type {
 
     /**pouzije se v modelu a bude to hodnota ulozena v property typeref, znazornuje zobrazeni typu*/
     private String typeRef;
+    @JsonIgnore
     private String typeName;
 
     protected Type(String typeName, String typeRef) {

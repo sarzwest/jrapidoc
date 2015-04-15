@@ -1,5 +1,6 @@
 package org.jrapidoc.model.object;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -9,6 +10,7 @@ public class BeanProperty {
 
     public static String ROOT_VARIABLE = "root";
     String name;
+    @JsonIgnore
     Class<?> type;
     String typeRef;
     String description;

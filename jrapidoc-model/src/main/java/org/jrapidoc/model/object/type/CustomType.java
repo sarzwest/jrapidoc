@@ -1,5 +1,6 @@
 package org.jrapidoc.model.object.type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.object.BeanProperty;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 public class CustomType extends org.jrapidoc.model.object.type.Type {
 
     private Map<String, BeanProperty> attributes = new HashMap<String, BeanProperty>();
+    @JsonIgnore
     private Class<?> typeClass;
     private List<String> enumerations = new ArrayList<String>();
 

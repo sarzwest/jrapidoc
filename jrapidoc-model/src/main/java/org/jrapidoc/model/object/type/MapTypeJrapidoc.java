@@ -1,13 +1,17 @@
 package org.jrapidoc.model.object.type;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by papa on 19.1.15.
  */
 public class MapTypeJrapidoc extends org.jrapidoc.model.object.type.Type {
 
+    @JsonIgnore
     private String keyType;
     private String keyTypeRef;
+    @JsonIgnore
     private String valueType;
     private String valueTypeRef;
 

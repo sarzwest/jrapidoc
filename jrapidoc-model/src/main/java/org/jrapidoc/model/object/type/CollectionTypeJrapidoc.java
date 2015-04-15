@@ -1,10 +1,13 @@
 package org.jrapidoc.model.object.type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by papa on 18.1.15.
  */
 public class CollectionTypeJrapidoc extends org.jrapidoc.model.object.type.Type {
 
+    @JsonIgnore
     private String includeType;
     private String includeTypeRef;
 
@@ -14,12 +17,12 @@ public class CollectionTypeJrapidoc extends org.jrapidoc.model.object.type.Type 
         this.includeTypeRef = includeTypeRef;
     }
 
-    public void setIncludeTypeRef(String includeTypeRef) {
-        this.includeTypeRef = includeTypeRef;
-    }
-
     public String getIncludeType() {
         return includeType;
+    }
+
+    public void setIncludeTypeRef(String includeTypeRef) {
+        this.includeTypeRef = includeTypeRef;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class CollectionTypeJrapidoc extends org.jrapidoc.model.object.type.Type 
 
         CollectionTypeJrapidoc that = (CollectionTypeJrapidoc) o;
 
-        if (!includeType.equals(that.includeType)) return false;
+        if (!includeTypeRef.equals(that.includeTypeRef)) return false;
 
         return true;
     }
@@ -38,7 +41,7 @@ public class CollectionTypeJrapidoc extends org.jrapidoc.model.object.type.Type 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + includeType.hashCode();
+        result = 31 * result + includeTypeRef.hashCode();
         return result;
     }
 
