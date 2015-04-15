@@ -2,15 +2,19 @@ package org.jrapidoc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.apache.commons.lang3.StringUtils;
+import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.param.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by papa on 23.12.14.
  */
-@JsonPropertyOrder({"description", "path", "pathExample", "methods"})
+@JsonPropertyOrder({ "path", "name", "description", "pathExample", "methods"})
 public class Resource {
 
     private String path;
@@ -27,11 +31,11 @@ public class Resource {
     private List<PathParam> pathParams = new ArrayList<PathParam>();
     @JsonIgnore
     private List<QueryParam> queryParams = new ArrayList<QueryParam>();
-    private List<Method> methods = new ArrayList<Method>();
+    private Map<String, Method> methods = new HashMap<String, Method>();
     private String description;
     private String name;
 
-    private Resource(String path, String pathExample, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, List<Method> methods, String description, String name) {
+    private Resource(String path, String pathExample, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, Map<String, Method> methods, String description, String name) {
         this.path = path;
         this.pathExample = pathExample;
         this.headerParams = headerParams;
@@ -53,7 +57,7 @@ public class Resource {
         return path;
     }
 
-    public List<Method> getMethods() {
+    public Map<String, Method> getMethods() {
         return methods;
     }
 
@@ -126,7 +130,7 @@ public class Resource {
         private List<MatrixParam> matrixParams = new ArrayList<MatrixParam>();
         private List<PathParam> pathParams = new ArrayList<PathParam>();
         private List<QueryParam> queryParams = new ArrayList<QueryParam>();
-        private List<Method> methods = new ArrayList<Method>();
+        private Map<String, Method> methods = new HashMap<String, Method>();
         private String description;
         private String name;
 
@@ -146,7 +150,9 @@ public class Resource {
         }
 
         public ResourceBuilder method(Method method) {
-            this.methods.add(method);
+            String key = (StringUtils.isNotEmpty(method.getName()))?method.getName():method.getPath();
+            Logger.debug(this.getClass().getSimpleName() + " " + key);
+            this.methods.put(key, method);
             return this;
         }
 

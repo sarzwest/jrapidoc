@@ -8,8 +8,11 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.std.*;
 import com.fasterxml.jackson.databind.type.*;
-import org.jrapidoc.model.object.type.*;
 import org.jrapidoc.model.object.BeanProperty;
+import org.jrapidoc.model.object.type.CollectionTypeJrapidoc;
+import org.jrapidoc.model.object.type.CustomType;
+import org.jrapidoc.model.object.type.MapTypeJrapidoc;
+import org.jrapidoc.model.object.type.Type;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -35,8 +38,10 @@ public class JacksonToJrapidocProcessor {
 //            return objectMapper.writerFor(jacksonType);
 //        }
 //    }
+
     /**
      * Z jackson typu vytvori apition typ, bean properties jsou ulozeny v cache
+     *
      * @param jacksonType
      * @return
      */
@@ -64,98 +69,106 @@ public class JacksonToJrapidocProcessor {
 
     /**
      * To stejne jako {@link #getType(com.fasterxml.jackson.databind.type.SimpleType)}
+     *
      * @param jacksonType
      * @return
      */
     public Type getType(CollectionLikeType jacksonType) {
-        try {
-            String signature = JacksonSignature.createSignature(jacksonType);
-            JavaType contentType = jacksonType.getContentType();
-            String contentSignature = JacksonSignature.createSignature(contentType);
-            Class<?> containerClass = jacksonType.getRawClass();
-            CollectionTypeJrapidoc type = new CollectionTypeJrapidoc(containerClass.getName(), signature, contentType.getRawClass().getName(), contentSignature);
-            if (cache.containsKey(signature)) {
-                return cache.get(signature);
-            }
-            cache.put(signature, type);
-            ObjectWriter objectWriter = objectMapper.writerFor(jacksonType);
-            Field prefetchFiled = objectWriter.getClass().getDeclaredField("_prefetch");
-            prefetchFiled.setAccessible(true);
-            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchFiled.get(objectWriter);
-            doIntrospection(prefetch.valueSerializer, type);
-            return type;
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+//        try {
+        String signature = JacksonSignature.createSignature(jacksonType);
+        JavaType contentType = jacksonType.getContentType();
+        String contentSignature = JacksonSignature.createSignature(contentType);
+        Class<?> containerClass = jacksonType.getRawClass();
+        CollectionTypeJrapidoc type = new CollectionTypeJrapidoc(containerClass.getName(), signature, contentType.getRawClass().getName(), contentSignature);
+        if (cache.containsKey(signature)) {
+            return cache.get(signature);
         }
-        return null;
+        cache.put(signature, type);
+//            ObjectWriter objectWriter = objectMapper.writerFor(jacksonType);
+//            Field prefetchFiled = objectWriter.getClass().getDeclaredField("_prefetch");
+//            prefetchFiled.setAccessible(true);
+//            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchFiled.get(objectWriter);
+//            doIntrospection(prefetch.valueSerializer, type);
+        getType(jacksonType.getContentType());
+        return type;
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
     /**
      * To stejne jako {@link #getType(com.fasterxml.jackson.databind.type.SimpleType)}
+     *
      * @param jacksonType
      * @return
      */
     public Type getType(ArrayType jacksonType) {
-        try {
-            String signature = JacksonSignature.createSignature(jacksonType);
-            String contentSignature = JacksonSignature.createSignature(jacksonType.getContentType());
-            Class<?> contentType = jacksonType.getContentType().getRawClass();
-            Class<?> containerClass = jacksonType.getRawClass();
-            CollectionTypeJrapidoc type = new CollectionTypeJrapidoc(containerClass.getName(), signature, contentType.getName(), contentSignature);
-            if (cache.containsKey(signature)) {
-                return cache.get(signature);
-            }
-            cache.put(signature, type);
-            ObjectWriter objectWriter = objectMapper.writerFor(jacksonType);
-            Field prefetchFiled = objectWriter.getClass().getDeclaredField("_prefetch");
-            prefetchFiled.setAccessible(true);
-            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchFiled.get(objectWriter);
-            doIntrospection(prefetch.valueSerializer, type);
-            return type;
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+//        try {
+        String signature = JacksonSignature.createSignature(jacksonType);
+        String contentSignature = JacksonSignature.createSignature(jacksonType.getContentType());
+        Class<?> contentType = jacksonType.getContentType().getRawClass();
+        Class<?> containerClass = jacksonType.getRawClass();
+        CollectionTypeJrapidoc type = new CollectionTypeJrapidoc(containerClass.getName(), signature, contentType.getName(), contentSignature);
+        if (cache.containsKey(signature)) {
+            return cache.get(signature);
         }
-        return null;
+        cache.put(signature, type);
+//            ObjectWriter objectWriter = objectMapper.writerFor(jacksonType);
+//            Field prefetchFiled = objectWriter.getClass().getDeclaredField("_prefetch");
+//            prefetchFiled.setAccessible(true);
+//            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchFiled.get(objectWriter);
+//            doIntrospection(prefetch.valueSerializer, type);
+        getType(jacksonType.getContentType());
+        return type;
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
     /**
      * To stejne jako {@link #getType(com.fasterxml.jackson.databind.type.SimpleType)}
+     *
      * @param jacksonType
      * @return
      */
     public Type getType(MapLikeType jacksonType) {
-        try {
-            String signature = JacksonSignature.createSignature(jacksonType);
-            JavaType keyType = jacksonType.getKeyType();
-            JavaType valueType = jacksonType.getContentType();
-            Class<?> containerClass = jacksonType.getRawClass();
-            String keySignature = JacksonSignature.createSignature(keyType);
-            String valSignature = JacksonSignature.createSignature(valueType);
-            MapTypeJrapidoc type = new MapTypeJrapidoc(containerClass.getName(), signature, keyType.getRawClass().getName(), keySignature, valueType.getRawClass().getName(), valSignature);
-            if (cache.containsKey(signature)) {
-                return cache.get(signature);
-            }
-            cache.put(signature, type);
-            ObjectWriter objectWriter = objectMapper.writerFor(jacksonType);
-            Field prefetchFiled = objectWriter.getClass().getDeclaredField("_prefetch");
-            prefetchFiled.setAccessible(true);
-            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchFiled.get(objectWriter);
-            doIntrospection(prefetch.valueSerializer, type);
-            return type;
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+//        try {
+        String signature = JacksonSignature.createSignature(jacksonType);
+        JavaType keyType = jacksonType.getKeyType();
+        JavaType valueType = jacksonType.getContentType();
+        Class<?> containerClass = jacksonType.getRawClass();
+        String keySignature = JacksonSignature.createSignature(keyType);
+        String valSignature = JacksonSignature.createSignature(valueType);
+        MapTypeJrapidoc type = new MapTypeJrapidoc(containerClass.getName(), signature, keyType.getRawClass().getName(), keySignature, valueType.getRawClass().getName(), valSignature);
+        if (cache.containsKey(signature)) {
+            return cache.get(signature);
         }
-        return null;
+        cache.put(signature, type);
+        getType(keyType);
+        getType(valueType);
+//            ObjectWriter objectWriter = objectMapper.writerFor(jacksonType);
+//            Field prefetchFiled = objectWriter.getClass().getDeclaredField("_prefetch");
+//            prefetchFiled.setAccessible(true);
+//            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchFiled.get(objectWriter);
+//            doIntrospection(prefetch.valueSerializer, type);
+        return type;
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
     /**
      * Provadi presmerovani z obecneho typu na konkretni typ
+     *
      * @param type jackson typ
      * @return apition typ
      */
@@ -164,39 +177,41 @@ public class JacksonToJrapidocProcessor {
             return getType((SimpleType) type);
         } else if (type instanceof CollectionType) {
             return getType((CollectionLikeType) type);
-        }else if(type instanceof ArrayType){
-            return getType((ArrayType)type);
-        }else if(type instanceof MapLikeType){
-            return getType((MapLikeType)type);
+        } else if (type instanceof ArrayType) {
+            return getType((ArrayType) type);
+        } else if (type instanceof MapLikeType) {
+            return getType((MapLikeType) type);
         }
         throw new RuntimeException("Sem se to nesmi dostat: " + type);
     }
 
     /**
      * Provadi presmerovani z obecneho jackson serializeru na konkretnejsi
+     *
      * @param serializer
      * @param type
      */
     private void doIntrospection(JsonSerializer serializer, Type type) {
-        if(serializer == null){
+        if (serializer == null) {
             //Object.class has no serializer
             return;
         }
         if (EnumSerializer.class.isAssignableFrom(serializer.getClass())) {
             introspectSerializer((EnumSerializer) serializer, (CustomType) type);
-        }else if (BeanSerializerBase.class.isAssignableFrom(serializer.getClass())) {
+        } else if (BeanSerializerBase.class.isAssignableFrom(serializer.getClass())) {
             introspectSerializer((BeanSerializerBase) serializer, (CustomType) type);
         } else if (StdScalarSerializer.class.isAssignableFrom(serializer.getClass())) {
             introspectSerializer((StdScalarSerializer) serializer, (CustomType) type);
         } else if (AsArraySerializerBase.class.isAssignableFrom(serializer.getClass())) {
             introspectSerializer((AsArraySerializerBase) serializer, (CollectionTypeJrapidoc) type);
-        }else if(MapSerializer.class.isAssignableFrom(serializer.getClass())){
-            introspectSerializer((MapSerializer)serializer, (MapTypeJrapidoc)type);
+        } else if (MapSerializer.class.isAssignableFrom(serializer.getClass())) {
+            introspectSerializer((MapSerializer) serializer, (MapTypeJrapidoc) type);
         }
     }
 
     /**
      * Prozkoumava serializer pro kolekce
+     *
      * @param collectionSerializer
      * @param type
      */
@@ -206,6 +221,7 @@ public class JacksonToJrapidocProcessor {
 
     /**
      * Prozkoumava serializer pro javovske beany
+     *
      * @param beanSerializer
      * @param type
      */
@@ -229,6 +245,7 @@ public class JacksonToJrapidocProcessor {
 
     /**
      * Prozkoumava serializer pro enumerace
+     *
      * @param enumSerializer
      * @param type
      */
@@ -240,6 +257,7 @@ public class JacksonToJrapidocProcessor {
 
     /**
      * Prozkoumava serializer pro mapu
+     *
      * @param mapSerializer
      * @param type
      */
@@ -247,7 +265,7 @@ public class JacksonToJrapidocProcessor {
         try {
             Field keyTypeField = mapSerializer.getClass().getDeclaredField("_keyType");
             keyTypeField.setAccessible(true);
-            JavaType keyType = (JavaType)keyTypeField.get(mapSerializer);
+            JavaType keyType = (JavaType) keyTypeField.get(mapSerializer);
             JavaType valueType = mapSerializer.getContentType();
             getType(keyType);
             getType(valueType);
@@ -260,13 +278,14 @@ public class JacksonToJrapidocProcessor {
 
     /**
      * Prozkoumava standardni javovske typy - ty se nemuseji zkoumat, takze nic nedela
+     *
      * @param stdScalarSerializer
      * @param type
      */
     private void introspectSerializer(StdScalarSerializer stdScalarSerializer, CustomType type) {
     }
 
-    public Type loadType(JavaType javaType){
+    public Type loadType(JavaType javaType) {
         Type type = getType(javaType);
         return type;
     }

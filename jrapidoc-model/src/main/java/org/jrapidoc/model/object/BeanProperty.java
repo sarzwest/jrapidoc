@@ -1,5 +1,7 @@
 package org.jrapidoc.model.object;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by papa on 13.1.15.
  */
@@ -10,6 +12,7 @@ public class BeanProperty {
     Class<?> type;
     String typeRef;
     String description;
+    @JsonProperty("required")
     boolean isRequired;
 
     public BeanProperty(String name, String typeRef, Class<?> type, String description, boolean isRequired) {
@@ -22,6 +25,26 @@ public class BeanProperty {
 
     public void addType(Class<?> type){
         this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Class<?> getType() {
+        return type;
+    }
+
+    public String getTypeRef() {
+        return typeRef;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isRequired() {
+        return isRequired;
     }
 
     @Override

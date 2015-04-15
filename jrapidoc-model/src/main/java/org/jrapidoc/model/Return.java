@@ -5,7 +5,9 @@ import org.jrapidoc.model.param.CookieParam;
 import org.jrapidoc.model.param.HeaderParam;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by papa on 23.12.14.
@@ -13,13 +15,13 @@ import java.util.List;
 public class Return {
 
     private int httpStatus;
-    private List<HeaderParam> headerParams;
-    private List<CookieParam> cookieParams;
-    private List<TransportType> returnTypes;
+    private Map<String, HeaderParam> headerParams;
+    private Map<String, CookieParam> cookieParams;
+    private Map<String, TransportType> returnTypes;
     private String description;
-    private List<TransportType> soapOutputHeaders;
+    private Map<String, TransportType> soapOutputHeaders;
 
-    private Return(int httpStatus, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<TransportType> returnTypes, String description, List<TransportType> soapOutputHeaders) {
+    private Return(int httpStatus, Map<String, HeaderParam> headerParams, Map<String, CookieParam> cookieParams, Map<String, TransportType> returnTypes, String description, Map<String, TransportType> soapOutputHeaders) {
         this.httpStatus = httpStatus;
         this.headerParams = headerParams;
         this.cookieParams = cookieParams;
@@ -32,15 +34,15 @@ public class Return {
         return httpStatus;
     }
 
-    public List<HeaderParam> getHeaderParams() {
+    public Map<String, HeaderParam> getHeaderParams() {
         return headerParams;
     }
 
-    public List<CookieParam> getCookieParams() {
+    public Map<String, CookieParam> getCookieParams() {
         return cookieParams;
     }
 
-    public List<TransportType> getReturnTypes() {
+    public Map<String, TransportType> getReturnTypes() {
         return returnTypes;
     }
 
@@ -48,18 +50,18 @@ public class Return {
         return description;
     }
 
-    public List<TransportType> getSoapOutputHeaders() {
+    public Map<String, TransportType> getSoapOutputHeaders() {
         return soapOutputHeaders;
     }
 
     public static class ReturnBuilder{
 
         private int httpStatus;
-        private List<HeaderParam> headerParams = new ArrayList<HeaderParam>();
-        private List<CookieParam> cookieParams = new ArrayList<CookieParam>();
-        private List<TransportType> returnTypes;
+        private Map<String, HeaderParam> headerParams = new HashMap<String, HeaderParam>();
+        private Map<String, CookieParam> cookieParams = new HashMap<String, CookieParam>();
+        private Map<String, TransportType> returnTypes = new HashMap<String, TransportType>();
         private String description;
-        private List<TransportType> soapOutputHeaders = new ArrayList<TransportType>();
+        private Map<String, TransportType> soapOutputHeaders = new HashMap<String, TransportType>();
 
         public ReturnBuilder httpStatus(int httpStatus) {
             this.httpStatus = httpStatus;
@@ -67,17 +69,23 @@ public class Return {
         }
 
         public ReturnBuilder headerParams(List<HeaderParam> headerParams) {
-            this.headerParams.addAll(headerParams);
+            for (HeaderParam param:headerParams){
+                this.headerParams.put(param.getName(), param);
+            }
             return this;
         }
 
         public ReturnBuilder cookieParams(List<CookieParam> cookieParams) {
-            this.cookieParams.addAll(cookieParams);
+            for (CookieParam param:cookieParams){
+                this.cookieParams.put(param.getName(), param);
+            }
             return this;
         }
 
         public ReturnBuilder returnTypes(List<TransportType> returnTypes) {
-            this.returnTypes = returnTypes;
+            for (TransportType type:returnTypes){
+                this.returnTypes.put(type.getType().getTypeRef(), type);
+            }
             return this;
         }
 
@@ -87,7 +95,7 @@ public class Return {
         }
 
         public ReturnBuilder soapOutputHeader(TransportType soapHeader) {
-            this.soapOutputHeaders.add(soapHeader);
+            this.soapOutputHeaders.put(soapHeader.getType().getTypeRef(), soapHeader);
             return this;
         }
 

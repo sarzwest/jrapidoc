@@ -44,6 +44,10 @@ public class Logger {
         if(msg == null){
             return null;
         }
-        return MessageFormat.format(msg, tokens);
+        try {
+            return MessageFormat.format(msg, tokens);
+        }catch(IllegalArgumentException e){
+            return msg + tokens;
+        }
     }
 }

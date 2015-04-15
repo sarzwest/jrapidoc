@@ -12,8 +12,8 @@ import org.jrapidoc.model.Resource;
 public class CheckRestMethodDescriptionHandler implements ModelHandler {
     @Override
     public void handleModel(APIModel model) throws HandlerException {
-        for(Resource resource:model.getResources()){
-            for (Method method:resource.getMethods()){
+        for(Resource resource:model.getResources().values()){
+            for (Method method:resource.getMethods().values()){
                 if(StringUtils.isEmpty(method.getDescription())){
                     Logger.warn("Method {0} has not set description", method.getPath());
                 }

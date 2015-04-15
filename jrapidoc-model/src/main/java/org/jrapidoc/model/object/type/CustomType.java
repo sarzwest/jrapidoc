@@ -1,20 +1,23 @@
 package org.jrapidoc.model.object.type;
 
+import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.object.BeanProperty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by papa on 18.1.15.
  */
 public class CustomType extends org.jrapidoc.model.object.type.Type {
 
-    private List<BeanProperty> attributes = new ArrayList<BeanProperty>();
+    private Map<String, BeanProperty> attributes = new HashMap<String, BeanProperty>();
     private Class<?> typeClass;
     private List<String> enumerations = new ArrayList<String>();
 
-    public CustomType(String typeName, String typeRef, List<BeanProperty> attributes, Class<?> typeClass) {
+    public CustomType(String typeName, String typeRef, Map<String, BeanProperty> attributes, Class<?> typeClass) {
         super(typeName, typeRef);
         this.attributes = attributes;
         this.typeClass = typeClass;
@@ -26,7 +29,8 @@ public class CustomType extends org.jrapidoc.model.object.type.Type {
     }
 
     public void addBeanProperty(BeanProperty variable) {
-        attributes.add(variable);
+        Logger.debug(this.getClass().getSimpleName() + " " +variable.getName());
+        attributes.put(variable.getName(), variable);
     }
 
     public void addEnumeration(String enumeration) {

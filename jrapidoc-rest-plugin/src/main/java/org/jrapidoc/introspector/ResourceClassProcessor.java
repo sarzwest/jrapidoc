@@ -79,9 +79,14 @@ public class ResourceClassProcessor {
             APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
             createApiModel(new HashSet<ResourceClass>(Arrays.asList(new ResourceClass[]{newResourceClass})), APIModelBuilder);
             APIModel locatorSubModel = APIModelBuilder.build();
-            for (Method method : locatorSubModel.getResources().get(0).getMethods()) {
-                resourceBuilder.method(method);
+            for (Resource resource:locatorSubModel.getResources().values()){
+                for (Method method:resource.getMethods().values()){
+                    resourceBuilder.method(method);
+                }
             }
+//            for (Method method : locatorSubModel.getResources().get(0).getMethods().values()) {
+//                resourceBuilder.method(method);
+//            }
         }
     }
 

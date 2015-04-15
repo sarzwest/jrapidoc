@@ -1,27 +1,32 @@
 package org.jrapidoc.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.object.type.Type;
 import org.jrapidoc.model.param.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by papa on 23.12.14.
  */
 @JsonPropertyOrder({"name", "soapBinding", "path", "httpMethodType", "pathExample", "headerParams",
         "pathParams", "queryParams", "matrixParams", "cookieParams",
-        "formParams", "isAsynchronous", "parameters", "returnOptions"})
+        "formParams", "asynchronous", "parameters", "returnOptions"})
 public class Method {
 
+    @JsonProperty("asynchronous")
     private boolean isAsynchronous;
-    private List<HeaderParam> headerParams = new ArrayList<HeaderParam>();
-    private List<CookieParam> cookieParams = new ArrayList<CookieParam>();
-    private List<FormParam> formParams = new ArrayList<FormParam>();
-    private List<MatrixParam> matrixParams = new ArrayList<MatrixParam>();
-    private List<PathParam> pathParams = new ArrayList<PathParam>();
-    private List<QueryParam> queryParams = new ArrayList<QueryParam>();
+    private Map<String, HeaderParam> headerParams = new HashMap<String, HeaderParam>();
+    private Map<String, CookieParam> cookieParams = new HashMap<String, CookieParam>();
+    private Map<String, FormParam> formParams = new HashMap<String, FormParam>();
+    private Map<String, MatrixParam> matrixParams = new HashMap<String, MatrixParam>();
+    private Map<String, PathParam> pathParams = new HashMap<String, PathParam>();
+    private Map<String, QueryParam> queryParams = new HashMap<String, QueryParam>();
     private String path;
     private String pathExample;
     private List<Return> returnOptions;
@@ -32,7 +37,7 @@ public class Method {
     private List<TransportType> soapInputHeaders;
     private SoapBinding soapBinding;
 
-    private Method(boolean isAsynchronous, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, String path, String pathExample, List<Return> returnOptions, List<TransportType> parameters, String httpMethodType, String description, String name, List<TransportType> soapInputHeaders, SoapBinding soapBinding) {
+    private Method(boolean isAsynchronous, Map<String, HeaderParam> headerParams, Map<String, CookieParam> cookieParams, Map<String, FormParam> formParams, Map<String, MatrixParam> matrixParams, Map<String, PathParam> pathParams, Map<String, QueryParam> queryParams, String path, String pathExample, List<Return> returnOptions, List<TransportType> parameters, String httpMethodType, String description, String name, List<TransportType> soapInputHeaders, SoapBinding soapBinding) {
         this.isAsynchronous = isAsynchronous;
         this.headerParams = headerParams;
         this.cookieParams = cookieParams;
@@ -59,27 +64,27 @@ public class Method {
         return isAsynchronous;
     }
 
-    public List<HeaderParam> getHeaderParams() {
+    public Map<String, HeaderParam> getHeaderParams() {
         return headerParams;
     }
 
-    public List<CookieParam> getCookieParams() {
+    public Map<String, CookieParam> getCookieParams() {
         return cookieParams;
     }
 
-    public List<FormParam> getFormParams() {
+    public Map<String, FormParam> getFormParams() {
         return formParams;
     }
 
-    public List<MatrixParam> getMatrixParams() {
+    public Map<String, MatrixParam> getMatrixParams() {
         return matrixParams;
     }
 
-    public List<PathParam> getPathParams() {
+    public Map<String, PathParam> getPathParams() {
         return pathParams;
     }
 
-    public List<QueryParam> getQueryParams() {
+    public Map<String, QueryParam> getQueryParams() {
         return queryParams;
     }
 
@@ -131,12 +136,12 @@ public class Method {
     public static class MethodBuilder {
 
         private boolean isAsynchronous;
-        private List<HeaderParam> headerParams = new ArrayList<HeaderParam>();
-        private List<CookieParam> cookieParams = new ArrayList<CookieParam>();
-        private List<FormParam> formParams = new ArrayList<FormParam>();
-        private List<MatrixParam> matrixParams = new ArrayList<MatrixParam>();
-        private List<PathParam> pathParams = new ArrayList<PathParam>();
-        private List<QueryParam> queryParams = new ArrayList<QueryParam>();
+        private Map<String, HeaderParam> headerParams = new HashMap<String, HeaderParam>();
+        private Map<String, CookieParam> cookieParams = new HashMap<String, CookieParam>();
+        private Map<String, FormParam> formParams = new HashMap<String, FormParam>();
+        private Map<String, MatrixParam> matrixParams = new HashMap<String, MatrixParam>();
+        private Map<String, PathParam> pathParams = new HashMap<String, PathParam>();
+        private Map<String, QueryParam> queryParams = new HashMap<String, QueryParam>();
         private List<String> consumes = new ArrayList<String>();
         private List<String> produces = new ArrayList<String>();
         private String path;
@@ -148,62 +153,6 @@ public class Method {
         private String name;
         private List<TransportType> soapInputHeaders = new ArrayList<TransportType>();
         private SoapBinding soapBinding;
-
-        public boolean isAsynchronous() {
-            return isAsynchronous;
-        }
-
-        public List<HeaderParam> getHeaderParams() {
-            return headerParams;
-        }
-
-        public List<CookieParam> getCookieParams() {
-            return cookieParams;
-        }
-
-        public List<FormParam> getFormParams() {
-            return formParams;
-        }
-
-        public List<MatrixParam> getMatrixParams() {
-            return matrixParams;
-        }
-
-        public List<PathParam> getPathParams() {
-            return pathParams;
-        }
-
-        public List<QueryParam> getQueryParams() {
-            return queryParams;
-        }
-
-        public List<String> getConsumes() {
-            return consumes;
-        }
-
-        public List<String> getProduces() {
-            return produces;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public String getPathExample() {
-            return pathExample;
-        }
-
-        public List<Return> getReturnOptions() {
-            return returnOptions;
-        }
-
-        public List<TransportType> getParameters() {
-            return parameters;
-        }
-
-        public String getHttpMethodType() {
-            return httpMethodType;
-        }
 
         public MethodBuilder isAsynchronous(boolean isAsynchronous) {
             this.isAsynchronous = isAsynchronous;
@@ -278,32 +227,38 @@ public class Method {
         }
         /**First try to add more specific value and then try to add less specific value.  */
         protected void addHeaderParam(HeaderParam headerParam) {
-            for (HeaderParam param:headerParams){
+            for (HeaderParam param:headerParams.values()){
                 if(param.getName().equals(headerParam.getName())){
                     return;
                 }
             }
-            this.headerParams.add(headerParam);
+            Logger.debug(this.getClass().getSimpleName() + " " +headerParam.getName());
+            this.headerParams.put(headerParam.getName(), headerParam);
         }
 
         protected void addCookieParam(CookieParam cookieParam) {
-            this.cookieParams.add(cookieParam);
+            Logger.debug(this.getClass().getSimpleName() + " " +cookieParam.getName());
+            this.cookieParams.put(cookieParam.getName(), cookieParam);
         }
 
         protected void addFormParam(FormParam formParam) {
-            this.formParams.add(formParam);
+            Logger.debug(this.getClass().getSimpleName() + " " +formParam.getName());
+            this.formParams.put(formParam.getName(), formParam);
         }
 
         protected void addMatrixParam(MatrixParam matrixParam) {
-            this.matrixParams.add(matrixParam);
+            Logger.debug(this.getClass().getSimpleName() + " " +matrixParam.getName());
+            this.matrixParams.put(matrixParam.getName(), matrixParam);
         }
 
         protected void addPathParam(PathParam pathParam) {
-            this.pathParams.add(pathParam);
+            Logger.debug(this.getClass().getSimpleName() + " " +pathParam.getName());
+            this.pathParams.put(pathParam.getName(), pathParam);
         }
 
         protected void addQueryParam(QueryParam queryParam) {
-            this.queryParams.add(queryParam);
+            Logger.debug(this.getClass().getSimpleName() + " " +queryParam.getName());
+            this.queryParams.put(queryParam.getName(), queryParam);
         }
 
         public void soapInputHeader(TransportType soapHeader) {

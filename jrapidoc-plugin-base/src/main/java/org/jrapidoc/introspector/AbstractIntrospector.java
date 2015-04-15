@@ -83,6 +83,9 @@ public abstract class AbstractIntrospector {
 
     Set<Class<?>> removeExcludedResourceClasses(List<String> exclude, Set<Class<?>> resourceClasses) {
         Set<Class<?>> resourceClassesFiltered = new HashSet<Class<?>>(resourceClasses);
+        if(exclude == null || exclude.isEmpty()){
+            return resourceClasses;
+        }
         for (String excludePath : exclude) {
             for (Class<?> resourceClass : resourceClasses) {
                 if (resourceClass.getCanonicalName().startsWith(excludePath)) {
@@ -96,7 +99,7 @@ public abstract class AbstractIntrospector {
 
     Reflections getUnionOfIncludedPaths(List<String> include, ClassLoader loader) {
         Reflections ref;
-        if (include.isEmpty()) {
+        if (include == null || include.isEmpty()) {
             ref = new Reflections("", loader);
         } else {
             ref = new Reflections(include.remove(0), loader);

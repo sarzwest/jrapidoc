@@ -877,7 +877,7 @@ public class ResourceBuilder {
             Path methodPath = method.getAnnotation(Path.class);
             if (methodPath != null) {
                 resourceLocatorBuilder.path(methodPath.value());
-            }else{
+            } else {
                 resourceLocatorBuilder.path("");
             }
             for (int i = 0; i < resourceLocatorBuilder.locator.params.length; i++) {
@@ -903,12 +903,8 @@ public class ResourceBuilder {
                     resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) ((ParameterizedType) paramType.getActualTypeArguments()[0]).getRawType(), paramType.getActualTypeArguments()[0], null, null);
                 }
             }
-        }else if(returnClass.isArray()){
-//            Class<?> componentType = returnClass.getComponentType();
-//            if(componentType.isPrimitive()){
-//
-//            }
-            resourceMethodBuilder.response(204, new String[]{}, new String[]{}, returnClass, returnClass, null, null);
+        } else {
+            resourceMethodBuilder.response(200, new String[]{}, new String[]{}, returnClass, parameterized, null, null);
         }
     }
 
