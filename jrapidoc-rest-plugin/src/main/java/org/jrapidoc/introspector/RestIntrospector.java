@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,27 +22,36 @@ import java.util.Set;
 public class RestIntrospector extends AbstractIntrospector {
 
     @Override
-    public void run(URL[] urlsForClassloader, List<String> include, List<String> exclude, String basePath, String typeProviderClass, File output, List<String> modelHandlerClasses) throws Exception {
+    public void run(URL[] urlsForClassloader, List<String> include, List<String> exclude, String basePath, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> customInfo) throws Exception {
         Logger.debug("Introspection started");
         createOutputDir(output);
         List<ModelHandler> modelHandlers = getModelHandlers(modelHandlerClasses);
         URLClassLoader loader = getProjectUrlClassLoader(urlsForClassloader);
         Set<Class<?>> resourceClasses = getScannedClasses(include, exclude, loader, Path.class);
-        APIModel apiModel = createModel(basePath, resourceClasses, typeProviderClass);
+        APIModel apiModel = createModel(customInfo, basePath, resourceClasses, typeProviderClass);
         processHandlers(modelHandlers, apiModel);
         writeModelToFile(apiModel, output);
         Logger.debug("Introspection finished");
     }
 
-    APIModel createModel(String basePath, Set<Class<?>> resourceClasses, String typeProviderClass) {
+    APIModel createModel(Map<String, String> customInfo, String basePath, Set<Class<?>> resourceClasses, String typeProviderClass) {
         TypeProvider typeProvider = getTypeProvider(typeProviderClass);
         ResourceClassProcessor resourceClassProcessor = getResourceClassProcessor(typeProvider);
         APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
+        addCustomInfo(customInfo, APIModelBuilder);
         APIModelBuilder.baseUrl(basePath);
         Set<ResourceClass> resourceClassesMeta = doPreIntrospection(resourceClasses);
         resourceClassProcessor.createApiModel(resourceClassesMeta, APIModelBuilder);
         APIModelBuilder.types(typeProvider.getUsedTypes());
         return APIModelBuilder.build();
+    }
+
+    void addCustomInfo(Map<String, String> customInfo, APIModel.APIModelBuilder APIModelBuilder) {
+        if (customInfo != null || !customInfo.isEmpty()) {
+            for (String key : customInfo.keySet()) {
+                APIModelBuilder.customInfo(key, customInfo.get(key));
+            }
+        }
     }
 
     ResourceClassProcessor getResourceClassProcessor(TypeProvider typeProvider) {

@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by papa on 14.3.15.
@@ -62,6 +63,9 @@ public class RestMojo extends AbstractMojo {
     @Parameter(name = "modelHandlers")
     List<String> modelHandlers;
 
+    @Parameter(name = "custom")
+    Map<String, String> custom;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         long start = System.currentTimeMillis();
@@ -80,7 +84,7 @@ public class RestMojo extends AbstractMojo {
             }
             URL[] urls = projectClasspathList.toArray(new URL[projectClasspathList.size()]);
             RestIntrospector restIntrospector = new RestIntrospector();
-            restIntrospector.run(urls, includes, excludes, baseUrl, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.rest.model.json"), modelHandlers);
+            restIntrospector.run(urls, includes, excludes, baseUrl, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.rest.model.json"), modelHandlers, custom);
         } catch (DependencyResolutionRequiredException e) {
             getLog().error(e);
             throw new MojoExecutionException(e.getMessage(), e);

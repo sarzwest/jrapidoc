@@ -20,6 +20,7 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by papa on 14.3.15.
@@ -59,6 +60,9 @@ public class SoapMojo extends AbstractMojo {
     @Parameter(name = "modelHandlers")
     List<String> modelHandlers;
 
+    @Parameter(name = "custom")
+    Map<String, String> custom;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         long start = System.currentTimeMillis();
@@ -77,7 +81,7 @@ public class SoapMojo extends AbstractMojo {
             }
             URL[] urls = projectClasspathList.toArray(new URL[projectClasspathList.size()]);
             SoapIntrospector soapIntrospector = new SoapIntrospector();
-            soapIntrospector.run(urls, includes, excludes, baseUrl, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.soap.model.json"), modelHandlers);
+            soapIntrospector.run(urls, includes, excludes, baseUrl, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.soap.model.json"), modelHandlers, custom);
         } catch (DependencyResolutionRequiredException e) {
             getLog().error(e);
             throw new MojoExecutionException(e.getMessage(), e);

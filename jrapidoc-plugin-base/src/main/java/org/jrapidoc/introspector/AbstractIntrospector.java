@@ -18,6 +18,7 @@ import java.net.URLClassLoader;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -25,7 +26,7 @@ import java.util.Set;
  */
 public abstract class AbstractIntrospector {
 
-    public abstract void run(URL[] urlsForClassloader, List<String> include, List<String> exclude, String basePath, String typeProviderClass, File output, List<String> modelHandlerClasses) throws Exception;
+    public abstract void run(URL[] urlsForClassloader, List<String> include, List<String> exclude, String basePath, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> custom) throws Exception;
 
     void writeModelToFile(APIModel apiModel, File output) throws FileNotFoundException {
         ModelGenerator.generateModel(apiModel, output);
