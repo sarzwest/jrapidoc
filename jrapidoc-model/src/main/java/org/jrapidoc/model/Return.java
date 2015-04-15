@@ -54,6 +54,30 @@ public class Return {
         return soapOutputHeaders;
     }
 
+    public void setHttpStatus(int httpStatus) {
+        this.httpStatus = httpStatus;
+    }
+
+    public void setHeaderParams(Map<String, HeaderParam> headerParams) {
+        this.headerParams = headerParams;
+    }
+
+    public void setCookieParams(Map<String, CookieParam> cookieParams) {
+        this.cookieParams = cookieParams;
+    }
+
+    public void setReturnTypes(Map<String, TransportType> returnTypes) {
+        this.returnTypes = returnTypes;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setSoapOutputHeaders(Map<String, TransportType> soapOutputHeaders) {
+        this.soapOutputHeaders = soapOutputHeaders;
+    }
+
     public static class ReturnBuilder{
 
         private int httpStatus;

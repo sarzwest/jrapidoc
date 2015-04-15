@@ -18,8 +18,8 @@ public class HeaderParam extends Param  {
         return options;
     }
 
-    public HeaderParamBuilder setOptions(String[] options) {
-        return new HeaderParamBuilder().setOptions(options);
+    public void setOptions(String[] options) {
+        this.options = options;
     }
 
     public static class HeaderParamBuilder extends ParamBuilder{

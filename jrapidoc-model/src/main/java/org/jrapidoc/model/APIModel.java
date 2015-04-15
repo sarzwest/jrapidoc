@@ -46,6 +46,22 @@ public class APIModel {
         return types;
     }
 
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    public void setCustomInfo(Map<String, String> customInfo) {
+        this.customInfo = customInfo;
+    }
+
+    public void setResources(Map<String, Resource> resources) {
+        this.resources = resources;
+    }
+
+    public void setTypes(Map<String, Type> types) {
+        this.types = types;
+    }
+
     public static class APIModelBuilder {
         private String baseUrl;
         private Map<String, String> customInfo = new HashMap<String, String>();

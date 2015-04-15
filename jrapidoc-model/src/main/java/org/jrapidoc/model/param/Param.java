@@ -52,6 +52,26 @@ public abstract class Param {
         return type;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRequired(boolean isRequired) {
+        this.isRequired = isRequired;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setTyperef(String typeref) {
+        this.typeref = typeref;
+    }
+
     public static abstract class ParamBuilder{
 
         String name;

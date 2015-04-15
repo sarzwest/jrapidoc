@@ -93,7 +93,6 @@ public class Resource {
         return queryParams;
     }
 
-
     private <T extends Param> T getParam(List<T> params, String paramName){
         for (T p:params){
             if(p.getName().equals(paramName)){
@@ -118,6 +117,26 @@ public class Resource {
             return getParam(queryParams, paramName);
         }
         return null;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public void setPathExample(String pathExample) {
+        this.pathExample = pathExample;
+    }
+
+    public void setMethods(Map<String, Method> methods) {
+        this.methods = methods;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public static class ResourceBuilder{

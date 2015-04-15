@@ -120,6 +120,70 @@ public class Method {
         return soapBinding;
     }
 
+    public void setAsynchronous(boolean isAsynchronous) {
+        this.isAsynchronous = isAsynchronous;
+    }
+
+    public void setHeaderParams(Map<String, HeaderParam> headerParams) {
+        this.headerParams = headerParams;
+    }
+
+    public void setCookieParams(Map<String, CookieParam> cookieParams) {
+        this.cookieParams = cookieParams;
+    }
+
+    public void setFormParams(Map<String, FormParam> formParams) {
+        this.formParams = formParams;
+    }
+
+    public void setMatrixParams(Map<String, MatrixParam> matrixParams) {
+        this.matrixParams = matrixParams;
+    }
+
+    public void setPathParams(Map<String, PathParam> pathParams) {
+        this.pathParams = pathParams;
+    }
+
+    public void setQueryParams(Map<String, QueryParam> queryParams) {
+        this.queryParams = queryParams;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public void setPathExample(String pathExample) {
+        this.pathExample = pathExample;
+    }
+
+    public void setReturnOptions(List<Return> returnOptions) {
+        this.returnOptions = returnOptions;
+    }
+
+    public void setParameters(List<TransportType> parameters) {
+        this.parameters = parameters;
+    }
+
+    public void setHttpMethodType(String httpMethodType) {
+        this.httpMethodType = httpMethodType;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSoapInputHeaders(List<TransportType> soapInputHeaders) {
+        this.soapInputHeaders = soapInputHeaders;
+    }
+
+    public void setSoapBinding(SoapBinding soapBinding) {
+        this.soapBinding = soapBinding;
+    }
+
     @Override
     public String toString() {
         return "Method{" +
