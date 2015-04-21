@@ -3,7 +3,7 @@ package org.jrapidoc.model.handler;
 import org.jrapidoc.model.APIModel;
 
 /**
- * Created by papa on 12.4.15.
+ * Created by Tomas "sarzwest" Jiricek on 12.4.15.
  */
 public interface ModelHandler {
 

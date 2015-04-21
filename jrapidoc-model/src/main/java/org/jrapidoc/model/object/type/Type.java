@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by papa on 23.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
 public class Type {
 

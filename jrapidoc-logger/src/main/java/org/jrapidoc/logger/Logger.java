@@ -6,7 +6,7 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 import java.text.MessageFormat;
 
 /**
- * Created by papa on 6.4.15.
+ * Created by Tomas "sarzwest" Jiricek on 6.4.15.
  */
 public class Logger {
 

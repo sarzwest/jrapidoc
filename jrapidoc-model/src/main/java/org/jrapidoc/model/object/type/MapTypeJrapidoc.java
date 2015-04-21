@@ -4,7 +4,7 @@ package org.jrapidoc.model.object.type;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Created by papa on 19.1.15.
+ * Created by Tomas "sarzwest" Jiricek on 19.1.15.
  */
 public class MapTypeJrapidoc extends org.jrapidoc.model.object.type.Type {
 

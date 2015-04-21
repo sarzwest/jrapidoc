@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by papa on 29.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 29.3.15.
  */
 public class JacksonSignature {
 

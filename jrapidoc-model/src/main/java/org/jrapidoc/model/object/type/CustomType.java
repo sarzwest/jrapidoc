@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by papa on 18.1.15.
+ * Created by Tomas "sarzwest" Jiricek on 18.1.15.
  */
 public class CustomType extends org.jrapidoc.model.object.type.Type {
 

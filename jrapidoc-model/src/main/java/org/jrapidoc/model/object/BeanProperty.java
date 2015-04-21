@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Created by papa on 13.1.15.
+ * Created by Tomas "sarzwest" Jiricek on 13.1.15.
  */
 public class BeanProperty {
 

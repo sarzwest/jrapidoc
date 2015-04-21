@@ -2,6 +2,7 @@ package org.jrapidoc.introspector;
 
 import org.jboss.resteasy.spi.metadata.*;
 import org.jrapidoc.RestUtil;
+import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.*;
 import org.jrapidoc.model.object.type.Type;
 import org.jrapidoc.model.param.*;
@@ -10,7 +11,7 @@ import org.jrapidoc.model.type.provider.TypeProvider;
 import java.util.*;
 
 /**
- * Created by papa on 26.1.15.
+ * Created by Tomas "sarzwest" Jiricek on 26.1.15.
  */
 public class ResourceClassProcessor {
 
@@ -26,11 +27,13 @@ public class ResourceClassProcessor {
      * @param resourceClasses
      * @return
      */
-    public void createApiModel(Set<ResourceClass> resourceClasses, APIModel.APIModelBuilder APIModelBuilder) {
+    public ServiceGroup createServiceGroup(Set<ResourceClass> resourceClasses, ServiceGroup.ServiceGroupBuilder serviceGroupBuilder) {
         for (ResourceClass resourceClass : resourceClasses) {
-            Resource resource = createResource(resourceClass);
-            APIModelBuilder.resource(resource);
+            Logger.debug("Introspecting resource class {0}", resourceClass.getClazz().getCanonicalName());
+            Service service = createResource(resourceClass);
+            serviceGroupBuilder.service(service);
         }
+        return serviceGroupBuilder.build();
     }
 
     void addConsumesParam(Method.MethodBuilder methodBuilder, ResourceClass resourceClass, ResourceMethod resourceMethod) {
@@ -61,9 +64,9 @@ public class ResourceClassProcessor {
         }
     }
 
-    Resource createResource(ResourceClass resourceClass) {
-        Resource.ResourceBuilder resourceBuilder = new Resource.ResourceBuilder();
-        resourceBuilder.path(RestUtil.trimSlash(resourceClass.getPath()));
+    Service createResource(ResourceClass resourceClass) {
+        Service.ResourceBuilder resourceBuilder = new Service.ResourceBuilder();
+        addPath(resourceClass, resourceBuilder);
         resourceBuilder.pathExample(resourceClass.getPathExample());
         resourceBuilder.description(resourceClass.getDescription());
         addMethods(resourceClass, resourceBuilder);
@@ -71,26 +74,34 @@ public class ResourceClassProcessor {
         return resourceBuilder.build();
     }
 
-    void addLocatorMethods(ResourceClass resourceClass, Resource.ResourceBuilder resourceBuilder) {
+    void addPath(ResourceClass resourceClass, Service.ResourceBuilder resourceBuilder) {
+        String path = RestUtil.trimSlash(resourceClass.getPath());
+        if(path.equals("")){
+            path = "/";
+        }
+        resourceBuilder.path(path);
+    }
+
+    void addLocatorMethods(ResourceClass resourceClass, Service.ResourceBuilder resourceBuilder) {
         for (ResourceLocator resourceLocator : resourceClass.getResourceLocators()) {
-            ResourceClass newResourceClass = ResourceBuilder.locatorFromAnnotations(resourceLocator.getReturnType());
-            newResourceClass.setPath(resourceLocator.getFullpath());
-            newResourceClass.setConstructor(resourceClass.getConstructor());
-            APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
-            createApiModel(new HashSet<ResourceClass>(Arrays.asList(new ResourceClass[]{newResourceClass})), APIModelBuilder);
-            APIModel locatorSubModel = APIModelBuilder.build();
-            for (Resource resource:locatorSubModel.getResources().values()){
-                for (Method method:resource.getMethods().values()){
-                    resourceBuilder.method(method);
+            try {
+                ResourceClass newResourceClass = ResourceBuilder.locatorFromAnnotations(resourceLocator.getReturnType());
+                newResourceClass.setPath(resourceLocator.getFullpath());
+                newResourceClass.setConstructor(resourceClass.getConstructor());
+                ServiceGroup.ServiceGroupBuilder serviceGroupBuilder = new ServiceGroup.ServiceGroupBuilder();
+                ServiceGroup locatorSubModel = createServiceGroup(new HashSet<ResourceClass>(Arrays.asList(new ResourceClass[]{newResourceClass})), serviceGroupBuilder);
+                for (Service service : locatorSubModel.getServices().values()) {
+                    for (Method method : service.getMethods().values()) {
+                        resourceBuilder.method(method);
+                    }
                 }
+            } catch (Exception e) {
+                Logger.error(e, "Problem during preintrospection of locator class {0}, skipping this class", resourceLocator.getReturnType().getCanonicalName());
             }
-//            for (Method method : locatorSubModel.getResources().get(0).getMethods().values()) {
-//                resourceBuilder.method(method);
-//            }
         }
     }
 
-    void addMethods(ResourceClass resourceClass, Resource.ResourceBuilder resourceBuilder) {
+    void addMethods(ResourceClass resourceClass, Service.ResourceBuilder resourceBuilder) {
         for (ResourceMethod resourceMethod : resourceClass.getResourceMethods()) {
             Method method = createMethod(resourceMethod, resourceClass);
             resourceBuilder.method(method);
@@ -102,6 +113,7 @@ public class ResourceClassProcessor {
     }
 
     Method createMethod(ResourceMethod resourceMethod, ResourceClass resourceClass) {
+        Logger.debug("Introspecting method {0}", resourceMethod.getMethod().toString());
         resourceMethod.messageBodyCheck();
         Method.MethodBuilder methodBuilder = new Method.MethodBuilder();
         methodBuilder.isAsynchronous(resourceMethod.isAsynchronous());
@@ -212,7 +224,7 @@ public class ResourceClassProcessor {
         Type type = createParameterType(parameter);
         paramBuilder.setTyperef(type.getTypeRef());
         paramBuilder.setDescription(parameter.getDescription());
-//        paramBuilder.setRequired();
+        paramBuilder.setRequired(parameter.getIsRequired());
         return paramBuilder.build();
     }
 
@@ -236,7 +248,6 @@ public class ResourceClassProcessor {
                 return new TransportType.TransportTypeBuilder().type(typeProvider.createType(methodParameter.getGenericType())).description(methodParameter.getDescription()).build();
             }
         }
-        //TODO nebere parametr - void
         return null;
     }
 }

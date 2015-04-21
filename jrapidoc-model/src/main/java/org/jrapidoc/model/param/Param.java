@@ -1,11 +1,13 @@
 package org.jrapidoc.model.param;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * Created by papa on 23.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
-@JsonPropertyOrder({"name", "description", "isRequired", "type", "typeref"})
+@JsonPropertyOrder({"name", "description", "required", "type", "typeref"})
 public abstract class Param {
 
     public static enum Type {
@@ -18,8 +20,9 @@ public abstract class Param {
     };
 
     private String name;
-    /**v nektere metode muze byt required, jinde neni required*/
+    @JsonProperty("required")
     private boolean isRequired;
+    @JsonIgnore
     private Type type;
     private String description;
     private String typeref;
@@ -85,8 +88,12 @@ public abstract class Param {
             return this;
         }
 
-        public ParamBuilder setRequired(boolean isRequired) {
-            this.isRequired = isRequired;
+        public ParamBuilder setRequired(Boolean isRequired) {
+            boolean isRequiredValue = true;
+            if(isRequired != null){
+                isRequiredValue = isRequired;
+            }
+            this.isRequired = isRequiredValue;
             return this;
         }
 

@@ -1,6 +1,7 @@
 package org.jboss.resteasy.spi.metadata;
 
 import org.jrapidoc.annotation.Description;
+import org.jrapidoc.annotation.IsRequired;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
@@ -17,7 +18,7 @@ public class SetterParameter extends Parameter
 
    protected SetterParameter(ResourceClass declaredClass, Method setter, Method annotatedMethod)
    {
-      super(declaredClass, setter.getParameterTypes()[0], setter.getGenericParameterTypes()[0], (setter.getAnnotation(Description.class) == null)?null:setter.getAnnotation(Description.class).value());
+      super(declaredClass, setter.getParameterTypes()[0], setter.getGenericParameterTypes()[0], (setter.getAnnotation(Description.class) == null)?null:setter.getAnnotation(Description.class).value(), (setter.getAnnotation(IsRequired.class) == null)?null:setter.getAnnotation(IsRequired.class).value());
       this.setter = setter;
       this.annotatedMethod = annotatedMethod;
    }

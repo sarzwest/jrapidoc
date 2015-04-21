@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 
 /**
- * Created by papa on 13.1.15.
+ * Created by Tomas "sarzwest" Jiricek on 13.1.15.
  */
 public class JacksonUtil {
 

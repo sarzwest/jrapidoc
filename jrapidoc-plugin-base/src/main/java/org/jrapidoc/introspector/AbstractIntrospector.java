@@ -8,6 +8,7 @@ import org.jrapidoc.model.handler.HandlerFactory;
 import org.jrapidoc.model.handler.ModelHandler;
 import org.jrapidoc.model.type.provider.TypeProvider;
 import org.jrapidoc.model.type.provider.TypeProviderFactory;
+import org.jrapidoc.plugin.ConfigGroup;
 import org.reflections.Reflections;
 
 import java.io.File;
@@ -22,11 +23,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by papa on 12.4.15.
+ * Created by Tomas "sarzwest" Jiricek on 12.4.15.
  */
 public abstract class AbstractIntrospector {
 
-    public abstract void run(URL[] urlsForClassloader, List<String> include, List<String> exclude, String basePath, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> custom) throws Exception;
+    public abstract void run(URL[] urlsForClassloader, List<ConfigGroup> groups, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> custom) throws Exception;
 
     void writeModelToFile(APIModel apiModel, File output) throws FileNotFoundException {
         ModelGenerator.generateModel(apiModel, output);
@@ -49,6 +50,14 @@ public abstract class AbstractIntrospector {
                     Logger.error(e, "Exception occured in handler {0}, stopping plugin", modelHandler.getClass().getCanonicalName());
                     throw new Exception(e);
                 }
+            }
+        }
+    }
+
+    void addCustomInfo(Map<String, String> customInfo, APIModel.APIModelBuilder APIModelBuilder) {
+        if (customInfo != null && !customInfo.isEmpty()) {
+            for (String key : customInfo.keySet()) {
+                APIModelBuilder.customInfo(key, customInfo.get(key));
             }
         }
     }
@@ -110,5 +119,33 @@ public abstract class AbstractIntrospector {
             }
         }
         return ref;
+    }
+
+    void checkIncludeConfigNotEmpty(List<String> include) throws Exception {
+        if(include == null || include.isEmpty()){
+            Logger.error("Please specify packages with API\n" +
+                    "Add missing plugin configuration:\n" +
+                    "\n" +
+                    "<includes>\n" +
+                    "   <include>package.with.api</include>\n" +
+                    "   <include>another.package.with.api</include>\n" +
+                    "</includes>");
+            throw new Exception("\"include\" packages are not configured");
+        }
+    }
+
+    void setUp(List<ConfigGroup> groups, File output) throws Exception {
+        createOutputDir(output);
+        if(groups == null){
+            Logger.error("Groups element in configuration is null");
+            throw new Exception("Groups element in configuration is null");
+        }
+        for (ConfigGroup group:groups){
+            if(group == null){
+                Logger.error("Group element in groups element is null");
+                throw new Exception("Group element in groups element is null");
+            }
+            checkIncludeConfigNotEmpty(group.getIncludes());
+        }
     }
 }

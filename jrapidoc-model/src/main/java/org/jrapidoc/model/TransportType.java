@@ -3,7 +3,7 @@ package org.jrapidoc.model;
 import org.jrapidoc.model.object.type.Type;
 
 /**
- * Created by papa on 10.4.15.
+ * Created by Tomas "sarzwest" Jiricek on 10.4.15.
  */
 public class TransportType {
 

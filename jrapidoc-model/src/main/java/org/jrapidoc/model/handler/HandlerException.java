@@ -1,7 +1,7 @@
 package org.jrapidoc.model.handler;
 
 /**
- * Created by papa on 12.4.15.
+ * Created by Tomas "sarzwest" Jiricek on 12.4.15.
  */
 public class HandlerException extends Exception{
 

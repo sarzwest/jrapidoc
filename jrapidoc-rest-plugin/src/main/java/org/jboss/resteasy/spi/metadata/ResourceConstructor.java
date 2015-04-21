@@ -2,6 +2,7 @@ package org.jboss.resteasy.spi.metadata;
 
 import javassist.runtime.Desc;
 import org.jrapidoc.annotation.Description;
+import org.jrapidoc.annotation.IsRequired;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -26,14 +27,16 @@ public class ResourceConstructor
          for (int i = 0; i < constructor.getParameterTypes().length; i++)
          {
              Description desc = null;
+             IsRequired isReq = null;
              Annotation[] annotations = constructor.getParameterAnnotations()[i];
              for(Annotation a:annotations){
                  if(a.annotationType().equals(Description.class)){
                      desc = (Description)a;
-                     break;
+                 }else if(a.annotationType().equals(IsRequired.class)){
+                     isReq = (IsRequired)a;
                  }
              }
-            this.params[i] = new ConstructorParameter(this, constructor.getParameterTypes()[i], constructor.getGenericParameterTypes()[i], constructor.getParameterAnnotations()[i], desc);
+            this.params[i] = new ConstructorParameter(this, constructor.getParameterTypes()[i], constructor.getGenericParameterTypes()[i], constructor.getParameterAnnotations()[i], desc, isReq);
          }
       }
    }

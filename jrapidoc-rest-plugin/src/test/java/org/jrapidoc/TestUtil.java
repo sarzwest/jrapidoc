@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by papa on 29.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 29.3.15.
  */
 public class TestUtil {
 
@@ -13,5 +13,8 @@ public class TestUtil {
         String url = "/qwe/rty/";
         url = RestUtil.trimSlash(url);
         Assert.assertEquals("qwe/rty", url);
+        url = "/";
+        url = RestUtil.trimSlash(url);
+        Assert.assertEquals("", url);
     }
 }

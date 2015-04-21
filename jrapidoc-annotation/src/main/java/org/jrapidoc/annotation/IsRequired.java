@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by Tomas "sarzwest" Jiricek on 15.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 16.4.15.
  */
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Description {
-    String value();
+public @interface IsRequired {
+    boolean value() default true;
 }

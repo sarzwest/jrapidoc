@@ -1,7 +1,7 @@
 package org.jrapidoc.model.param;
 
 /**
- * Created by papa on 23.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
 public class HeaderParam extends Param  {
 
@@ -37,7 +37,7 @@ public class HeaderParam extends Param  {
         }
 
         @Override
-        public HeaderParamBuilder setRequired(boolean isRequired) {
+        public HeaderParamBuilder setRequired(Boolean isRequired) {
             return (HeaderParamBuilder)super.setRequired(isRequired);
         }
 

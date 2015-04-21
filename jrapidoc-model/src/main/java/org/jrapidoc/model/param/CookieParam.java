@@ -1,7 +1,7 @@
 package org.jrapidoc.model.param;
 
 /**
- * Created by papa on 23.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
 public class CookieParam extends Param {
     public CookieParam(String name, boolean isRequired, String typeref, Type type, String description) {
@@ -16,7 +16,7 @@ public class CookieParam extends Param {
         }
 
         @Override
-        public CookieParamBuilder setRequired(boolean isRequired) {
+        public CookieParamBuilder setRequired(Boolean isRequired) {
             return (CookieParamBuilder)super.setRequired(isRequired);
         }
 

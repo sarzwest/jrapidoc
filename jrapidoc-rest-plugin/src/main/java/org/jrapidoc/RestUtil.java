@@ -8,7 +8,7 @@ import org.jrapidoc.model.param.Param;
 import java.util.Set;
 
 /**
- * Created by papa on 29.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 29.3.15.
  */
 public class RestUtil {
 
@@ -18,6 +18,9 @@ public class RestUtil {
         }
         if(urlPath.charAt(0) == '/'){
             urlPath = urlPath.substring(1);
+        }
+        if(StringUtils.isEmpty(urlPath)){
+            return urlPath;
         }
         if(urlPath.charAt(urlPath.length() - 1) == '/'){
             urlPath = urlPath.substring(0, urlPath.length() - 1);

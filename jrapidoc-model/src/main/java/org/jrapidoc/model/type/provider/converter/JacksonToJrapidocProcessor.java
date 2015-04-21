@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by papa on 11.1.15.
+ * Created by Tomas "sarzwest" Jiricek on 11.1.15.
  */
 public class JacksonToJrapidocProcessor {
 

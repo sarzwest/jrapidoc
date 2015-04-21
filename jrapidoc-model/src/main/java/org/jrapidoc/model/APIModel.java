@@ -2,40 +2,42 @@ package org.jrapidoc.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.object.type.Type;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
- * Created by papa on 23.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
 @JsonPropertyOrder({"info", "baseUrl", "resources"})
 public class APIModel {
 
-    private String baseUrl;
+    private Map<String, ServiceGroup> resourceGroups;
     @JsonProperty("info")
     private Map<String, String> customInfo;
-    private Map<String, Resource> resources = new HashMap<String, Resource>();
+//    private Map<String, Service> resources = new HashMap<String, Service>();
     private Map<String, Type> types;
 
-    private APIModel(String baseUrl, Map<String, Resource> resources, Map<String, Type> types, Map<String, String> customInfo) {
-        this.baseUrl = baseUrl;
-        this.resources = resources;
+    private APIModel(/*String baseUrl, Map<String, Service> resources, */Map<String, ServiceGroup> resourceGroups, Map<String, Type> types, Map<String, String> customInfo) {
+//        this.baseUrl = baseUrl;
+//        this.resources = resources;
+        this.resourceGroups = resourceGroups;
         this.types = types;
         this.customInfo = customInfo;
     }
 
-    public Map<String, Resource> getResources() {
-        return resources;
+    public void setCustomInfo(Map<String, String> customInfo) {
+        this.customInfo = customInfo;
     }
 
-    public String getBaseUrl() {
-        return baseUrl;
+    public void setTypes(Map<String, Type> types) {
+        this.types = types;
+    }
+
+    public void setResourceGroups(Map<String, ServiceGroup> resourceGroups) {
+        this.resourceGroups = resourceGroups;
     }
 
     public Map<String, String> getCustomInfo() {
@@ -46,37 +48,25 @@ public class APIModel {
         return types;
     }
 
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
-    }
-
-    public void setCustomInfo(Map<String, String> customInfo) {
-        this.customInfo = customInfo;
-    }
-
-    public void setResources(Map<String, Resource> resources) {
-        this.resources = resources;
-    }
-
-    public void setTypes(Map<String, Type> types) {
-        this.types = types;
+    public Map<String, ServiceGroup> getResourceGroups() {
+        return resourceGroups;
     }
 
     public static class APIModelBuilder {
-        private String baseUrl;
+        private Map<String, ServiceGroup> resourceGroups = new HashMap<String, ServiceGroup>();
         private Map<String, String> customInfo = new HashMap<String, String>();
-        private Map<String, Resource> resources = new HashMap<String, Resource>();
         private Map<String, Type> types;
 
-        public APIModelBuilder baseUrl(String baseUrl) {
-            this.baseUrl = baseUrl;
-            return this;
-        }
-
-        public APIModelBuilder resource(Resource resource) {
-            String key = (StringUtils.isNotEmpty(resource.getPath()))?resource.getPath():resource.getName();
-            Logger.debug(this.getClass().getSimpleName() + " " +key);
-            this.resources.put(key, resource);
+        public APIModelBuilder resourceGroup(ServiceGroup serviceGroup) {
+            String key = serviceGroup.getBaseUrl();
+            Logger.debug("Service group identifier: {0}", key);
+            if(key == null){
+                Logger.warn("Putting null key into map");
+            }
+            if(resourceGroups.containsKey(key)){
+                Logger.warn("Overwriting resource group object, because resource group with such key {0} is already present in model", key);
+            }
+            this.resourceGroups.put(serviceGroup.getBaseUrl(), serviceGroup);
             return this;
         }
 
@@ -91,7 +81,7 @@ public class APIModel {
         }
 
         public APIModel build(){
-            return new APIModel(baseUrl, resources, types, (customInfo.isEmpty())? null: customInfo);
+            return new APIModel(resourceGroups, types, (customInfo.isEmpty())? null: customInfo);
         }
     }
 }

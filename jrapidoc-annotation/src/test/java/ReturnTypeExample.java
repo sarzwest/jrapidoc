@@ -2,7 +2,7 @@ import org.jrapidoc.annotation.rest.Return;
 import org.jrapidoc.annotation.rest.Returns;
 
 /**
- * Created by papa on 31.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 31.3.15.
  */
 public class ReturnTypeExample {
 

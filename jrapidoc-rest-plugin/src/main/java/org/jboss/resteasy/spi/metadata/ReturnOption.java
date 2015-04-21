@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by papa on 10.1.15.
+ * Created by Tomas "sarzwest" Jiricek on 10.1.15.
  */
 public class ReturnOption {
 

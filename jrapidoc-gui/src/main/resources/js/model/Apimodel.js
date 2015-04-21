@@ -1,5 +1,5 @@
 /**
- * Created by papa on 21.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 21.3.15.
  */
 var ApiModel = function(){
     this.modelJSON;
@@ -12,7 +12,12 @@ var ApiModel = function(){
 ApiModel.prototype.loadModel = function(modelUrl){
     var stateChanged = function (caller) {
         if (this.readyState === 4) {
-            console.log(this.responseText);
+            if(this.status == 200){
+//                Logger.success("Retrieving model finished with http status: OK " + this.status);
+            }else{
+                Logger.error("Retrieving model finished with http status: " + this.status);
+                throw new CaughtException("Retrieving model finished with http status: " + this.status);
+            }
             var modelJSON = caller.checkAndGetModel(this.responseText);
             caller.setModelJSON(modelJSON);
         }
@@ -37,8 +42,8 @@ ApiModel.prototype.checkAndGetModel = function(givenModel){
         var modelJSON = JSON.parse(givenModel);
         return modelJSON;
     }catch (e){
-        console.log("error occured");
-        throw e;
+        Logger.error("Given model could not be parsed as JSON");
+        throw new CaughtException("Given model could not be parsed as JSON");
     }
 };
 

@@ -1,7 +1,7 @@
 package org.jrapidoc.model.param;
 
 /**
- * Created by papa on 23.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
 public class MatrixParam extends Param  {
 
@@ -16,7 +16,7 @@ public class MatrixParam extends Param  {
         }
 
         @Override
-        public MatrixParamBuilder setRequired(boolean isRequired) {
+        public MatrixParamBuilder setRequired(Boolean isRequired) {
             return (MatrixParamBuilder)super.setRequired(isRequired);
         }
 

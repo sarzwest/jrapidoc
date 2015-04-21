@@ -3,9 +3,11 @@ package org.jrapidoc.introspector;
 import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.APIModel;
+import org.jrapidoc.model.ServiceGroup;
 import org.jrapidoc.model.handler.ModelHandler;
 import org.jrapidoc.model.type.provider.JacksonJaxbJsonProvider;
 import org.jrapidoc.model.type.provider.TypeProvider;
+import org.jrapidoc.plugin.ConfigGroup;
 
 import javax.jws.WebService;
 import java.io.File;
@@ -17,41 +19,48 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by papa on 7.4.15.
+ * Created by Tomas "sarzwest" Jiricek on 7.4.15.
  */
 public class SoapIntrospector extends AbstractIntrospector{
 
     @Override
-    public void run(URL[] urlsForClassloader, List<String> include, List<String> exclude, String basePath, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> customInfo) throws Exception {
+    public void run(URL[] urlsForClassloader, List<ConfigGroup> groups, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> customInfo) throws Exception {
         Logger.debug("Introspection started");
-        createOutputDir(output);
+        setUp(groups, output);
         List<ModelHandler> modelHandlers = getModelHandlers(modelHandlerClasses);
         URLClassLoader loader = getProjectUrlClassLoader(urlsForClassloader);
-        Set<Class<?>> seiClasses = getScannedClasses(include, exclude, loader, WebService.class);
-        seiClasses = removeInterfaces(seiClasses);
-        seiClasses = removeExcludedResourceClasses(exclude, seiClasses);
-        APIModel apiModel = createModel(customInfo, basePath, seiClasses, typeProviderClass, loader);
+//        Set<Class<?>> seiClasses = getScannedClasses(include, exclude, loader, WebService.class);
+//        seiClasses = removeInterfaces(seiClasses);
+//        seiClasses = removeExcludedResourceClasses(exclude, seiClasses);
+        APIModel apiModel = createModel(customInfo, groups, loader, typeProviderClass);
         processHandlers(modelHandlers, apiModel);
         writeModelToFile(apiModel, output);
         Logger.debug("Introspection finished");
     }
 
-    APIModel createModel(Map<String, String> customInfo, String basePath, Set<Class<?>> seiClasses, String typeProviderClass, URLClassLoader loader) throws ClassNotFoundException {
+    APIModel createModel(Map<String, String> customInfo, List<ConfigGroup> groups, URLClassLoader loader, String typeProviderClass) throws ClassNotFoundException {
         TypeProvider typeProvider = getTypeProvider(typeProviderClass);
         SEIProcessor seiProcessor = getSeiClassProcessor(typeProviderClass, loader);
         APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
         addCustomInfo(customInfo, APIModelBuilder);
-        APIModelBuilder.baseUrl(basePath);
-        seiProcessor.createApiModel(seiClasses, APIModelBuilder);
+        addServiceGroups(groups, seiProcessor, loader, APIModelBuilder);
         APIModelBuilder.types(typeProvider.getUsedTypes());
         return APIModelBuilder.build();
     }
 
-    void addCustomInfo(Map<String, String> customInfo, APIModel.APIModelBuilder APIModelBuilder) {
-        if (customInfo != null || !customInfo.isEmpty()) {
-            for (String key : customInfo.keySet()) {
-                APIModelBuilder.customInfo(key, customInfo.get(key));
-            }
+    ServiceGroup createServiceGroup(String basePath, String description, Set<Class<?>> resourceClasses, SEIProcessor seiProcessor) throws ClassNotFoundException {
+        ServiceGroup.ServiceGroupBuilder serviceGroupBuilder = new ServiceGroup.ServiceGroupBuilder();
+        serviceGroupBuilder.baseUrl(basePath);
+        serviceGroupBuilder.description(description);
+        return seiProcessor.createServiceGroup(resourceClasses, serviceGroupBuilder);
+    }
+
+    void addServiceGroups(List<ConfigGroup> groups, SEIProcessor seiProcessor, URLClassLoader loader, APIModel.APIModelBuilder APIModelBuilder) throws ClassNotFoundException {
+        for (ConfigGroup group:groups) {
+            Set<Class<?>> resourceClasses = getScannedClasses(group.getIncludes(), group.getExcludes(), loader, WebService.class);
+            resourceClasses = removeInterfaces(resourceClasses);
+            ServiceGroup serviceGroup = createServiceGroup(group.getBaseUrl(), group.getDescription(), resourceClasses, seiProcessor);
+            APIModelBuilder.resourceGroup(serviceGroup);
         }
     }
 

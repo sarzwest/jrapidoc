@@ -4,8 +4,10 @@ import org.jboss.resteasy.spi.metadata.ResourceBuilder;
 import org.jboss.resteasy.spi.metadata.ResourceClass;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.APIModel;
+import org.jrapidoc.model.ServiceGroup;
 import org.jrapidoc.model.handler.ModelHandler;
 import org.jrapidoc.model.type.provider.TypeProvider;
+import org.jrapidoc.plugin.ConfigGroup;
 
 import javax.ws.rs.Path;
 import java.io.File;
@@ -17,40 +19,52 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by papa on 23.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 23.3.15.
  */
 public class RestIntrospector extends AbstractIntrospector {
 
     @Override
-    public void run(URL[] urlsForClassloader, List<String> include, List<String> exclude, String basePath, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> customInfo) throws Exception {
+    public void run(URL[] urlsForClassloader, List<ConfigGroup> groups, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> customInfo) throws Exception {
         Logger.debug("Introspection started");
-        createOutputDir(output);
+        setUp(groups, output);
         List<ModelHandler> modelHandlers = getModelHandlers(modelHandlerClasses);
         URLClassLoader loader = getProjectUrlClassLoader(urlsForClassloader);
-        Set<Class<?>> resourceClasses = getScannedClasses(include, exclude, loader, Path.class);
-        APIModel apiModel = createModel(customInfo, basePath, resourceClasses, typeProviderClass);
+//        for (ConfigGroup group:groups) {
+//            Set<Class<?>> resourceClasses = getScannedClasses(group.getIncludes(), group.getExcludes(), loader, Path.class);
+//            ServiceGroup resourceGroup = createResourceGroup(group.getBaseUrl(), group.getDescription(), resourceClasses);
+//            APIModel apiModel = createModel(customInfo, basePath, resourceClasses, typeProviderClass);
+//        }
+        APIModel apiModel = createModel(customInfo, groups, loader, typeProviderClass);
         processHandlers(modelHandlers, apiModel);
         writeModelToFile(apiModel, output);
         Logger.debug("Introspection finished");
     }
 
-    APIModel createModel(Map<String, String> customInfo, String basePath, Set<Class<?>> resourceClasses, String typeProviderClass) {
+    ServiceGroup createServiceGroup(String basePath, String description, Set<Class<?>> resourceClasses, ResourceClassProcessor resourceClassProcessor) {
+        ServiceGroup.ServiceGroupBuilder serviceGroupBuilder = new ServiceGroup.ServiceGroupBuilder();
+        serviceGroupBuilder.baseUrl(basePath);
+        serviceGroupBuilder.description(description);
+        Set<ResourceClass> resourceClassesMeta = doPreIntrospection(resourceClasses);
+        return resourceClassProcessor.createServiceGroup(resourceClassesMeta, serviceGroupBuilder);
+    }
+
+    APIModel createModel(Map<String, String> customInfo, List<ConfigGroup> groups, URLClassLoader loader, /*k nicemu, musi byt zvlast pro groupSet<Class<?>> resourceClasses,*/ String typeProviderClass) {
         TypeProvider typeProvider = getTypeProvider(typeProviderClass);
         ResourceClassProcessor resourceClassProcessor = getResourceClassProcessor(typeProvider);
         APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
         addCustomInfo(customInfo, APIModelBuilder);
-        APIModelBuilder.baseUrl(basePath);
-        Set<ResourceClass> resourceClassesMeta = doPreIntrospection(resourceClasses);
-        resourceClassProcessor.createApiModel(resourceClassesMeta, APIModelBuilder);
+        addServiceGroups(groups, resourceClassProcessor, loader, APIModelBuilder);
+//        Set<ResourceClass> resourceClassesMeta = doPreIntrospection(resourceClasses);
+//        resourceClassProcessor.createApiModel(resourceClassesMeta, APIModelBuilder);
         APIModelBuilder.types(typeProvider.getUsedTypes());
         return APIModelBuilder.build();
     }
 
-    void addCustomInfo(Map<String, String> customInfo, APIModel.APIModelBuilder APIModelBuilder) {
-        if (customInfo != null || !customInfo.isEmpty()) {
-            for (String key : customInfo.keySet()) {
-                APIModelBuilder.customInfo(key, customInfo.get(key));
-            }
+    void addServiceGroups(List<ConfigGroup> groups, ResourceClassProcessor resourceClassProcessor, URLClassLoader loader, APIModel.APIModelBuilder APIModelBuilder) {
+        for (ConfigGroup group:groups) {
+            Set<Class<?>> resourceClasses = getScannedClasses(group.getIncludes(), group.getExcludes(), loader, Path.class);
+            ServiceGroup serviceGroup = createServiceGroup(group.getBaseUrl(), group.getDescription(), resourceClasses, resourceClassProcessor);
+            APIModelBuilder.resourceGroup(serviceGroup);
         }
     }
 
@@ -61,8 +75,12 @@ public class RestIntrospector extends AbstractIntrospector {
     Set<ResourceClass> doPreIntrospection(Set<Class<?>> resourceClasses) {
         Set<ResourceClass> resourceClassesMeta = new HashSet<ResourceClass>();
         for (Class<?> rootResourceClass : resourceClasses) {
-            ResourceClass resourceClass = ResourceBuilder.rootResourceFromAnnotations(rootResourceClass);
-            resourceClassesMeta.add(resourceClass);
+            try {
+                ResourceClass resourceClass = ResourceBuilder.rootResourceFromAnnotations(rootResourceClass);
+                resourceClassesMeta.add(resourceClass);
+            }catch (Exception e){
+                Logger.error(e, "Problem during preintrospection of class {0}, skipping this resource class", rootResourceClass.getCanonicalName());
+            }
         }
         return resourceClassesMeta;
     }

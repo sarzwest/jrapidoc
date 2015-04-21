@@ -3,7 +3,7 @@ package org.jrapidoc.model.object.type;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Created by papa on 18.1.15.
+ * Created by Tomas "sarzwest" Jiricek on 18.1.15.
  */
 public class CollectionTypeJrapidoc extends org.jrapidoc.model.object.type.Type {
 

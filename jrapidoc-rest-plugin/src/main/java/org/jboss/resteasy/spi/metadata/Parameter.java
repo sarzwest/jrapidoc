@@ -39,16 +39,22 @@ abstract public class Parameter
    protected String defaultValue;
    protected long suspendTimeout; // deprecated
     protected String description;
+    protected Boolean isRequired;
 
-   protected Parameter(ResourceClass resourceClass, Class<?> type, Type genericType, String description)
+   protected Parameter(ResourceClass resourceClass, Class<?> type, Type genericType, String description, Boolean isRequired)
    {
       this.resourceClass = resourceClass;
       this.genericType = Types.resolveTypeVariables(resourceClass.getClazz(), genericType);
       this.type = Types.getRawType(this.genericType);
        this.description = description;
+       this.isRequired = isRequired;
    }
 
-   public ResourceClass getResourceClass()
+    public Boolean getIsRequired() {
+        return isRequired;
+    }
+
+    public ResourceClass getResourceClass()
    {
       return resourceClass;
    }

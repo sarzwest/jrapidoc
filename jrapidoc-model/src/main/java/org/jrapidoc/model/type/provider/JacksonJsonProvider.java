@@ -10,7 +10,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
 /**
- * Created by papa on 25.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 25.3.15.
  */
 public class JacksonJsonProvider extends TypeProvider {
 

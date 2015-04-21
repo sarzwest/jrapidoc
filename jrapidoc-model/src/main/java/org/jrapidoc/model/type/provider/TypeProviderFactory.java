@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.logger.Logger;
 
 /**
- * Created by papa on 25.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 25.3.15.
  */
 public class TypeProviderFactory {
 

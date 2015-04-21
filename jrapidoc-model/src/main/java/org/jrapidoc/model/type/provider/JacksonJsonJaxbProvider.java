@@ -6,7 +6,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import org.jrapidoc.model.object.type.Type;
 
 /**
- * Created by papa on 11.4.15.
+ * Created by Tomas "sarzwest" Jiricek on 11.4.15.
  */
 public class JacksonJsonJaxbProvider extends JacksonJsonProvider{
 

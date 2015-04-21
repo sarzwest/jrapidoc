@@ -9,7 +9,7 @@ import org.jrapidoc.model.APIModel;
 import java.io.*;
 
 /**
- * Created by papa on 3.4.15.
+ * Created by Tomas "sarzwest" Jiricek on 3.4.15.
  */
 public class ModelGenerator {
 
@@ -42,7 +42,7 @@ public class ModelGenerator {
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(output, model);
         } catch (IOException e) {
-            e.printStackTrace();//TODO
+            Logger.error(e, "Could not write model to output stream");
         }
     }
 }

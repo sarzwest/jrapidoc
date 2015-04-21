@@ -3,7 +3,6 @@ package org.jrapidoc.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.jrapidoc.logger.Logger;
-import org.jrapidoc.model.object.type.Type;
 import org.jrapidoc.model.param.*;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by papa on 23.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
 @JsonPropertyOrder({"name", "soapBinding", "path", "httpMethodType", "pathExample", "headerParams",
         "pathParams", "queryParams", "matrixParams", "cookieParams",
@@ -190,8 +189,8 @@ public class Method {
                 "path='" + path + '\'' +
                 '}';
     }
-    
-    public Method clone(String httpMethod){
+
+    public Method clone(String httpMethod) {
         return new Method(this.isAsynchronous, this.headerParams, this.cookieParams, this.formParams, this.matrixParams,
                 this.pathParams, this.queryParams, this.path, this.pathExample, this.returnOptions,
                 this.parameters, httpMethod, this.description, this.name, this.soapInputHeaders, this.soapBinding);
@@ -254,7 +253,9 @@ public class Method {
         }
 
         public MethodBuilder parameter(TransportType parameter) {
-            this.parameters.add(parameter);
+            if (parameter != null) {
+                this.parameters.add(parameter);
+            }
             return this;
         }
 
@@ -275,53 +276,56 @@ public class Method {
 
         public MethodBuilder param(Param.Type paramType, Param param) {
             if (paramType.equals(Param.Type.COOKIE_PARAM)) {
-                addCookieParam((CookieParam)param);
+                addCookieParam((CookieParam) param);
             } else if (paramType.equals(Param.Type.FORM_PARAM)) {
-                addFormParam((FormParam)param);
+                addFormParam((FormParam) param);
             } else if (paramType.equals(Param.Type.HEADER_PARAM)) {
-                addHeaderParam((HeaderParam)param);
+                addHeaderParam((HeaderParam) param);
             } else if (paramType.equals(Param.Type.MATRIX_PARAM)) {
-                addMatrixParam((MatrixParam)param);
+                addMatrixParam((MatrixParam) param);
             } else if (paramType.equals(Param.Type.PATH_PARAM)) {
-                addPathParam((PathParam)param);
+                addPathParam((PathParam) param);
             } else if (paramType.equals(Param.Type.QUERY_PARAM)) {
-                addQueryParam((QueryParam)param);
+                addQueryParam((QueryParam) param);
             }
             return this;
         }
-        /**First try to add more specific value and then try to add less specific value.  */
+
+        /**
+         * First try to add more specific value and then try to add less specific value.
+         */
         protected void addHeaderParam(HeaderParam headerParam) {
-            for (HeaderParam param:headerParams.values()){
-                if(param.getName().equals(headerParam.getName())){
+            for (HeaderParam param : headerParams.values()) {
+                if (param.getName().equals(headerParam.getName())) {
                     return;
                 }
             }
-            Logger.debug(this.getClass().getSimpleName() + " " +headerParam.getName());
+            Logger.debug(this.getClass().getSimpleName() + " " + headerParam.getName());
             this.headerParams.put(headerParam.getName(), headerParam);
         }
 
         protected void addCookieParam(CookieParam cookieParam) {
-            Logger.debug(this.getClass().getSimpleName() + " " +cookieParam.getName());
+            Logger.debug(this.getClass().getSimpleName() + " " + cookieParam.getName());
             this.cookieParams.put(cookieParam.getName(), cookieParam);
         }
 
         protected void addFormParam(FormParam formParam) {
-            Logger.debug(this.getClass().getSimpleName() + " " +formParam.getName());
+            Logger.debug(this.getClass().getSimpleName() + " " + formParam.getName());
             this.formParams.put(formParam.getName(), formParam);
         }
 
         protected void addMatrixParam(MatrixParam matrixParam) {
-            Logger.debug(this.getClass().getSimpleName() + " " +matrixParam.getName());
+            Logger.debug(this.getClass().getSimpleName() + " " + matrixParam.getName());
             this.matrixParams.put(matrixParam.getName(), matrixParam);
         }
 
         protected void addPathParam(PathParam pathParam) {
-            Logger.debug(this.getClass().getSimpleName() + " " +pathParam.getName());
+            Logger.debug(this.getClass().getSimpleName() + " " + pathParam.getName());
             this.pathParams.put(pathParam.getName(), pathParam);
         }
 
         protected void addQueryParam(QueryParam queryParam) {
-            Logger.debug(this.getClass().getSimpleName() + " " +queryParam.getName());
+            Logger.debug(this.getClass().getSimpleName() + " " + queryParam.getName());
             this.queryParams.put(queryParam.getName(), queryParam);
         }
 
@@ -329,8 +333,8 @@ public class Method {
             this.soapInputHeaders.add(soapHeader);
         }
 
-        public Method build(){
-            return new Method(isAsynchronous, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, path, pathExample, returnOptions, parameters, httpMethodType, description, name, (soapInputHeaders.isEmpty())?null: soapInputHeaders, soapBinding);
+        public Method build() {
+            return new Method(isAsynchronous, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, path, pathExample, returnOptions, parameters, httpMethodType, description, name, (soapInputHeaders.isEmpty()) ? null : soapInputHeaders, soapBinding);
         }
     }
 }

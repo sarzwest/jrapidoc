@@ -5,9 +5,11 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.component.annotations.Component;
@@ -18,16 +20,17 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by papa on 14.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 14.3.15.
  *
  * @phase compile
  */
-@Mojo(name = "run", defaultPhase = LifecyclePhase.COMPILE/*,
-        requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME*//*,
+@Mojo(name = "run", defaultPhase = LifecyclePhase.PROCESS_CLASSES,
+        requiresDependencyResolution = ResolutionScope.RUNTIME/*,
         configurator = "include-project-dependencies"*/
 )
 @Component(role = RestMojo.class)
@@ -48,14 +51,14 @@ public class RestMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.build.directory}", readonly = true)
     File target;
 
-    @Parameter(name = "baseUrl")
-    String baseUrl;
-
-    @Parameter(name = "includes")
-    List<String> includes;
-
-    @Parameter(name = "excludes")
-    List<String> excludes;
+//    @Parameter(name = "baseUrl")
+//    String baseUrl;
+//
+//    @Parameter(name = "includes")
+//    List<String> includes;
+//
+//    @Parameter(name = "excludes")
+//    List<String> excludes;
 
     @Parameter(name = "typeProviderClass")
     String typeProviderClass;
@@ -66,16 +69,20 @@ public class RestMojo extends AbstractMojo {
     @Parameter(name = "custom")
     Map<String, String> custom;
 
+    @Parameter(name = "groups")
+    List<ConfigGroup> groups;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         long start = System.currentTimeMillis();
         try {
             Logger.setLogger(getLog());
+            addPluginVersionToInfo();
             List<String> classpathElements = project.getCompileClasspathElements();
             List<URL> projectClasspathList = new ArrayList<URL>();
             for (String element : classpathElements) {
                 try {
-                    Logger.info("Adding project classpath element {0}", element);
+                    Logger.debug("Adding project classpath element {0}", element);
                     projectClasspathList.add(new File(element).toURI().toURL());
                 } catch (MalformedURLException e) {
                     getLog().error(e);
@@ -84,7 +91,7 @@ public class RestMojo extends AbstractMojo {
             }
             URL[] urls = projectClasspathList.toArray(new URL[projectClasspathList.size()]);
             RestIntrospector restIntrospector = new RestIntrospector();
-            restIntrospector.run(urls, includes, excludes, baseUrl, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.rest.model.json"), modelHandlers, custom);
+            restIntrospector.run(urls, groups, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.rest.model.json"), modelHandlers, custom);
         } catch (DependencyResolutionRequiredException e) {
             getLog().error(e);
             throw new MojoExecutionException(e.getMessage(), e);
@@ -94,5 +101,13 @@ public class RestMojo extends AbstractMojo {
         } finally {
             Logger.info("Finished in " + ((System.currentTimeMillis() - start) / 1000) + " seconds");
         }
+    }
+
+    void addPluginVersionToInfo() {
+        if(custom == null){
+            custom = new HashMap<String, String>();
+        }
+        PluginDescriptor pluginDesc = ((PluginDescriptor)getPluginContext().get("pluginDescriptor"));
+        custom.put(pluginDesc.getArtifactId(), pluginDesc.getVersion());
     }
 }

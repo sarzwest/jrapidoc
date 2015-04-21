@@ -1,5 +1,5 @@
 /**
- * Created by papa on 21.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 21.3.15.
  */
 function Utils(object){
 

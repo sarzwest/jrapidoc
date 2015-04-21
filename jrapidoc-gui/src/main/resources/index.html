@@ -1,91 +1,165 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>jRAPIDoc</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset='UTF-8'/>
+    <title>JRAPIDoc</title>
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/notify.min.js"></script>
+    <script src='js/json2html.js' type='text/javascript'></script>
+    <script src='js/jquery.json2html.js' type='text/javascript'></script>
     <script src="js/utils/Properties.js"></script>
-    <script src="js/utils/Utils.js"></script>
+    <script src="js/utils/Exceptions.js"></script>
+    <script src="js/utils/Logger.js"></script>
     <script src="js/model/Apimodel.js"></script>
-    <script src="js/controller/Listeners.js"></script>
-    <script src="js/controller/tester/tester.js"></script>
     <script src="js/view/Graphics.js"></script>
     <script src="js/controller/Initializer.js"></script>
-    <script>
+    <script src="js/controller/Listeners.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/view/ProgressBar.js"></script>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/prettify.css" rel="stylesheet">
+    <link href='css/layout.css' media='all' type='text/css' rel='stylesheet'/>
+    <link href='css/progress.css' media='all' type='text/css' rel='stylesheet'/>
+
+    <style>
+        #page {
+            min-height: 600px;
+        }
+
+        .package {
+            margin-left: 10px;
+            padding: 3px;
+            border-radius: 2px;
+            margin-top: 2px;
+        }
+
+        .header {
+            cursor: pointer;
+        }
+
+        .name {
+            color: gray;
+        }
+
+        .array {
+            background-color: #FFD8BB;
+            border: thin solid #FFB780;
+        }
+
+        .object {
+            background-color: #E7F1FE;
+            border: thin solid #7DA2CE;
+        }
+
+        .string {
+            color: red;
+        }
+
+        .number {
+            color: blue;
+        }
+
+        .function {
+            color: green;
+        }
+
+        .open .children {
+            display: block;
+        }
+
+        .closed .children {
+            display: none;
+        }
+
+        .arrow {
+            background-image: url("img/d.png");
+            background-repeat: no-repeat;
+            background-color: transparent;
+            height: 15px;
+            width: 15px;
+            display: inline-block;
+        }
+
+        .open .arrow {
+            background-position: -20px 0;
+        }
+
+        .closed .arrow {
+            background-position: 0 0;
+        }
+
+        .type {
+            color: gray;
+            font-size: 8pt;
+            float: right;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        #main {
+            width: 100%;
+            height: 500px;
+            overflow-y: scroll;
+        }
+
+        #modelUrl {
+            width: 85%;
+        }
+
+        #loadModel {
+            width: 13%;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .footer {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+    </style>
+    <script type='text/javascript'>
+
         var windowloaded = function () {
             new Initializer().initialize();
         };
         window.addEventListener("load", windowloaded);
+
     </script>
 </head>
 <body>
-<div id="header"></div>
-<div id="menu">
-    <ul></ul>
-</div>
-<div id="content">
+<h1>Remote API reference documentation</h1>
+<section id="page">
+    <h2>Application name</h2>
+    <article>
+        <div style=";margin-top:20px;">
+            <input id="modelUrl" type="text" size="100"><input id="loadModel" type="button" value="Load model">
 
+            <div id="top"></div>
+        </div>
+    </article>
+</section>
+<div id="progress">
+    <div id="background" class="progress-background"></div>
+    <div id="progressbar" class="progress-active">
+        <div>Loading data...</div>
+        <progress></progress>
+    </div>
 </div>
-<div id="typesContent"></div>
-<div id="typeTemplate">
-    <span></span>
-
-</div>
-<div id="descriptionTemplate" class="description">
-    <span class="descriptionLabel">Description: </span><span class="descriptionValue"></span>
-</div>
-<div id="propertiesTemplate" class="properties">
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Description</th>
-        </tr>
-    </table>
-</div>
-<div id="optionsTemplate">
-    <span class="optionsLabel">Options: </span>
-</div>
-<div id="typerefTemplate">
-    <span class="typerefLabel">Type: </span><span></span>
-</div>
-<div id="requiredTemplate">
-    <span class="requiredLabel">Required: </span><span></span>
-</div>
-<div id="paramTemplate">
-    <span class="parameterName"></span>
-    <!--description templ-->
-    <!--typeref templ-->
-    <!--options templ-->
-    <!--required templ-->
-</div>
-<div id="parameterTypeTemplate">
-    <span class="paramTypeLabel"></span>
-</div>
-<div id="requestTemplate">
-    <span class="requestLabel"></span>
-</div>
-<div id="responsesTemplate">
-    <span class="responsesLabel"></span>
-</div>
-<div id="responseTemplate">
-    <span class="responseLabel"></span>
-</div>
-<div id="statusTemplate">
-    <span class="statusLabel">Status: </span><span></span>
-</div>
-<div id="methodTemplate">
-    <span class="methodLabel"></span>
-</div>
-<div id="methodsTemplate">
-    <span class="methodsLabel"></span>
-</div>
-<div id="resourceTemplate">
-</div>
-<div id="subresourceTemplate" class="subresource">
-</div>
-<div id="pathTemplate">
-    <span class="pathLabel"></span>
-</div>
+<footer class="footer">
+    <span>See project home on <a href="https://github.com/sarzwest/jrapidoc">GitHub</a></span> |
+    <span>JRAPIDoc is under Apache License, Version 2.0</span> |
+    <span itemscope itemtype="http://data-vocabulary.org/person"><span itemprop="name">Tomas Jiricek</span></span> |
+    <span>2015</span>
+</footer>
 </body>
 </html>

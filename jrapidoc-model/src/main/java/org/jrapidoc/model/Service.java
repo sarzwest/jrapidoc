@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by papa on 23.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
 @JsonPropertyOrder({ "path", "name", "description", "pathExample", "methods"})
-public class Resource {
+public class Service {
 
     private String path;
     private String pathExample;
@@ -35,7 +35,7 @@ public class Resource {
     private String description;
     private String name;
 
-    private Resource(String path, String pathExample, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, Map<String, Method> methods, String description, String name) {
+    private Service(String path, String pathExample, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, Map<String, Method> methods, String description, String name) {
         this.path = path;
         this.pathExample = pathExample;
         this.headerParams = headerParams;
@@ -170,7 +170,7 @@ public class Resource {
 
         public ResourceBuilder method(Method method) {
             String key = (StringUtils.isNotEmpty(method.getName()))?method.getName():method.getPath();
-            Logger.debug(this.getClass().getSimpleName() + " " + key);
+            Logger.debug("Method identifier: {0}", key);
             this.methods.put(key, method);
             return this;
         }
@@ -227,11 +227,11 @@ public class Resource {
             this.queryParams.add(queryParam);
         }
 
-        public Resource build(){
+        public Service build(){
 //            for(Method method:methods){
 //
 //            }
-            return new Resource(path, pathExample, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, methods, description, name);
+            return new Service(path, pathExample, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, methods, description, name);
         }
     }
 }

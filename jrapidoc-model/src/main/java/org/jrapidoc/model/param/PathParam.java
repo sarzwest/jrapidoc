@@ -1,7 +1,7 @@
 package org.jrapidoc.model.param;
 
 /**
- * Created by papa on 23.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
 public class PathParam extends Param  {
     public PathParam(String name, boolean isRequired, String typeref, Type type, String description) {
@@ -15,7 +15,7 @@ public class PathParam extends Param  {
         }
 
         @Override
-        public PathParamBuilder setRequired(boolean isRequired) {
+        public PathParamBuilder setRequired(Boolean isRequired) {
             return (PathParamBuilder)super.setRequired(isRequired);
         }
 

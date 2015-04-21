@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by papa on 7.4.15.
+ * Created by Tomas "sarzwest" Jiricek on 7.4.15.
  */
 public class SEIProcessor {
 
@@ -34,12 +34,14 @@ public class SEIProcessor {
         this.loader = loader;
     }
 
-    public void createApiModel(Set<Class<?>> seiClasses, APIModel.APIModelBuilder APIModelBuilder) throws ClassNotFoundException {
+    public ServiceGroup createServiceGroup(Set<Class<?>> seiClasses, ServiceGroup.ServiceGroupBuilder serviceGroupBuilder) throws ClassNotFoundException {
         for (Class<?> seiClass : seiClasses) {
+            Logger.debug("Introspecting SEI class {0}", seiClass.getCanonicalName());
             seiClass = getSEI(seiClass);
-            Resource resource = createEndpoint(seiClass);
-            APIModelBuilder.resource(resource);
+            Service service = createEndpoint(seiClass);
+            serviceGroupBuilder.service(service);
         }
+        return serviceGroupBuilder.build();
     }
 
     Class<?> getSEI(Class<?> seiClass) throws ClassNotFoundException {
@@ -56,15 +58,15 @@ public class SEIProcessor {
         }
     }
 
-    Resource createEndpoint(Class<?> seiClass) {
-        Resource.ResourceBuilder resourceBuilder = new Resource.ResourceBuilder();
+    Service createEndpoint(Class<?> seiClass) {
+        Service.ResourceBuilder resourceBuilder = new Service.ResourceBuilder();
         addServiceName(seiClass, resourceBuilder);
         resourceBuilder.description(getDescription(seiClass.getDeclaredAnnotations()));
         addMethods(seiClass, resourceBuilder);
         return resourceBuilder.build();
     }
 
-    void addMethods(Class<?> seiClass, Resource.ResourceBuilder resourceBuilder) {
+    void addMethods(Class<?> seiClass, Service.ResourceBuilder resourceBuilder) {
         for (Method method : seiClass.getDeclaredMethods()) {
             if (Modifier.isPublic(method.getModifiers())) {
                 WebMethod webMetAnnotation = method.getAnnotation(WebMethod.class);
@@ -87,6 +89,7 @@ public class SEIProcessor {
     }
 
     org.jrapidoc.model.Method createMethod(Method method, Class<?> seiClass) {
+        Logger.debug("Introspecting method {0}", method.toString());
         org.jrapidoc.model.Method.MethodBuilder methodBuilder = new org.jrapidoc.model.Method.MethodBuilder();
         methodBuilder.description(getDescription(method.getDeclaredAnnotations())).isAsynchronous(true);
         addOperationName(method, methodBuilder);
@@ -98,7 +101,7 @@ public class SEIProcessor {
         return methodBuilder.build();
     }
 
-    void addServiceName(Class<?> seiClass, Resource.ResourceBuilder resourceBuilder){
+    void addServiceName(Class<?> seiClass, Service.ResourceBuilder resourceBuilder){
         WebService webServiceAnno = getAnnotation(seiClass.getDeclaredAnnotations(), WebService.class);
         String serviceName = seiClass.getSimpleName() + "Service";
         if(webServiceAnno != null){

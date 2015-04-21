@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * Created by papa on 23.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 23.3.15.
  */
 public class TestEasy {
 

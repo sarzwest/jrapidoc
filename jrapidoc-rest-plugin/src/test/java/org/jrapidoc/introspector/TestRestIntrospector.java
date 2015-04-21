@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Set;
 
 /**
- * Created by papa on 23.3.15.
+ * Created by Tomas "sarzwest" Jiricek on 23.3.15.
  */
 public class TestRestIntrospector {
 

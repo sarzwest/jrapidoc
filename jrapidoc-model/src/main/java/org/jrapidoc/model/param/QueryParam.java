@@ -1,7 +1,7 @@
 package org.jrapidoc.model.param;
 
 /**
- * Created by papa on 23.12.14.
+ * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
 public class QueryParam extends Param  {
     public QueryParam(String name, boolean isRequired, String typeref, Type type, String description) {
@@ -15,7 +15,7 @@ public class QueryParam extends Param  {
         }
 
         @Override
-        public QueryParamBuilder setRequired(boolean isRequired) {
+        public QueryParamBuilder setRequired(Boolean isRequired) {
             return (QueryParamBuilder)super.setRequired(isRequired);
         }
 
