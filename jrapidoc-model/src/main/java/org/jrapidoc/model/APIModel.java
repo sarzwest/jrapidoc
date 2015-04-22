@@ -11,19 +11,16 @@ import java.util.Map;
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
-@JsonPropertyOrder({"info", "baseUrl", "resources"})
+@JsonPropertyOrder({"info", "serviceGroups", "types"})
 public class APIModel {
 
-    private Map<String, ServiceGroup> resourceGroups;
     @JsonProperty("info")
     private Map<String, String> customInfo;
-//    private Map<String, Service> resources = new HashMap<String, Service>();
+    private Map<String, ServiceGroup> serviceGroups;
     private Map<String, Type> types;
 
-    private APIModel(/*String baseUrl, Map<String, Service> resources, */Map<String, ServiceGroup> resourceGroups, Map<String, Type> types, Map<String, String> customInfo) {
-//        this.baseUrl = baseUrl;
-//        this.resources = resources;
-        this.resourceGroups = resourceGroups;
+    private APIModel(Map<String, ServiceGroup> serviceGroups, Map<String, Type> types, Map<String, String> customInfo) {
+        this.serviceGroups = serviceGroups;
         this.types = types;
         this.customInfo = customInfo;
     }
@@ -36,8 +33,8 @@ public class APIModel {
         this.types = types;
     }
 
-    public void setResourceGroups(Map<String, ServiceGroup> resourceGroups) {
-        this.resourceGroups = resourceGroups;
+    public void setServiceGroups(Map<String, ServiceGroup> serviceGroups) {
+        this.serviceGroups = serviceGroups;
     }
 
     public Map<String, String> getCustomInfo() {
@@ -48,8 +45,8 @@ public class APIModel {
         return types;
     }
 
-    public Map<String, ServiceGroup> getResourceGroups() {
-        return resourceGroups;
+    public Map<String, ServiceGroup> getServiceGroups() {
+        return serviceGroups;
     }
 
     public static class APIModelBuilder {

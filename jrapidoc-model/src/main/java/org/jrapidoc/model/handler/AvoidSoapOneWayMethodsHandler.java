@@ -13,7 +13,7 @@ import java.text.MessageFormat;
 public class AvoidSoapOneWayMethodsHandler implements ModelHandler {
     @Override
     public void handleModel(APIModel model) throws HandlerException {
-        for (ServiceGroup serviceGroup : model.getResourceGroups().values()) {
+        for (ServiceGroup serviceGroup : model.getServiceGroups().values()) {
             for (Service service : serviceGroup.getServices().values()) {
                 for (Method method : service.getMethods().values()) {
                     if (method.getReturnOptions().isEmpty()) {
