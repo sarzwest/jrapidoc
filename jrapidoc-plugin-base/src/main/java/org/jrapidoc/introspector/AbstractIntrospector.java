@@ -1,5 +1,6 @@
 package org.jrapidoc.introspector;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.APIModel;
 import org.jrapidoc.model.generator.ModelGenerator;
@@ -121,29 +122,41 @@ public abstract class AbstractIntrospector {
         return ref;
     }
 
-    void checkIncludeConfigNotEmpty(List<String> include) throws Exception {
-        if(include == null || include.isEmpty()){
-            Logger.error("Please specify packages with API\n" +
-                    "Add missing plugin configuration:\n" +
-                    "\n" +
-                    "<includes>\n" +
-                    "   <include>package.with.api</include>\n" +
-                    "   <include>another.package.with.api</include>\n" +
-                    "</includes>");
-            throw new Exception("\"include\" packages are not configured");
+    void checkIncludeConfigNotEmpty(List<String> includes) throws Exception {
+        if(includes == null){
+            Logger.error("\"includes\" element in configuration is null");
+            throw new Exception("\"includes\" element in configuration is null");
+        }
+        if(includes.isEmpty()){
+            Logger.error("\"includes\" element in configuration is empty");
+            throw new Exception("\"includes\" element in configuration is empty");
+        }
+        for (String include:includes){
+            if(StringUtils.isEmpty(include)){
+                Logger.error("\"include\" element in \"includes\" element is empty");
+                throw new Exception("\"include\" element in \"includes\" element is empty");
+            }
         }
     }
 
     void setUp(List<ConfigGroup> groups, File output) throws Exception {
         createOutputDir(output);
         if(groups == null){
-            Logger.error("Groups element in configuration is null");
-            throw new Exception("Groups element in configuration is null");
+            Logger.error("\"groups\" element in configuration is null");
+            throw new Exception("\"groups\" element in configuration is null");
+        }
+        if(groups.isEmpty()){
+            Logger.error("\"groups\" element in configuration is empty, nothing will be generated");
+            throw new Exception("\"groups\" element in configuration is empty, nothing will be generated");
         }
         for (ConfigGroup group:groups){
             if(group == null){
-                Logger.error("Group element in groups element is null");
-                throw new Exception("Group element in groups element is null");
+                Logger.error("\"group\" element in \"groups\" element is null");
+                throw new Exception("\"group\" element in \"groups\" element is null");
+            }
+            if(StringUtils.isEmpty(group.getBaseUrl())){
+                Logger.error("\"baseUrl\" element in \"group\" element is null");
+                throw new Exception("\"baseUrl\" element in \"group\" element is null");
             }
             checkIncludeConfigNotEmpty(group.getIncludes());
         }

@@ -66,7 +66,7 @@ public class SoapMojo extends AbstractMojo {
     @Parameter(name = "custom")
     Map<String, String> custom;
 
-    @Parameter(name = "groups")
+    @Parameter(name = "groups", required = true)
     List<ConfigGroup> groups;
 
     @Override
