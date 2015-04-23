@@ -170,6 +170,7 @@ public class Service {
 
         public ResourceBuilder method(Method method) {
             String key = (StringUtils.isNotEmpty(method.getName()))?method.getName():method.getPath();
+            key += " - " + method.getHttpMethodType();
             Logger.debug("Method identifier: {0}", key);
             this.methods.put(key, method);
             return this;
