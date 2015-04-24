@@ -48,25 +48,29 @@ public class SoapMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.build.directory}", readonly = true)
     File target;
 
-//    @Parameter(name = "baseUrl")
-//    String baseUrl;
-//
-//    @Parameter(name = "includes")
-//    List<String> includes;
-//
-//    @Parameter(name = "excludes")
-//    List<String> excludes;
-
-    @Parameter(name = "typeProviderClass")
+    /**
+     * Class implementing org.jrapidoc.model.type.provider.TypeProvider
+     */
+    @Parameter(alias = "typeProviderClass", name = "typeProviderClass", property = "typeProviderClass")
     String typeProviderClass;
 
-    @Parameter(name = "modelHandlers")
+    /**
+     * List of classes implementing org.jrapidoc.model.handler.ModelHandler.
+     * Classes are used to work with API model, such operations could be validation, changing some values in model etc.
+     */
+    @Parameter(alias = "modelHandlers", name = "modelHandlers", property = "modelHandlers")
     List<String> modelHandlers;
 
-    @Parameter(name = "custom")
+    /**
+     * Map including custom property names as keys and custom values as values. These key-value pairs will be added to API model.
+     */
+    @Parameter(alias = "custom", name = "custom", property = "custom")
     Map<String, String> custom;
 
-    @Parameter(name = "groups", required = true)
+    /**
+     * List of groups. Every group is identified by URI prefix and contains set of services with these prefix.
+     */
+    @Parameter(alias = "groups", name = "groups", property = "groups", required = true)
     List<ConfigGroup> groups;
 
     @Override

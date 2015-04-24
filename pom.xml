@@ -11,7 +11,25 @@
 
     <packaging>pom</packaging>
 
+    <description>
+        A Maven plugin used to generate remote API documentation based on JAX-RS and JAX-WS.
+    </description>
+
+    <scm>
+        <url>https://github.com/sarzwest/jrapidoc</url>
+        <connection>scm:git:git@github.com:sarzwest/jrapidoc.git</connection>
+        <developerConnection>scm:git:git@github.com:sarzwest/jrapidoc.git</developerConnection>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>Apache License Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.jrapidoc.version>1.0-SNAPSHOT</org.jrapidoc.version>
         <com.fasterxml.jackson.version>2.5.0</com.fasterxml.jackson.version>
     </properties>
@@ -20,7 +38,6 @@
         <module>jrapidoc-rest-plugin</module>
         <module>jrapidoc-soap-plugin</module>
         <module>jrapidoc-annotation</module>
-        <!--<module>../airserviceopenshift</module>-->
         <module>jrapidoc-gui</module>
         <module>jrapidoc-model</module>
         <module>jrapidoc-logger</module>
@@ -43,28 +60,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-plugin-plugin</artifactId>
-                    <version>3.3</version>
-                    <executions>
-                        <execution>
-                            <id>generated-helpmojo</id>
-                            <goals>
-                                <goal>helpmojo</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>mojo-descriptor</id>
-                            <phase>process-classes</phase>
-                            <goals>
-                                <goal>descriptor</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
-                        <extractors>
-                            <extractor>java-annotations</extractor>
-                        </extractors>
-                    </configuration>
+                    <version>3.4</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -104,18 +100,18 @@
             <dependency>
                 <groupId>org.apache.maven.plugin-tools</groupId>
                 <artifactId>maven-plugin-annotations</artifactId>
-                <version>3.3</version>
+                <version>3.4</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-plugin-api</artifactId>
-                <version>3.0.5</version>
+                <version>3.3.1</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-core</artifactId>
-                <version>3.0.5</version>
+                <version>3.3.1</version>
             </dependency>
             <!--Jackson fasterxml BEGIN-->
             <dependency>

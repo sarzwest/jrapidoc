@@ -33,6 +33,9 @@
                         <goals>
                             <goal>helpmojo</goal>
                         </goals>
+                        <configuration>
+                            <helpPackageName>org.jrapidoc.plugin.generated</helpPackageName>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>mojo-descriptor</id>
@@ -43,7 +46,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <goalPrefix>jrapidoc-soap</goalPrefix>
+                    <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                 </configuration>
             </plugin>
         </plugins>
