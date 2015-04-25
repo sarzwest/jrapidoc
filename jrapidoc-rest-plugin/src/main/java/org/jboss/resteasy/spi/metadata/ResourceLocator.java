@@ -2,7 +2,7 @@ package org.jboss.resteasy.spi.metadata;
 
 import org.jboss.resteasy.util.Types;
 import org.jrapidoc.annotation.Description;
-import org.jrapidoc.annotation.IsRequired;
+import org.jrapidoc.annotation.rest.IsRequired;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

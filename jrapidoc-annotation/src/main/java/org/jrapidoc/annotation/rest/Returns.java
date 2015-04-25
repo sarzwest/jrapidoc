@@ -6,7 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by Tomas "sarzwest" Jiricek on 31.3.15.
+ * Annotatation can be used on resource method<br/>
+ * If more than one return option can be returned use this wrapper for them<br/>
+ * <br/>
+ * Created by Tomas "sarzwest" Jiricek on 31.3.15.<br/>
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
