@@ -3,6 +3,7 @@ package org.jrapidoc.model.generator;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jrapidoc.exception.JrapidocExecutionException;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.APIModel;
 
@@ -13,12 +14,15 @@ import java.io.*;
  */
 public class ModelGenerator {
 
-    public static void generateModel(APIModel model, File output) throws FileNotFoundException {
+    public static void generateModel(APIModel model, File output) throws JrapidocExecutionException {
         FileOutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(output);
             generateModel(model, outputStream);
-        } finally {
+        }catch (FileNotFoundException e){
+            Logger.error(e, "File {0} was not found on filesystem", output.getAbsolutePath());
+            throw new JrapidocExecutionException(e.getMessage(), e);
+        }finally {
             if (outputStream != null) {
                 try {
                     outputStream.close();

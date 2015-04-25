@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>org.jrapidoc</groupId>
-            <artifactId>jrapidoc-logger</artifactId>
+            <artifactId>jrapidoc-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

@@ -1,6 +1,8 @@
 package org.jrapidoc.introspector;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jrapidoc.exception.JrapidocExecutionException;
+import org.jrapidoc.exception.JrapidocFailureException;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.APIModel;
 import org.jrapidoc.model.ServiceGroup;
@@ -21,10 +23,10 @@ import java.util.Set;
 /**
  * Created by Tomas "sarzwest" Jiricek on 7.4.15.
  */
-public class SoapIntrospector extends AbstractIntrospector{
+public class SoapIntrospector extends AbstractIntrospector {
 
     @Override
-    public void run(URL[] urlsForClassloader, List<ConfigGroup> groups, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> customInfo) throws Exception {
+    public void run(URL[] urlsForClassloader, List<ConfigGroup> groups, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> customInfo) throws JrapidocExecutionException, JrapidocFailureException {
         Logger.debug("Introspection started");
         setUp(groups, output);
         List<ModelHandler> modelHandlers = getModelHandlers(modelHandlerClasses);
@@ -38,25 +40,30 @@ public class SoapIntrospector extends AbstractIntrospector{
         Logger.debug("Introspection finished");
     }
 
-    APIModel createModel(Map<String, String> customInfo, List<ConfigGroup> groups, URLClassLoader loader, String typeProviderClass) throws ClassNotFoundException {
-        TypeProvider typeProvider = getTypeProvider(typeProviderClass);
-        SEIProcessor seiProcessor = getSeiClassProcessor(typeProviderClass, loader);
-        APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
-        addCustomInfo(customInfo, APIModelBuilder);
-        addServiceGroups(groups, seiProcessor, loader, APIModelBuilder);
-        APIModelBuilder.types(typeProvider.getUsedTypes());
-        return APIModelBuilder.build();
+    APIModel createModel(Map<String, String> customInfo, List<ConfigGroup> groups, URLClassLoader loader, String typeProviderClass) throws JrapidocExecutionException, JrapidocFailureException {
+        try {
+            TypeProvider typeProvider = getTypeProvider(typeProviderClass);
+            SEIProcessor seiProcessor = getSeiClassProcessor(typeProviderClass, loader);
+            APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
+            addCustomInfo(customInfo, APIModelBuilder);
+            addServiceGroups(groups, seiProcessor, loader, APIModelBuilder);
+            APIModelBuilder.types(typeProvider.getUsedTypes());
+            return APIModelBuilder.build();
+        } catch (Exception e) {
+            Logger.error(e, "Unexpected error during creating model");
+            throw new JrapidocFailureException(e.getMessage(), e);
+        }
     }
 
-    ServiceGroup createServiceGroup(String basePath, String description, Set<Class<?>> resourceClasses, SEIProcessor seiProcessor) throws ClassNotFoundException {
+    ServiceGroup createServiceGroup(String basePath, String description, Set<Class<?>> resourceClasses, SEIProcessor seiProcessor) throws JrapidocExecutionException {
         ServiceGroup.ServiceGroupBuilder serviceGroupBuilder = new ServiceGroup.ServiceGroupBuilder();
         serviceGroupBuilder.baseUrl(basePath);
         serviceGroupBuilder.description(description);
         return seiProcessor.createServiceGroup(resourceClasses, serviceGroupBuilder);
     }
 
-    void addServiceGroups(List<ConfigGroup> groups, SEIProcessor seiProcessor, URLClassLoader loader, APIModel.APIModelBuilder APIModelBuilder) throws ClassNotFoundException {
-        for (ConfigGroup group:groups) {
+    void addServiceGroups(List<ConfigGroup> groups, SEIProcessor seiProcessor, URLClassLoader loader, APIModel.APIModelBuilder APIModelBuilder) throws JrapidocExecutionException {
+        for (ConfigGroup group : groups) {
             Set<Class<?>> resourceClasses = getScannedClasses(group.getIncludes(), group.getExcludes(), loader, WebService.class);
             resourceClasses = removeInterfaces(resourceClasses);
             ServiceGroup serviceGroup = createServiceGroup(group.getBaseUrl(), group.getDescription(), resourceClasses, seiProcessor);

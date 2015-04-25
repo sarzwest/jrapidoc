@@ -2,6 +2,7 @@ package org.jrapidoc.introspector;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.annotation.Description;
+import org.jrapidoc.exception.JrapidocExecutionException;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.*;
 import org.jrapidoc.model.param.HeaderParam;
@@ -34,7 +35,7 @@ public class SEIProcessor {
         this.loader = loader;
     }
 
-    public ServiceGroup createServiceGroup(Set<Class<?>> seiClasses, ServiceGroup.ServiceGroupBuilder serviceGroupBuilder) throws ClassNotFoundException {
+    public ServiceGroup createServiceGroup(Set<Class<?>> seiClasses, ServiceGroup.ServiceGroupBuilder serviceGroupBuilder) throws JrapidocExecutionException {
         for (Class<?> seiClass : seiClasses) {
             Logger.debug("Introspecting SEI class {0}", seiClass.getCanonicalName());
             seiClass = getSEI(seiClass);
@@ -44,14 +45,14 @@ public class SEIProcessor {
         return serviceGroupBuilder.build();
     }
 
-    Class<?> getSEI(Class<?> seiClass) throws ClassNotFoundException {
+    Class<?> getSEI(Class<?> seiClass) throws JrapidocExecutionException {
         String interfaceClass = seiClass.getAnnotation(WebService.class).endpointInterface();
         if (StringUtils.isNotEmpty(interfaceClass)) {
             try {
                 return loader.loadClass(interfaceClass);
             } catch (ClassNotFoundException e) {
                 Logger.error("Endpoint interface {0} for {1} is not on project classpath", interfaceClass, seiClass.getCanonicalName());
-                throw e;
+                throw new JrapidocExecutionException(e.getMessage(), e);
             }
         } else {
             return seiClass;

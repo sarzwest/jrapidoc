@@ -13,6 +13,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.component.annotations.Component;
+import org.jrapidoc.exception.JrapidocExecutionException;
+import org.jrapidoc.exception.JrapidocFailureException;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.introspector.SoapIntrospector;
 
@@ -79,26 +81,29 @@ public class SoapMojo extends AbstractMojo {
         try {
             Logger.setLogger(getLog());
             addPluginVersionToInfo();
-            List<String> classpathElements = project.getCompileClasspathElements();
+            List<String> classpathElements = null;
+            try {
+                classpathElements = project.getCompileClasspathElements();
+            } catch (DependencyResolutionRequiredException e) {
+                throw new JrapidocExecutionException(e.getMessage(), e);
+            }
             List<URL> projectClasspathList = new ArrayList<URL>();
             for (String element : classpathElements) {
                 try {
                     Logger.debug("Adding project classpath element {0}", element);
                     projectClasspathList.add(new File(element).toURI().toURL());
                 } catch (MalformedURLException e) {
-                    getLog().error(e);
-                    throw new MojoFailureException(e, element + " is an invalid classpath element", element + " is an invalid classpath element");
+                    Logger.error(e, e.getMessage());
+                    throw new JrapidocFailureException(element + " is an invalid classpath element", e);
                 }
             }
             URL[] urls = projectClasspathList.toArray(new URL[projectClasspathList.size()]);
             SoapIntrospector soapIntrospector = new SoapIntrospector();
             soapIntrospector.run(urls, groups, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.soap.model.json"), modelHandlers, custom);
-        } catch (DependencyResolutionRequiredException e) {
-            getLog().error(e);
+        } catch (JrapidocFailureException e) {
+            throw new MojoFailureException(e.getMessage(), e);
+        } catch (JrapidocExecutionException e) {
             throw new MojoExecutionException(e.getMessage(), e);
-        } catch (Exception e) {
-            Logger.error(e, e.getMessage());
-            e.printStackTrace();
         } finally {
             Logger.info("Finished in " + ((System.currentTimeMillis() - start) / 1000) + " seconds");
         }

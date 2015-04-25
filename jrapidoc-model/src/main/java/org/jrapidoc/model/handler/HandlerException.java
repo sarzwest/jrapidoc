@@ -36,6 +36,6 @@ public class HandlerException extends Exception{
     }
 
     public enum Action {
-        CONTINUE, STOP_HANDLERS, STOP_ALL
+        STOP_HANDLER_CURRENT, STOP_HANDLERS, FAILURE_EXCEPTION, EXECUTION_EXCEPTION
     }
 }
