@@ -27,13 +27,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Tomas "sarzwest" Jiricek on 14.3.15.
+ * Adapter pattern between Maven and {@link org.jrapidoc.introspector.SoapIntrospector}<br/>
+ * <br/>
+ * Created by Tomas "sarzwest" Jiricek on 14.3.15.<br/>
  */
 @Mojo(name = "run", defaultPhase = LifecyclePhase.PROCESS_CLASSES,
         requiresDependencyResolution = ResolutionScope.RUNTIME
 )
-@Component(role = SoapMojo.class)
-public class SoapMojo extends AbstractMojo {
+@Component(role = SoapMojoAdapter.class)
+public class SoapMojoAdapter extends AbstractMojo {
 
     @Parameter(defaultValue = "${session}", readonly = true)
     MavenSession session;
