@@ -86,7 +86,7 @@ public abstract class AbstractIntrospector {
         return TypeProviderFactory.createTypeProvider(typeProviderClass);
     }
 
-    Set<Class<?>> getScannedClasses(List<String> include, List<String> exclude, URLClassLoader loader, Class<? extends Annotation> annotatedWith) {
+    Set<Class<?>> getScannedClasses(List<String> include, List<String> exclude, ClassLoader loader, Class<? extends Annotation> annotatedWith) {
         Reflections ref = getUnionOfIncludedPaths(include, loader);
         Set<Class<?>> resourceClassesAll = ref.getTypesAnnotatedWith(annotatedWith);
         Logger.debug("Root resource classes on path: {0}", resourceClassesAll.toString());
