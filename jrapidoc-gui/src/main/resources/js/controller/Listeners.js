@@ -7,7 +7,7 @@ var Listeners = function () {
 
 Listeners.prototype.init = function () {
     this.regEvents();
-    this.switchListeners();
+    this.loadListener();
 };
 
 Listeners.prototype.loadModel = function (e) {
@@ -29,7 +29,7 @@ Listeners.prototype.loadModel = function (e) {
     }
 };
 
-Listeners.prototype.switchListeners = function () {
+Listeners.prototype.loadListener = function () {
     var switchButton = document.querySelector("#loadModel");
     switchButton.addEventListener("click", this.loadModel);
 };

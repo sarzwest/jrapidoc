@@ -1,7 +1,7 @@
 /**
  * Created by Tomas "sarzwest" Jiricek on 21.3.15.
  */
-var ApiModel = function(){
+var ApiModel = function () {
     this.modelJSON;
 };
 
@@ -9,13 +9,13 @@ var ApiModel = function(){
  * Stores the model in JSON format in modelJSON property
  * @param modelUrl URL where model can be retrieved
  */
-ApiModel.prototype.loadModel = function(modelUrl){
+ApiModel.prototype.loadModel = function (modelUrl) {
     var stateChanged = function (caller) {
         if (this.readyState === 4) {
-            if(this.status == 200){
+            if (this.status == 200) {
 //                Logger.success("Retrieving model finished with http status: OK " + this.status);
-            }else{
-                Logger.error("Retrieving model finished with http status: " + this.status);
+            } else {
+//                Logger.error("Retrieving model finished with http status: " + this.status);
                 throw new CaughtException("Retrieving model finished with http status: " + this.status);
             }
             var modelJSON = caller.checkAndGetModel(this.responseText);
@@ -27,8 +27,17 @@ ApiModel.prototype.loadModel = function(modelUrl){
     xmlhttp.open('GET', modelUrl, false);
     var oldThis = this;
     var callback = stateChanged.bind(xmlhttp);
-    xmlhttp.addEventListener('readystatechange', function (){callback(oldThis)});
-    xmlhttp.send();
+    xmlhttp.addEventListener('readystatechange', function () {
+        callback(oldThis)
+    });
+    try {
+        xmlhttp.send();
+    } catch (e) {
+        throw new CaughtException(e + "\nwith model URI " + modelUrl);
+    }
+    if (xmlhttp.status != 200) {
+        throw new CaughtException("Retrieving model finished with http status: " + xmlhttp.status+ "\nwith model URI " + modelUrl);
+    }
 };
 
 /**
@@ -36,18 +45,18 @@ ApiModel.prototype.loadModel = function(modelUrl){
  * @param givenModel model in string format
  * @returns {*} model in JSON format
  */
-ApiModel.prototype.checkAndGetModel = function(givenModel){
+ApiModel.prototype.checkAndGetModel = function (givenModel) {
     try {
         givenModel = givenModel.replace(/[<]/g, "&lt;").replace(/[>]/g, "&gt;");
         var modelJSON = JSON.parse(givenModel);
         return modelJSON;
-    }catch (e){
+    } catch (e) {
         Logger.error("Given model could not be parsed as JSON");
         throw new CaughtException("Given model could not be parsed as JSON");
     }
 };
 
-ApiModel.prototype.setModelJSON = function(modelJSON){
+ApiModel.prototype.setModelJSON = function (modelJSON) {
     this.modelJSON = modelJSON;
 };
 

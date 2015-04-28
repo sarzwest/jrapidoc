@@ -106,7 +106,7 @@
         }
 
         #modelUrl {
-            width: 85%;
+            width: 80%;
         }
 
         #loadModel {
@@ -126,6 +126,10 @@
             text-align: center;
         }
 
+        .inline{
+            display: inline;
+        }
+
     </style>
     <script type='text/javascript'>
 
@@ -142,7 +146,7 @@
     <h2>Application name</h2>
     <article>
         <div style=";margin-top:20px;">
-            <input id="modelUrl" type="text" size="100"><input id="loadModel" type="button" value="Load model">
+            <label class="inline" for="modelUrl">URI: </label><input id="modelUrl" type="text" size="100"><input id="loadModel" type="button" value="Load model">
 
             <div id="top"></div>
         </div>
