@@ -62,14 +62,6 @@
             <artifactId>jrapidoc-annotation</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jrapidoc</groupId>
-            <artifactId>jrapidoc-model</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jrapidoc</groupId>
-            <artifactId>jrapidoc-common</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
         </dependency>
