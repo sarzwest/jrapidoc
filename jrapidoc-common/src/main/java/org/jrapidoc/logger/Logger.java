@@ -4,6 +4,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 6.4.15.
@@ -47,7 +48,7 @@ public class Logger {
         try {
             return MessageFormat.format(msg, tokens);
         }catch(IllegalArgumentException e){
-            return msg + tokens;
+            return msg + " " + Arrays.toString(tokens);
         }
     }
 }

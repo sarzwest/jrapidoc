@@ -4,10 +4,7 @@ import org.jrapidoc.model.object.type.Type;
 import org.jrapidoc.model.param.CookieParam;
 import org.jrapidoc.model.param.HeaderParam;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
@@ -81,11 +78,11 @@ public class Return {
     public static class ReturnBuilder{
 
         private int httpStatus;
-        private Map<String, HeaderParam> headerParams = new HashMap<String, HeaderParam>();
-        private Map<String, CookieParam> cookieParams = new HashMap<String, CookieParam>();
-        private Map<String, TransportType> returnTypes = new HashMap<String, TransportType>();
+        private Map<String, HeaderParam> headerParams = new LinkedHashMap<String, HeaderParam>();
+        private Map<String, CookieParam> cookieParams = new LinkedHashMap<String, CookieParam>();
+        private Map<String, TransportType> returnTypes = new LinkedHashMap<String, TransportType>();
         private String description;
-        private Map<String, TransportType> soapOutputHeaders = new HashMap<String, TransportType>();
+        private Map<String, TransportType> soapOutputHeaders = new LinkedHashMap<String, TransportType>();
 
         public ReturnBuilder httpStatus(int httpStatus) {
             this.httpStatus = httpStatus;

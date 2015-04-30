@@ -6,10 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.param.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
@@ -31,7 +28,7 @@ public class Service {
     private List<PathParam> pathParams = new ArrayList<PathParam>();
     @JsonIgnore
     private List<QueryParam> queryParams = new ArrayList<QueryParam>();
-    private Map<String, Method> methods = new HashMap<String, Method>();
+    private Map<String, Method> methods = new TreeMap<String, Method>();
     private String description;
     private String name;
 
@@ -149,7 +146,7 @@ public class Service {
         private List<MatrixParam> matrixParams = new ArrayList<MatrixParam>();
         private List<PathParam> pathParams = new ArrayList<PathParam>();
         private List<QueryParam> queryParams = new ArrayList<QueryParam>();
-        private Map<String, Method> methods = new HashMap<String, Method>();
+        private Map<String, Method> methods = new TreeMap<String, Method>();
         private String description;
         private String name;
 
@@ -172,6 +169,9 @@ public class Service {
             String key = (StringUtils.isNotEmpty(method.getName()))?method.getName():method.getPath();
             key += " - " + method.getHttpMethodType();
             Logger.debug("Method identifier: {0}", key);
+            if(this.methods.containsKey(key)){
+                Logger.warn("Method identifier must be unique, but method with identifier {0} already exists!!!", key);
+            }
             this.methods.put(key, method);
             return this;
         }

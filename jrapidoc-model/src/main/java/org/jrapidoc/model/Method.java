@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.param.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
@@ -20,12 +17,12 @@ public class Method {
 
     @JsonProperty("asynchronous")
     private boolean isAsynchronous;
-    private Map<String, HeaderParam> headerParams = new HashMap<String, HeaderParam>();
-    private Map<String, CookieParam> cookieParams = new HashMap<String, CookieParam>();
-    private Map<String, FormParam> formParams = new HashMap<String, FormParam>();
-    private Map<String, MatrixParam> matrixParams = new HashMap<String, MatrixParam>();
-    private Map<String, PathParam> pathParams = new HashMap<String, PathParam>();
-    private Map<String, QueryParam> queryParams = new HashMap<String, QueryParam>();
+    private Map<String, HeaderParam> headerParams = new LinkedHashMap<String, HeaderParam>();
+    private Map<String, CookieParam> cookieParams = new LinkedHashMap<String, CookieParam>();
+    private Map<String, FormParam> formParams = new LinkedHashMap<String, FormParam>();
+    private Map<String, MatrixParam> matrixParams = new LinkedHashMap<String, MatrixParam>();
+    private Map<String, PathParam> pathParams = new LinkedHashMap<String, PathParam>();
+    private Map<String, QueryParam> queryParams = new LinkedHashMap<String, QueryParam>();
     private String path;
     private String pathExample;
     private List<Return> returnOptions;
@@ -199,12 +196,12 @@ public class Method {
     public static class MethodBuilder {
 
         private boolean isAsynchronous;
-        private Map<String, HeaderParam> headerParams = new HashMap<String, HeaderParam>();
-        private Map<String, CookieParam> cookieParams = new HashMap<String, CookieParam>();
-        private Map<String, FormParam> formParams = new HashMap<String, FormParam>();
-        private Map<String, MatrixParam> matrixParams = new HashMap<String, MatrixParam>();
-        private Map<String, PathParam> pathParams = new HashMap<String, PathParam>();
-        private Map<String, QueryParam> queryParams = new HashMap<String, QueryParam>();
+        private Map<String, HeaderParam> headerParams = new LinkedHashMap<String, HeaderParam>();
+        private Map<String, CookieParam> cookieParams = new LinkedHashMap<String, CookieParam>();
+        private Map<String, FormParam> formParams = new LinkedHashMap<String, FormParam>();
+        private Map<String, MatrixParam> matrixParams = new LinkedHashMap<String, MatrixParam>();
+        private Map<String, PathParam> pathParams = new LinkedHashMap<String, PathParam>();
+        private Map<String, QueryParam> queryParams = new LinkedHashMap<String, QueryParam>();
         private List<String> consumes = new ArrayList<String>();
         private List<String> produces = new ArrayList<String>();
         private String path;

@@ -6,7 +6,9 @@ import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.object.type.Type;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
@@ -50,8 +52,8 @@ public class APIModel {
     }
 
     public static class APIModelBuilder {
-        private Map<String, ServiceGroup> resourceGroups = new HashMap<String, ServiceGroup>();
-        private Map<String, String> customInfo = new HashMap<String, String>();
+        private Map<String, ServiceGroup> resourceGroups = new TreeMap<String, ServiceGroup>();
+        private Map<String, String> customInfo = new LinkedHashMap<String, String>();
         private Map<String, Type> types;
 
         public APIModelBuilder resourceGroup(ServiceGroup serviceGroup) {

@@ -5,6 +5,7 @@ import org.jrapidoc.logger.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 21.4.15.
@@ -13,7 +14,7 @@ public class ServiceGroup {
 
     private String baseUrl;
     private String description;
-    private Map<String, Service> services = new HashMap<String, Service>();
+    private Map<String, Service> services = new TreeMap<String, Service>();
 
     private ServiceGroup(String baseUrl, String description, Map<String, Service> services) {
         this.baseUrl = baseUrl;
@@ -48,7 +49,7 @@ public class ServiceGroup {
     public static class ServiceGroupBuilder {
         private String baseUrl;
         private String description;
-        private Map<String, Service> services = new HashMap<String, Service>();
+        private Map<String, Service> services = new TreeMap<String, Service>();
 
         public ServiceGroupBuilder baseUrl(String baseUrl){
             this.baseUrl = baseUrl;
