@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Return {
+public @interface DocReturn {
 
     /**
      * Http status returned
@@ -39,7 +39,7 @@ public @interface Return {
     Class<?> type() default Void.class;
 
     /**
-     * Wrapper for {@link org.jrapidoc.annotation.rest.Return#type()}.
+     * Wrapper for {@link DocReturn#type()}.
      * @return
      */
     Structure structure() default Structure.OBJECT;
@@ -47,15 +47,15 @@ public @interface Return {
 
     enum Structure {
         /**
-         * {@link Return#type()} is not wrapped
+         * {@link DocReturn#type()} is not wrapped
          */
         OBJECT,
         /**
-         * {@link Return#type()} is wrapped into array
+         * {@link DocReturn#type()} is wrapped into array
          */
         ARRAY,
         /**
-         * {@link Return#type()} is wrapped into map as value type (key type is string)
+         * {@link DocReturn#type()} is wrapped into map as value type (key type is string)
          */
         MAP
     }

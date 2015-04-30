@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Returns {
-    Return[] value();
+public @interface DocReturns {
+    DocReturn[] value();
 }

@@ -1,7 +1,7 @@
 package org.jboss.resteasy.spi.metadata;
 
-import org.jrapidoc.annotation.Description;
-import org.jrapidoc.annotation.rest.IsRequired;
+import org.jrapidoc.annotation.DocDescription;
+import org.jrapidoc.annotation.rest.DocIsRequired;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -25,14 +25,14 @@ public class ResourceConstructor
          this.params = new ConstructorParameter[constructor.getParameterTypes().length];
          for (int i = 0; i < constructor.getParameterTypes().length; i++)
          {
-             Description desc = null;
-             IsRequired isReq = null;
+             DocDescription desc = null;
+             DocIsRequired isReq = null;
              Annotation[] annotations = constructor.getParameterAnnotations()[i];
              for(Annotation a:annotations){
-                 if(a.annotationType().equals(Description.class)){
-                     desc = (Description)a;
-                 }else if(a.annotationType().equals(IsRequired.class)){
-                     isReq = (IsRequired)a;
+                 if(a.annotationType().equals(DocDescription.class)){
+                     desc = (DocDescription)a;
+                 }else if(a.annotationType().equals(DocIsRequired.class)){
+                     isReq = (DocIsRequired)a;
                  }
              }
             this.params[i] = new ConstructorParameter(this, constructor.getParameterTypes()[i], constructor.getGenericParameterTypes()[i], constructor.getParameterAnnotations()[i], desc, isReq);

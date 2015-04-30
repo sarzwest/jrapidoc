@@ -1,7 +1,7 @@
 package org.jboss.resteasy.spi.metadata;
 
-import org.jrapidoc.annotation.Description;
-import org.jrapidoc.annotation.rest.IsRequired;
+import org.jrapidoc.annotation.DocDescription;
+import org.jrapidoc.annotation.rest.DocIsRequired;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
@@ -16,9 +16,9 @@ public class ConstructorParameter extends Parameter
    protected Annotation[] annotations = {};
    protected ResourceConstructor constructor;
 
-   protected ConstructorParameter(ResourceConstructor constructor, Class<?> type, Type genericType, Annotation[] annotations, Description description, IsRequired isRequired)
+   protected ConstructorParameter(ResourceConstructor constructor, Class<?> type, Type genericType, Annotation[] annotations, DocDescription docDescription, DocIsRequired docIsRequired)
    {
-      super(constructor.getResourceClass(), type, genericType, (description == null)?null:description.value(), (isRequired == null)?null:isRequired.value());
+      super(constructor.getResourceClass(), type, genericType, (docDescription == null)?null: docDescription.value(), (docIsRequired == null)?null: docIsRequired.value());
       this.annotations = annotations;
       this.constructor = constructor;
    }

@@ -1,7 +1,8 @@
 package org.jrapidoc.introspector;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jrapidoc.annotation.Description;
+import org.jrapidoc.annotation.DocDescription;
+import org.jrapidoc.annotation.soap.DocReturn;
 import org.jrapidoc.exception.JrapidocExecutionException;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.*;
@@ -81,11 +82,11 @@ public class SEIProcessor {
     }
 
     String getDescription(Annotation[] annotations) {
-        Description description = getAnnotation(annotations, Description.class);
-        if (description == null) {
+        DocDescription docDescription = getAnnotation(annotations, DocDescription.class);
+        if (docDescription == null) {
             return null;
         } else {
-            return description.value();
+            return docDescription.value();
         }
     }
 
@@ -249,8 +250,8 @@ public class SEIProcessor {
     void addTypeFromReturn(Method method, List<TransportType> returnTypes) {
         if (!isHeader(method.getDeclaredAnnotations())) {
             if (!method.getGenericReturnType().equals(Void.TYPE)) {
-                org.jrapidoc.annotation.soap.Return returnAnno = getAnnotation(method.getDeclaredAnnotations(), org.jrapidoc.annotation.soap.Return.class);
-                String description = (returnAnno == null) ? null : returnAnno.description();
+                DocReturn docReturnAnno = getAnnotation(method.getDeclaredAnnotations(), DocReturn.class);
+                String description = (docReturnAnno == null) ? null : docReturnAnno.description();
                 TransportType soapOutputParameter = new TransportType.TransportTypeBuilder().description(description).type(createType(method.getGenericReturnType())).build();
                 returnTypes.add(soapOutputParameter);
             }
@@ -260,8 +261,8 @@ public class SEIProcessor {
     void addHeaderFromReturn(Method method, Return.ReturnBuilder returnBuilder) {
         if (isHeader(method.getDeclaredAnnotations())) {
             if (!method.getGenericReturnType().equals(Void.TYPE)) {
-                org.jrapidoc.annotation.soap.Return returnAnno = getAnnotation(method.getDeclaredAnnotations(), org.jrapidoc.annotation.soap.Return.class);
-                String description = (returnAnno == null) ? null : returnAnno.description();
+                DocReturn docReturnAnno = getAnnotation(method.getDeclaredAnnotations(), DocReturn.class);
+                String description = (docReturnAnno == null) ? null : docReturnAnno.description();
                 TransportType soapOutputHeader = new TransportType.TransportTypeBuilder().description(description).type(createType(method.getGenericReturnType())).build();
                 returnBuilder.soapOutputHeader(soapOutputHeader);
             }

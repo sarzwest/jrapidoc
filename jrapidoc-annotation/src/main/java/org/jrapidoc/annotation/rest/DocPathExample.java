@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PathExample {
+public @interface DocPathExample {
     /**
      * Because javax.ws.rs.Path.value can contain regular
      * expressions which are not much readable, here can be placed example of path.

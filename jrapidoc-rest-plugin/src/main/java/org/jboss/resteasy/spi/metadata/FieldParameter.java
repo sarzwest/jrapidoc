@@ -1,7 +1,7 @@
 package org.jboss.resteasy.spi.metadata;
 
-import org.jrapidoc.annotation.Description;
-import org.jrapidoc.annotation.rest.IsRequired;
+import org.jrapidoc.annotation.DocDescription;
+import org.jrapidoc.annotation.rest.DocIsRequired;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
@@ -17,7 +17,7 @@ public class FieldParameter extends Parameter
 
    protected FieldParameter(ResourceClass declaredClass, Field field)
    {
-      super(declaredClass, field.getType(), field.getGenericType(), (field.getAnnotation(Description.class) == null)? null:field.getAnnotation(Description.class).value(), (field.getAnnotation(IsRequired.class) == null)? null:field.getAnnotation(IsRequired.class).value());
+      super(declaredClass, field.getType(), field.getGenericType(), (field.getAnnotation(DocDescription.class) == null)? null:field.getAnnotation(DocDescription.class).value(), (field.getAnnotation(DocIsRequired.class) == null)? null:field.getAnnotation(DocIsRequired.class).value());
       this.field = field;
    }
 

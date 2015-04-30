@@ -1,6 +1,6 @@
 package org.jboss.resteasy.spi.metadata;
 
-import org.jrapidoc.annotation.rest.Return;
+import org.jrapidoc.annotation.rest.DocReturn;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class ReturnOption {
     List<String> headers = new ArrayList<String>();
     Type parameterized;
     Class<?> returnClass;
-    Return.Structure structure;
+    DocReturn.Structure structure;
     String description;
 
     public Class<?> getReturnClass() {
@@ -31,11 +31,11 @@ public class ReturnOption {
         this.parameterized = parameterized;
     }
 
-    public Return.Structure getStructure() {
+    public DocReturn.Structure getStructure() {
         return structure;
     }
 
-    public void setStructure(Return.Structure structure) {
+    public void setStructure(DocReturn.Structure structure) {
         this.structure = structure;
     }
 

@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IsRequired {
+public @interface DocIsRequired {
     /**
      * true if required<br/>
      * false if optional<br/>

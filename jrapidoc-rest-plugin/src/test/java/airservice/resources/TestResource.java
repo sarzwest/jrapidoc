@@ -8,10 +8,10 @@ import airservice.entity.bean.StringConstBean;
 import airservice.entity.bean.ValueOfBean;
 import airservice.entity.destination.*;
 import airservice.exception.MyException;
-import org.jrapidoc.annotation.Description;
-import org.jrapidoc.annotation.rest.IsRequired;
-import org.jrapidoc.annotation.rest.Return;
-import org.jrapidoc.annotation.rest.Returns;
+import org.jrapidoc.annotation.DocDescription;
+import org.jrapidoc.annotation.rest.DocIsRequired;
+import org.jrapidoc.annotation.rest.DocReturn;
+import org.jrapidoc.annotation.rest.DocReturns;
 
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
@@ -32,15 +32,15 @@ import java.util.logging.Logger;
  */
 @Path("/rest/test/{pathparam}/")
 @Produces("text/plain")
-@Description("Description of resource")
+@DocDescription("Description of resource")
 public class TestResource extends Class1 implements IFace2, ParentInterface,
         Parent2Interface {
 
     @DefaultValue("defvaluematrix")
-    @IsRequired
+    @DocIsRequired
     @MatrixParam("matrixparam")
     String matrix;
-    @IsRequired(false)
+    @DocIsRequired(false)
     @QueryParam("queryparam")
     int query;
     @PathParam("pathparam")
@@ -84,7 +84,7 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
     /**
      * Creates a new instance of TestResource
      */
-    public TestResource(@IsRequired @QueryParam("queryconst")String query) {
+    public TestResource(@DocIsRequired @QueryParam("queryconst")String query) {
         System.out.println(query);
     }
 
@@ -541,13 +541,13 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
     }
 
     @POST
-    @Return(http = 200, type = Object.class, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"})
+    @DocReturn(http = 200, type = Object.class, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"})
     public void foo9(){}
 
     @POST
-    @Returns({
-            @Return(http = 200, type = Object.class, structure = Return.Structure.ARRAY, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"}),
-            @Return(http = 200, type = Object.class, structure = Return.Structure.MAP, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"})
+    @DocReturns({
+            @DocReturn(http = 200, type = Object.class, structure = DocReturn.Structure.ARRAY, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"}),
+            @DocReturn(http = 200, type = Object.class, structure = DocReturn.Structure.MAP, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"})
     })
     public void foo2(){}
 
@@ -587,9 +587,9 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
 
     @POST
     @Path("decription")
-    @Description("Description of method")
-    @Return(http = 200, description = "Description of return option")
-    public void description(@Description("Description of query param")@QueryParam("qp")String s){
+    @DocDescription("Description of method")
+    @DocReturn(http = 200, description = "Description of return option")
+    public void description(@DocDescription("Description of query param")@QueryParam("qp")String s){
 
     }
 

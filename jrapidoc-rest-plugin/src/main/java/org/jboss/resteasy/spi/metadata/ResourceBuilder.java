@@ -9,10 +9,10 @@ import org.jboss.resteasy.util.IsHttpMethod;
 import org.jboss.resteasy.util.MethodHashing;
 import org.jboss.resteasy.util.PickConstructor;
 import org.jboss.resteasy.util.Types;
-import org.jrapidoc.annotation.Description;
-import org.jrapidoc.annotation.rest.PathExample;
-import org.jrapidoc.annotation.rest.Return;
-import org.jrapidoc.annotation.rest.Returns;
+import org.jrapidoc.annotation.DocDescription;
+import org.jrapidoc.annotation.rest.DocPathExample;
+import org.jrapidoc.annotation.rest.DocReturn;
+import org.jrapidoc.annotation.rest.DocReturns;
 import org.jrapidoc.logger.Logger;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
@@ -209,8 +209,8 @@ public class ResourceBuilder {
             Suspended suspended;
 
 
-            Description description = findAnnotation(annotations, Description.class);
-            parameter.description = (description == null) ? null : description.value();
+            DocDescription docDescription = findAnnotation(annotations, DocDescription.class);
+            parameter.description = (docDescription == null) ? null : docDescription.value();
             if ((query = findAnnotation(annotations, QueryParam.class)) != null) {
                 parameter.paramType = Parameter.ParamType.QUERY_PARAM;
                 parameter.paramName = query.value();
@@ -410,7 +410,7 @@ public class ResourceBuilder {
             return (T) this;
         }
 
-        public T response(int http, String[] headers, String[] cookies, Class<?> type, Type parameterized, Return.Structure structure, String description) {
+        public T response(int http, String[] headers, String[] cookies, Class<?> type, Type parameterized, DocReturn.Structure structure, String description) {
             ResponseObjectBuilder responseBuilder = new ResponseObjectBuilder();
             ReturnOption option = responseBuilder.status(http).headers(Arrays.asList(headers)).cookies(Arrays.asList(cookies)).type(type).parameterized(parameterized).structure(structure).description(description).buildReturnOption();
             locator.returnOptions.add(option);
@@ -583,7 +583,7 @@ public class ResourceBuilder {
             return this;
         }
 
-        public ResponseObjectBuilder structure(Return.Structure structure) {
+        public ResponseObjectBuilder structure(DocReturn.Structure structure) {
             returnOption.setStructure(structure);
             return this;
         }
@@ -672,10 +672,10 @@ public class ResourceBuilder {
             clazz = clazz.getSuperclass();
         }
         ResourceClassBuilder builder = null;
-        Description description = clazz.getAnnotation(Description.class);
-        String descValue = (description == null) ? null : description.value();
-        PathExample pathExample = clazz.getAnnotation(PathExample.class);
-        String pExamValue = (pathExample == null) ? "" : pathExample.value();
+        DocDescription docDescription = clazz.getAnnotation(DocDescription.class);
+        String descValue = (docDescription == null) ? null : docDescription.value();
+        DocPathExample docPathExample = clazz.getAnnotation(DocPathExample.class);
+        String pExamValue = (docPathExample == null) ? "" : docPathExample.value();
         Produces produces = clazz.getAnnotation(Produces.class);
         String[] producesValue = (produces == null) ? null : produces.value();
         Consumes consumes = clazz.getAnnotation(Consumes.class);
@@ -838,11 +838,11 @@ public class ResourceBuilder {
             } else {
                 ResourceMethodBuilder resourceMethodBuilder = resourceClassBuilder.method(implementation, method);
                 resourceLocatorBuilder = resourceMethodBuilder;
-                Description description = method.getAnnotation(Description.class);
-                String descValue = (description == null) ? null : description.value();
+                DocDescription docDescription = method.getAnnotation(DocDescription.class);
+                String descValue = (docDescription == null) ? null : docDescription.value();
                 resourceMethodBuilder.description(descValue);
-                PathExample pathExample = method.getAnnotation(PathExample.class);
-                String pExampValue = (pathExample == null) ? null : pathExample.value();
+                DocPathExample docPathExample = method.getAnnotation(DocPathExample.class);
+                String pExampValue = (docPathExample == null) ? null : docPathExample.value();
                 resourceMethodBuilder.pathExample(pExampValue);
                 for (String httpMethod : httpMethods) {
                     if (httpMethod.equalsIgnoreCase(HttpMethod.GET)) resourceMethodBuilder.get();
@@ -864,10 +864,10 @@ public class ResourceBuilder {
                     consumes = resourceClassBuilder.resourceClass.getClazz().getAnnotation(Consumes.class);
                 if (consumes == null) consumes = method.getDeclaringClass().getAnnotation(Consumes.class);
                 if (consumes != null) resourceMethodBuilder.consumes(consumes.value());
-                if (method.isAnnotationPresent(Return.class)) {
-                    createResponse(method.getAnnotation(Return.class), resourceMethodBuilder);
-                } else if (method.isAnnotationPresent(Returns.class)) {
-                    for (Return ret : method.getAnnotation(Returns.class).value()) {
+                if (method.isAnnotationPresent(DocReturn.class)) {
+                    createResponse(method.getAnnotation(DocReturn.class), resourceMethodBuilder);
+                } else if (method.isAnnotationPresent(DocReturns.class)) {
+                    for (DocReturn ret : method.getAnnotation(DocReturns.class).value()) {
                         createResponse(ret, resourceMethodBuilder);
                     }
                 } else {
@@ -912,16 +912,16 @@ public class ResourceBuilder {
         resourceMethodBuilder.response(204, new String[]{}, new String[]{}, null, null, null, null);
     }
 
-    static void createResponse(Return ret, ResourceMethodBuilder resourceMethodBuilder) {
+    static void createResponse(DocReturn ret, ResourceMethodBuilder resourceMethodBuilder) {
         Type parameterizedType = null;
-        Return.Structure structure = ret.structure();
-        if (structure == Return.Structure.OBJECT) {
+        DocReturn.Structure structure = ret.structure();
+        if (structure == DocReturn.Structure.OBJECT) {
             parameterizedType = ret.type();
             resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), ret.type(), ret.type(), ret.structure(), ret.description());
-        } else if (structure == Return.Structure.ARRAY) {
+        } else if (structure == DocReturn.Structure.ARRAY) {
             parameterizedType = ParameterizedTypeImpl.make(List.class, new Type[]{ret.type()}, null);
             resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), List.class, parameterizedType, ret.structure(), ret.description());
-        } else if (structure == Return.Structure.MAP) {
+        } else if (structure == DocReturn.Structure.MAP) {
             parameterizedType = ParameterizedTypeImpl.make(Map.class, new Type[]{String.class, ret.type()}, null);
             resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), Map.class, parameterizedType, ret.structure(), ret.description());
         }

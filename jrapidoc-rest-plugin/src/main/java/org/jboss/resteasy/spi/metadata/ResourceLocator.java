@@ -1,8 +1,8 @@
 package org.jboss.resteasy.spi.metadata;
 
 import org.jboss.resteasy.util.Types;
-import org.jrapidoc.annotation.Description;
-import org.jrapidoc.annotation.rest.IsRequired;
+import org.jrapidoc.annotation.DocDescription;
+import org.jrapidoc.annotation.rest.DocIsRequired;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -37,14 +37,14 @@ public class ResourceLocator {
         this.returnType = Types.getRawType(genericReturnType);
         this.params = new MethodParameter[method.getParameterTypes().length];
         for (int i = 0; i < method.getParameterTypes().length; i++) {
-            Description desc = null;
-            IsRequired isReq = null;
+            DocDescription desc = null;
+            DocIsRequired isReq = null;
             Annotation[] annotations = method.getParameterAnnotations()[i];
             for(Annotation a:annotations){
-                if(a.annotationType().equals(Description.class)){
-                    desc = (Description)a;
-                }else if(a.annotationType().equals(IsRequired.class)){
-                        isReq = (IsRequired)a;
+                if(a.annotationType().equals(DocDescription.class)){
+                    desc = (DocDescription)a;
+                }else if(a.annotationType().equals(DocIsRequired.class)){
+                        isReq = (DocIsRequired)a;
                 }
             }
             this.params[i] = new MethodParameter(this, method.getParameterTypes()[i], method.getGenericParameterTypes()[i], annotatedMethod.getParameterAnnotations()[i], desc, isReq);
