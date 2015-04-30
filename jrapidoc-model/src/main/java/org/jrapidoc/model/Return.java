@@ -1,5 +1,6 @@
 package org.jrapidoc.model;
 
+import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.object.type.Type;
 import org.jrapidoc.model.param.CookieParam;
 import org.jrapidoc.model.param.HeaderParam;
@@ -91,6 +92,13 @@ public class Return {
 
         public ReturnBuilder headerParams(List<HeaderParam> headerParams) {
             for (HeaderParam param:headerParams){
+                String key = param.getName();
+                if(key == null){
+                    Logger.warn("Putting null key into map!!!");
+                }
+                if(this.headerParams.containsKey(key)){
+                    Logger.warn("Header param identifier must be unique, but header param with identifier {0} already exists!!!", key);
+                }
                 this.headerParams.put(param.getName(), param);
             }
             return this;
@@ -98,7 +106,14 @@ public class Return {
 
         public ReturnBuilder cookieParams(List<CookieParam> cookieParams) {
             for (CookieParam param:cookieParams){
-                this.cookieParams.put(param.getName(), param);
+                String key = param.getName();
+                if(key == null){
+                    Logger.warn("Putting null key into map!!!");
+                }
+                if(this.cookieParams.containsKey(key)){
+                    Logger.warn("Cookie param identifier must be unique, but cookie param with identifier {0} already exists!!!", key);
+                }
+                this.cookieParams.put(key, param);
             }
             return this;
         }
@@ -106,7 +121,7 @@ public class Return {
         public ReturnBuilder returnTypes(List<TransportType> returnTypes) {
             for (TransportType type:returnTypes){
                 this.returnTypes.put(type.getType().getTypeRef(), type);
-            }
+            }//todo neprepisuje se to tady? Podle me muze byt string, string a to nebude fungovat v soap
             return this;
         }
 
@@ -117,6 +132,7 @@ public class Return {
 
         public ReturnBuilder soapOutputHeader(TransportType soapHeader) {
             this.soapOutputHeaders.put(soapHeader.getType().getTypeRef(), soapHeader);
+            //todo stejny jako todo predtim
             return this;
         }
 

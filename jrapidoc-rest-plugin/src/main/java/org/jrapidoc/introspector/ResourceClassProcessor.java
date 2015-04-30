@@ -30,9 +30,10 @@ public class ResourceClassProcessor {
      */
     public ServiceGroup createServiceGroup(Set<ResourceClass> resourceClasses, ServiceGroup.ServiceGroupBuilder serviceGroupBuilder) {
         for (ResourceClass resourceClass : resourceClasses) {
-            Logger.debug("Introspecting resource class {0}", resourceClass.getClazz().getCanonicalName());
+            Logger.info("{0} processing started", resourceClass.getClazz().getCanonicalName());
             Service service = createResource(resourceClass);
             serviceGroupBuilder.service(service);
+            Logger.info("{0} processing finished", resourceClass.getClazz().getCanonicalName());
         }
         return serviceGroupBuilder.build();
     }
@@ -93,6 +94,7 @@ public class ResourceClassProcessor {
     void addLocatorMethods(ResourceClass resourceClass, Service.ResourceBuilder resourceBuilder) {
         for (ResourceLocator resourceLocator : resourceClass.getResourceLocators()) {
             try {
+                Logger.info("{0} subresource locator processing started");
                 ResourceClass newResourceClass = ResourceBuilder.locatorFromAnnotations(resourceLocator.getReturnType());
                 newResourceClass.setPath(resourceLocator.getFullpath());
                 newResourceClass.setConstructor(resourceClass.getConstructor());
@@ -105,6 +107,8 @@ public class ResourceClassProcessor {
                 }
             } catch (Exception e) {
                 Logger.error(e, "Problem during preintrospection of locator class {0}, skipping this class", resourceLocator.getReturnType().getCanonicalName());
+            } finally {
+                Logger.info("{0} subresource locator processing finished");
             }
         }
     }
@@ -121,7 +125,7 @@ public class ResourceClassProcessor {
     }
 
     Method createMethod(ResourceMethod resourceMethod, ResourceClass resourceClass) {
-        Logger.debug("Introspecting method {0}", resourceMethod.getMethod().toString());
+        Logger.debug("{0} method processing started", resourceMethod.getMethod().toString());
         resourceMethod.messageBodyCheck();
         Method.MethodBuilder methodBuilder = new Method.MethodBuilder();
         methodBuilder.isAsynchronous(resourceMethod.isAsynchronous());
@@ -135,7 +139,9 @@ public class ResourceClassProcessor {
         methodBuilder.parameter(createParameterType(resourceMethod.getParams()));
         removeThisMethodFromResource(resourceMethod, methodBuilder);
         methodBuilder.returnOptions(createReturnOptions(resourceMethod));
-        return methodBuilder.build();
+        Method method = methodBuilder.build();
+        Logger.debug("{0} method processing finished", resourceMethod.getMethod().toString());
+        return method;
     }
 
     void removeThisMethodFromResource(ResourceMethod resourceMethod, Method.MethodBuilder methodBuilder) {

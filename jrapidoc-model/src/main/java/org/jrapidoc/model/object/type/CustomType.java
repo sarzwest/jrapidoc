@@ -31,7 +31,6 @@ public class CustomType extends org.jrapidoc.model.object.type.Type {
     }
 
     public void addBeanProperty(BeanProperty variable) {
-        Logger.debug(this.getClass().getSimpleName() + " " +variable.getName());
         attributes.put(variable.getName(), variable);
     }
 

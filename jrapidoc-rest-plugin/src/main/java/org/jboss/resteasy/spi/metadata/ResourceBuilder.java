@@ -636,13 +636,15 @@ public class ResourceBuilder {
      * @return
      */
     public static ResourceClass rootResourceFromAnnotations(Class<?> clazz) {
-        Logger.debug("Creating meta root resource class {0}", clazz.getCanonicalName());
-        return fromAnnotations(false, clazz);
+        ResourceClass resourceClass = fromAnnotations(false, clazz);
+        return resourceClass;
     }
 
     public static ResourceClass locatorFromAnnotations(Class<?> clazz) {
-        Logger.debug("Creating meta resource locator class {0}", clazz.getCanonicalName());
-        return fromAnnotations(true, clazz);
+        Logger.debug("Start meta resource class {0}", clazz.getCanonicalName());
+        ResourceClass resourceClass = fromAnnotations(true, clazz);
+        Logger.debug("End meta resource class {0}", clazz.getCanonicalName());
+        return resourceClass;
     }
 
     private static final String WELD_PROXY_INTERFACE_NAME = "org.jboss.weld.bean.proxy.ProxyObject";
@@ -826,7 +828,7 @@ public class ResourceBuilder {
     }
 
     protected static void processMethod(boolean isLocator, ResourceClassBuilder resourceClassBuilder, Class<?> root, Method implementation) {
-        Logger.info("Start processing method {0}", implementation.getName());
+        Logger.debug("{0} method preprocessing started", implementation.toGenericString());
         Method method = findAnnotatedMethod(root, implementation);
         if (method != null) {
             Set<String> httpMethods = IsHttpMethod.getHttpMethods(method);
@@ -885,6 +887,7 @@ public class ResourceBuilder {
             }
             resourceLocatorBuilder.buildMethod();
         }
+        Logger.debug("{0} method preprocessing finished", implementation.toGenericString());
     }
 
     static void responseFromReturn(Class<?> returnClass, Type parameterized, ResourceMethodBuilder resourceMethodBuilder) {

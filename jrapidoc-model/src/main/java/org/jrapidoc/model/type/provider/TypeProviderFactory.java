@@ -11,9 +11,9 @@ public class TypeProviderFactory {
     public static TypeProvider createTypeProvider(String clazzToLoad) {
         try {
             if (StringUtils.isNotEmpty(clazzToLoad)) {
-                Logger.info("Trying to load class {0}", clazzToLoad);
+                Logger.info("Loading class {0}", clazzToLoad);
                 Class<?> providerImpl = Thread.currentThread().getContextClassLoader().loadClass(clazzToLoad);
-                Logger.debug("Trying to create new instance from class {0} as TypeProvider", clazzToLoad);
+                Logger.debug("Creating new instance from class {0} as TypeProvider", clazzToLoad);
                 return (TypeProvider)providerImpl.newInstance();
             }else{
                 Logger.info("Using default TypeProvider instance");

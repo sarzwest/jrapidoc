@@ -1,5 +1,6 @@
 package org.jrapidoc.introspector;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.resteasy.spi.metadata.ResourceBuilder;
 import org.jboss.resteasy.spi.metadata.ResourceClass;
 import org.jrapidoc.exception.JrapidocExecutionException;
@@ -8,7 +9,10 @@ import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.APIModel;
 import org.jrapidoc.model.ServiceGroup;
 import org.jrapidoc.model.handler.ModelHandler;
+import org.jrapidoc.model.type.provider.JacksonJaxbProvider;
+import org.jrapidoc.model.type.provider.JacksonJsonProvider;
 import org.jrapidoc.model.type.provider.TypeProvider;
+import org.jrapidoc.model.type.provider.TypeProviderFactory;
 import org.jrapidoc.plugin.ConfigGroup;
 
 import javax.ws.rs.Path;
@@ -27,14 +31,18 @@ public class RestIntrospector extends AbstractIntrospector {
 
     @Override
     public void run(URL[] urlsForClassloader, List<ConfigGroup> groups, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> customInfo) throws JrapidocExecutionException, JrapidocFailureException {
-        Logger.debug("Introspection started");
+        Logger.info("");
+        Logger.info("Introspection started");
+        Logger.info("");
         setUp(groups, output);
         List<ModelHandler> modelHandlers = getModelHandlers(modelHandlerClasses);
         URLClassLoader loader = getProjectUrlClassLoader(urlsForClassloader);
         APIModel apiModel = createModel(customInfo, groups, loader, typeProviderClass);
         processHandlers(modelHandlers, apiModel);
         writeModelToFile(apiModel, output);
-        Logger.debug("Introspection finished");
+        Logger.info("");
+        Logger.info("Introspection finished");
+        Logger.info("");
     }
 
     ServiceGroup createServiceGroup(String basePath, String description, Set<Class<?>> resourceClasses, ResourceClassProcessor resourceClassProcessor) {
@@ -60,11 +68,17 @@ public class RestIntrospector extends AbstractIntrospector {
         }
     }
 
+    TypeProvider getTypeProvider(String typeProviderClass) {
+        return TypeProviderFactory.createTypeProvider((StringUtils.isEmpty(typeProviderClass) ? JacksonJsonProvider.class.getCanonicalName() : typeProviderClass));
+    }
+
     void addServiceGroups(List<ConfigGroup> groups, ResourceClassProcessor resourceClassProcessor, ClassLoader loader, APIModel.APIModelBuilder APIModelBuilder) {
         for (ConfigGroup group:groups) {
+            Logger.info("Service group {0} processing started", group.getBaseUrl());
             Set<Class<?>> resourceClasses = getScannedClasses(group.getIncludes(), group.getExcludes(), loader, Path.class);
             ServiceGroup serviceGroup = createServiceGroup(group.getBaseUrl(), group.getDescription(), resourceClasses, resourceClassProcessor);
             APIModelBuilder.resourceGroup(serviceGroup);
+            Logger.info("Service group {0} processing finished", group.getBaseUrl());
         }
     }
 
@@ -76,10 +90,13 @@ public class RestIntrospector extends AbstractIntrospector {
         Set<ResourceClass> resourceClassesMeta = new HashSet<ResourceClass>();
         for (Class<?> rootResourceClass : resourceClasses) {
             try {
+                Logger.info("{0} preprocessing started", rootResourceClass.getCanonicalName());
                 ResourceClass resourceClass = ResourceBuilder.rootResourceFromAnnotations(rootResourceClass);
                 resourceClassesMeta.add(resourceClass);
             }catch (Exception e){
                 Logger.error(e, "Problem during preintrospection of class {0}, skipping this resource class", rootResourceClass.getCanonicalName());
+            }finally {
+                Logger.info("{0} preprocessing finished", rootResourceClass.getCanonicalName());
             }
         }
         return resourceClassesMeta;

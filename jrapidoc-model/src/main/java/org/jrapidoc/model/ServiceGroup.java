@@ -62,7 +62,12 @@ public class ServiceGroup {
 
         public ServiceGroupBuilder service(Service service) {
             String key = (StringUtils.isNotEmpty(service.getPath()))? service.getPath(): service.getName();
-            Logger.debug("Service identifier: {0}", key);
+            if(key == null){
+                Logger.warn("Putting null key into map!!!");
+            }
+            if(this.services.containsKey(key)){
+                Logger.warn("Service identifier must be unique, but service with identifier {0} already exists!!!", key);
+            }
             this.services.put(key, service);
             return this;
         }

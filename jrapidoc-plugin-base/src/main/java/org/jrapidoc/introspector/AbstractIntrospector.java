@@ -36,7 +36,9 @@ public abstract class AbstractIntrospector {
     public abstract void run(URL[] urlsForClassloader, List<ConfigGroup> groups, String typeProviderClass, File output, List<String> modelHandlerClasses, Map<String, String> custom) throws JrapidocFailureException, JrapidocExecutionException;
 
     void writeModelToFile(APIModel apiModel, File output) throws JrapidocExecutionException {
+        Logger.info("Writing model to file {0} started", output.getAbsolutePath());
         ModelGenerator.generateModel(apiModel, output);
+        Logger.info("Writing model to file {0} finished", output.getAbsolutePath());
     }
 
     void processHandlers(List<ModelHandler> modelHandlers, APIModel apiModel) throws JrapidocFailureException, JrapidocExecutionException {
@@ -46,6 +48,9 @@ public abstract class AbstractIntrospector {
         }
         for (ModelHandler modelHandler:modelHandlers){
             try {
+                Logger.info("");
+                Logger.info("{0} model handler instance started", modelHandler.getClass().getCanonicalName());
+                Logger.info("");
                 modelHandler.handleModel(apiModel);
             }catch (HandlerException e){
                 if(e.getBehaviour() == HandlerException.Action.STOP_HANDLER_CURRENT){
@@ -59,6 +64,10 @@ public abstract class AbstractIntrospector {
                     Logger.error(e, "Exception occurred in handler {0}, throwing {1}", modelHandler.getClass().getCanonicalName(), MojoExecutionException.class.getCanonicalName());
                     throw new JrapidocExecutionException(e.getMessage(), e);
                 }
+            }finally {
+                Logger.info("");
+                Logger.info("{0} model handler instance finished", modelHandler.getClass().getCanonicalName());
+                Logger.info("");
             }
         }
     }
@@ -84,14 +93,10 @@ public abstract class AbstractIntrospector {
         }
     }
 
-    TypeProvider getTypeProvider(String typeProviderClass) {
-        return TypeProviderFactory.createTypeProvider((StringUtils.isEmpty(typeProviderClass) ? JacksonJaxbProvider.class.getCanonicalName() : typeProviderClass));
-    }
-
     Set<Class<?>> getScannedClasses(List<String> include, List<String> exclude, ClassLoader loader, Class<? extends Annotation> annotatedWith) {
         Reflections ref = getUnionOfIncludedPaths(include, loader);
         Set<Class<?>> resourceClassesAll = ref.getTypesAnnotatedWith(annotatedWith);
-        Logger.debug("Root resource classes on path: {0}", resourceClassesAll.toString());
+        Logger.debug("Service classes on path: {0}", resourceClassesAll.toString());
         return removeExcludedResourceClasses(exclude, resourceClassesAll);
     }
 

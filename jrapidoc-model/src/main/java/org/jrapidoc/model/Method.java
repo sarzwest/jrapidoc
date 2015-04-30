@@ -5,13 +5,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.param.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
-@JsonPropertyOrder({"name", "soapBinding", "path", "httpMethodType", "pathExample", "headerParams",
-        "pathParams", "queryParams", "matrixParams", "cookieParams",
+@JsonPropertyOrder({"name", "soapBinding", "path", "httpMethodType", "pathExample", "description",
+        "headerParams", "pathParams", "queryParams", "matrixParams", "cookieParams",
         "formParams", "asynchronous", "parameters", "returnOptions"})
 public class Method {
 
@@ -297,33 +300,69 @@ public class Method {
                     return;
                 }
             }
-            Logger.debug(this.getClass().getSimpleName() + " " + headerParam.getName());
-            this.headerParams.put(headerParam.getName(), headerParam);
+            String key = headerParam.getName();
+            if(key == null){
+                Logger.warn("Putting null key into map!!!");
+            }
+            if(this.headerParams.containsKey(key)){
+                Logger.warn("Header param identifier must be unique, but header param with identifier {0} already exists!!!", key);
+            }
+            this.headerParams.put(key, headerParam);
         }
 
         protected void addCookieParam(CookieParam cookieParam) {
-            Logger.debug(this.getClass().getSimpleName() + " " + cookieParam.getName());
-            this.cookieParams.put(cookieParam.getName(), cookieParam);
+            String key = cookieParam.getName();
+            if(key == null){
+                Logger.warn("Putting null key into map!!!");
+            }
+            if(this.cookieParams.containsKey(key)){
+                Logger.warn("Cookie param identifier must be unique, but cookie param with identifier {0} already exists!!!", key);
+            }
+            this.cookieParams.put(key, cookieParam);
         }
 
         protected void addFormParam(FormParam formParam) {
-            Logger.debug(this.getClass().getSimpleName() + " " + formParam.getName());
-            this.formParams.put(formParam.getName(), formParam);
+            String key = formParam.getName();
+            if(key == null){
+                Logger.warn("Putting null key into map!!!");
+            }
+            if(this.formParams.containsKey(key)){
+                Logger.warn("Form param identifier must be unique, but form param with identifier {0} already exists!!!", key);
+            }
+            this.formParams.put(key, formParam);
         }
 
         protected void addMatrixParam(MatrixParam matrixParam) {
-            Logger.debug(this.getClass().getSimpleName() + " " + matrixParam.getName());
-            this.matrixParams.put(matrixParam.getName(), matrixParam);
+            String key = matrixParam.getName();
+            if(key == null){
+                Logger.warn("Putting null key into map!!!");
+            }
+            if(this.matrixParams.containsKey(key)){
+                Logger.warn("Matrix param identifier must be unique, but matrix param with identifier {0} already exists!!!", key);
+            }
+            this.matrixParams.put(key, matrixParam);
         }
 
         protected void addPathParam(PathParam pathParam) {
-            Logger.debug(this.getClass().getSimpleName() + " " + pathParam.getName());
-            this.pathParams.put(pathParam.getName(), pathParam);
+            String key = pathParam.getName();
+            if(key == null){
+                Logger.warn("Putting null key into map!!!");
+            }
+            if(this.pathParams.containsKey(key)){
+                Logger.warn("Path param identifier must be unique, but path param with identifier {0} already exists!!!", key);
+            }
+            this.pathParams.put(key, pathParam);
         }
 
         protected void addQueryParam(QueryParam queryParam) {
-            Logger.debug(this.getClass().getSimpleName() + " " + queryParam.getName());
-            this.queryParams.put(queryParam.getName(), queryParam);
+            String key = queryParam.getName();
+            if(key == null){
+                Logger.warn("Putting null key into map!!!");
+            }
+            if(this.queryParams.containsKey(key)){
+                Logger.warn("Query param identifier must be unique, but query param with identifier {0} already exists!!!", key);
+            }
+            this.queryParams.put(key, queryParam);
         }
 
         public void soapInputHeader(TransportType soapHeader) {

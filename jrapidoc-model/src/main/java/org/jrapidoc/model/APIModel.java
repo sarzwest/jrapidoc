@@ -60,10 +60,10 @@ public class APIModel {
             String key = serviceGroup.getBaseUrl();
             Logger.debug("Service group identifier: {0}", key);
             if(key == null){
-                Logger.warn("Putting null key into map");
+                Logger.warn("Putting null key into map!!!");
             }
             if(resourceGroups.containsKey(key)){
-                Logger.warn("Overwriting resource group object, because resource group with such key {0} is already present in model", key);
+                Logger.warn("Resource group identifier must be unique, but resource group with identifier {0} already exists!!!", key);
             }
             this.resourceGroups.put(serviceGroup.getBaseUrl(), serviceGroup);
             return this;

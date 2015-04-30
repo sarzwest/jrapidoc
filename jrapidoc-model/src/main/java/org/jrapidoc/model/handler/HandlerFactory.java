@@ -15,18 +15,18 @@ public class HandlerFactory {
         try {
             List<ModelHandler> handlers = new ArrayList<ModelHandler>();
             if (handlerClassesToLoad == null || handlerClassesToLoad.isEmpty()) {
-                Logger.debug("No model handlers found");
+                Logger.debug("No model handler classes found");
                 return handlers;
             }
             for (String clazzToLoad : handlerClassesToLoad) {
-                Logger.info("Trying to load class {0}", clazzToLoad);
+                Logger.info("Loading class {0}", clazzToLoad);
                 Class<?> handler = Thread.currentThread().getContextClassLoader().loadClass(clazzToLoad);
-                Logger.debug("Trying to create new instance from class {0} as ModelHandler", clazzToLoad);
+                Logger.debug("Creating new instance from class {0} as ModelHandler", clazzToLoad);
                 handlers.add((ModelHandler) handler.newInstance());
             }
             return handlers;
         }catch (ClassNotFoundException e){
-            Logger.error(e, "Class wat not found");
+            Logger.error(e, "Class was not found");
             throw new JrapidocExecutionException(e.getMessage(), e);
         } catch (InstantiationException e) {
             Logger.error(e.getMessage());

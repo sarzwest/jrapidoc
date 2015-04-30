@@ -168,7 +168,9 @@ public class Service {
         public ResourceBuilder method(Method method) {
             String key = (StringUtils.isNotEmpty(method.getName()))?method.getName():method.getPath();
             key += " - " + method.getHttpMethodType();
-            Logger.debug("Method identifier: {0}", key);
+            if(key == null){
+                Logger.warn("Putting null key into map!!!");
+            }
             if(this.methods.containsKey(key)){
                 Logger.warn("Method identifier must be unique, but method with identifier {0} already exists!!!", key);
             }

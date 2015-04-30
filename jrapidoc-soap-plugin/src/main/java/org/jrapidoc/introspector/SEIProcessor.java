@@ -38,10 +38,11 @@ public class SEIProcessor {
 
     public ServiceGroup createServiceGroup(Set<Class<?>> seiClasses, ServiceGroup.ServiceGroupBuilder serviceGroupBuilder) throws JrapidocExecutionException {
         for (Class<?> seiClass : seiClasses) {
-            Logger.debug("Introspecting SEI class {0}", seiClass.getCanonicalName());
+            Logger.info("{0} processing started", seiClass.getCanonicalName());
             seiClass = getSEI(seiClass);
             Service service = createEndpoint(seiClass);
             serviceGroupBuilder.service(service);
+            Logger.info("{0} processing finished", seiClass.getCanonicalName());
         }
         return serviceGroupBuilder.build();
     }
@@ -91,16 +92,17 @@ public class SEIProcessor {
     }
 
     org.jrapidoc.model.Method createMethod(Method method, Class<?> seiClass) {
-        Logger.debug("Introspecting method {0}", method.toString());
+        Logger.debug("{0} method processing started", method.toString());
         org.jrapidoc.model.Method.MethodBuilder methodBuilder = new org.jrapidoc.model.Method.MethodBuilder();
         methodBuilder.description(getDescription(method.getDeclaredAnnotations())).isAsynchronous(true);
         addOperationName(method, methodBuilder);
-//        addMethodName(method, methodBuilder);
         addInputHeaders(method, methodBuilder);
         addInputParams(method, methodBuilder);
         addReturn(method, methodBuilder);
         addSoapBinding(method, seiClass, methodBuilder);
-        return methodBuilder.build();
+        org.jrapidoc.model.Method jrdMethod = methodBuilder.build();
+        Logger.debug("{0} method processing finished", method.toString());
+        return jrdMethod;
     }
 
     void addServiceName(Class<?> seiClass, Service.ResourceBuilder resourceBuilder){
