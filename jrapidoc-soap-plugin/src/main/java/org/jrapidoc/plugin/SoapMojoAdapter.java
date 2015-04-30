@@ -37,6 +37,8 @@ import java.util.Map;
 @Component(role = SoapMojoAdapter.class)
 public class SoapMojoAdapter extends AbstractMojo {
 
+    public static final String MODEL_FILE_OUTPUT_PATH = "generated-sources/jrapidoc/jrapidoc.soap.model.json";
+
     @Parameter(defaultValue = "${session}", readonly = true)
     MavenSession session;
 
@@ -101,7 +103,7 @@ public class SoapMojoAdapter extends AbstractMojo {
             }
             URL[] urls = projectClasspathList.toArray(new URL[projectClasspathList.size()]);
             SoapIntrospector soapIntrospector = new SoapIntrospector();
-            soapIntrospector.run(urls, groups, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.soap.model.json"), modelHandlers, custom);
+            soapIntrospector.run(urls, groups, typeProviderClass, new File(target, MODEL_FILE_OUTPUT_PATH), modelHandlers, custom);
         } catch (JrapidocFailureException e) {
             throw new MojoFailureException(e.getMessage(), e);
         } catch (JrapidocExecutionException e) {

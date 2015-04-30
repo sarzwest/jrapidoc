@@ -37,6 +37,8 @@ import java.util.Map;
 @Component(role = RestMojoAdapter.class)
 public class RestMojoAdapter extends AbstractMojo {
 
+    public static final String MODEL_FILE_OUTPUT_PATH = "generated-sources/jrapidoc/jrapidoc.rest.model.json";
+
     @Parameter(defaultValue = "${session}", readonly = true)
     MavenSession session;
 
@@ -101,7 +103,7 @@ public class RestMojoAdapter extends AbstractMojo {
             }
             URL[] urls = projectClasspathList.toArray(new URL[projectClasspathList.size()]);
             RestIntrospector restIntrospector = new RestIntrospector();
-            restIntrospector.run(urls, groups, typeProviderClass, new File(target, "generated-resources/jrapidoc/jrapidoc.rest.model.json"), modelHandlers, custom);
+            restIntrospector.run(urls, groups, typeProviderClass, new File(target, MODEL_FILE_OUTPUT_PATH), modelHandlers, custom);
         } catch (JrapidocFailureException e) {
             throw new MojoFailureException(e.getMessage(), e);
         } catch (JrapidocExecutionException e) {
