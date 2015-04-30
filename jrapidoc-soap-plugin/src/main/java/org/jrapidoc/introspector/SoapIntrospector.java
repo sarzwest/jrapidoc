@@ -43,7 +43,7 @@ public class SoapIntrospector extends AbstractIntrospector {
     APIModel createModel(Map<String, String> customInfo, List<ConfigGroup> groups, URLClassLoader loader, String typeProviderClass) throws JrapidocExecutionException, JrapidocFailureException {
         try {
             TypeProvider typeProvider = getTypeProvider(typeProviderClass);
-            SEIProcessor seiProcessor = getSeiClassProcessor(typeProviderClass, loader);
+            SEIProcessor seiProcessor = getSeiClassProcessor(typeProvider, loader);
             APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
             addCustomInfo(customInfo, APIModelBuilder);
             addServiceGroups(groups, seiProcessor, loader, APIModelBuilder);
@@ -71,8 +71,7 @@ public class SoapIntrospector extends AbstractIntrospector {
         }
     }
 
-    SEIProcessor getSeiClassProcessor(String typeProviderClass, URLClassLoader loader) {
-        TypeProvider typeProvider = getTypeProvider((StringUtils.isEmpty(typeProviderClass) ? JacksonJaxbJsonProvider.class.getCanonicalName() : typeProviderClass));
+    SEIProcessor getSeiClassProcessor(TypeProvider typeProvider, URLClassLoader loader) {
         return new SEIProcessor(typeProvider, loader);
     }
 

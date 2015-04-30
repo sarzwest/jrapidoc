@@ -11,6 +11,8 @@ import org.jrapidoc.model.generator.ModelGenerator;
 import org.jrapidoc.model.handler.HandlerException;
 import org.jrapidoc.model.handler.HandlerFactory;
 import org.jrapidoc.model.handler.ModelHandler;
+import org.jrapidoc.model.type.provider.JacksonJaxbJsonProvider;
+import org.jrapidoc.model.type.provider.JacksonJaxbProvider;
 import org.jrapidoc.model.type.provider.TypeProvider;
 import org.jrapidoc.model.type.provider.TypeProviderFactory;
 import org.jrapidoc.plugin.ConfigGroup;
@@ -83,7 +85,7 @@ public abstract class AbstractIntrospector {
     }
 
     TypeProvider getTypeProvider(String typeProviderClass) {
-        return TypeProviderFactory.createTypeProvider(typeProviderClass);
+        return TypeProviderFactory.createTypeProvider((StringUtils.isEmpty(typeProviderClass) ? JacksonJaxbProvider.class.getCanonicalName() : typeProviderClass));
     }
 
     Set<Class<?>> getScannedClasses(List<String> include, List<String> exclude, ClassLoader loader, Class<? extends Annotation> annotatedWith) {
