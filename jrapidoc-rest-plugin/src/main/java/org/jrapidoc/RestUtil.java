@@ -28,6 +28,14 @@ public class RestUtil {
         return urlPath;
     }
 
+    public static String getPathInModelFormat(String path){
+        path = trimSlash(path);
+        if(path.equals("")){
+            path = "/";
+        }
+        return path;
+    }
+
     public static boolean isHttpParam(Parameter parameter){
         try{
             Param.Type.valueOf(parameter.getParamType().name());

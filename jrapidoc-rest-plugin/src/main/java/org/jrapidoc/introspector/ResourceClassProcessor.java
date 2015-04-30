@@ -1,5 +1,6 @@
 package org.jrapidoc.introspector;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.resteasy.spi.metadata.*;
 import org.jrapidoc.RestUtil;
 import org.jrapidoc.logger.Logger;
@@ -67,18 +68,25 @@ public class ResourceClassProcessor {
     Service createResource(ResourceClass resourceClass) {
         Service.ResourceBuilder resourceBuilder = new Service.ResourceBuilder();
         addPath(resourceClass, resourceBuilder);
-        resourceBuilder.pathExample(resourceClass.getPathExample());
+        addPathExample(resourceClass, resourceBuilder);
         resourceBuilder.description(resourceClass.getDescription());
         addMethods(resourceClass, resourceBuilder);
         addLocatorMethods(resourceClass, resourceBuilder);
         return resourceBuilder.build();
     }
 
-    void addPath(ResourceClass resourceClass, Service.ResourceBuilder resourceBuilder) {
-        String path = RestUtil.trimSlash(resourceClass.getPath());
-        if(path.equals("")){
-            path = "/";
+    void addPathExample(ResourceClass resourceClass, Service.ResourceBuilder resourceBuilder) {
+        if (StringUtils.isEmpty(resourceClass.getPathExample())) {
+            resourceBuilder.pathExample(null);
+        } else {
+            String pathExample = RestUtil.getPathInModelFormat(resourceClass.getPathExample());
+            resourceBuilder.pathExample(pathExample);
         }
+
+    }
+
+    void addPath(ResourceClass resourceClass, Service.ResourceBuilder resourceBuilder) {
+        String path = RestUtil.getPathInModelFormat(resourceClass.getPath());
         resourceBuilder.path(path);
     }
 
@@ -174,8 +182,26 @@ public class ResourceClassProcessor {
     }
 
     void addPaths(Method.MethodBuilder methodBuilder, ResourceClass resourceClass, ResourceMethod resourceMethod) {
-        methodBuilder.path(RestUtil.trimSlash(RestUtil.trimSlash(resourceClass.getPath()) + "/" + RestUtil.trimSlash(resourceMethod.getPath())));
-        methodBuilder.pathExample(resourceMethod.getPathExample());
+        String methodPath = RestUtil.getPathInModelFormat(RestUtil.trimSlash(resourceClass.getPath()) + "/" + RestUtil.trimSlash(resourceMethod.getPath()));
+        methodBuilder.path(methodPath);
+        String methodPathExample;
+        if(StringUtils.isEmpty(resourceClass.getPathExample())){
+            methodPathExample = RestUtil.trimSlash(resourceClass.getPath());
+        }else{
+            methodPathExample = RestUtil.trimSlash(resourceClass.getPathExample());
+        }
+        methodPathExample += "/";
+        if(StringUtils.isEmpty(resourceMethod.getPathExample())){
+            methodPathExample += RestUtil.trimSlash(resourceMethod.getPath());
+        }else{
+            methodPathExample += RestUtil.trimSlash(resourceMethod.getPathExample());
+        }
+        methodPathExample = RestUtil.getPathInModelFormat(methodPathExample);
+        if(methodPathExample.equals(methodPath)){
+            methodBuilder.pathExample(null);
+        }else{
+            methodBuilder.pathExample(methodPathExample);
+        }
     }
 
     void addMethodParams(Method.MethodBuilder methodBuilder, ResourceMethod resourceMethod) {

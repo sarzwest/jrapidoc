@@ -10,6 +10,7 @@ import airservice.entity.destination.*;
 import airservice.exception.MyException;
 import org.jrapidoc.annotation.DocDescription;
 import org.jrapidoc.annotation.rest.DocIsRequired;
+import org.jrapidoc.annotation.rest.DocPathExample;
 import org.jrapidoc.annotation.rest.DocReturn;
 import org.jrapidoc.annotation.rest.DocReturns;
 
@@ -30,9 +31,10 @@ import java.util.logging.Logger;
  *
  * @author Tomas "sarzwest" Jiricek
  */
-@Path("/rest/test/{pathparam}/")
+@Path("/test/{pathparam}/")
 @Produces("text/plain")
 @DocDescription("Description of resource")
+@DocPathExample("/test/5")
 public class TestResource extends Class1 implements IFace2, ParentInterface,
         Parent2Interface {
 
@@ -103,6 +105,13 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
 //            System.out.println(fsb.toString());
 //        }
         return Response.status(Response.Status.OK).entity("je to ok").build();
+    }
+
+    @GET
+    @Path("pathExample/[a-z]{3}")
+    @DocPathExample("/pathExample/aaa")
+    public void pathExample(){
+
     }
 
     /**
