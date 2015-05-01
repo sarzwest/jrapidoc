@@ -94,7 +94,7 @@ public class ResourceClassProcessor {
     void addLocatorMethods(ResourceClass resourceClass, Service.ResourceBuilder resourceBuilder) {
         for (ResourceLocator resourceLocator : resourceClass.getResourceLocators()) {
             try {
-                Logger.info("{0} subresource locator processing started");
+                Logger.info("{0} subresource locator processing started", resourceLocator.getReturnType().getCanonicalName());
                 ResourceClass newResourceClass = ResourceBuilder.locatorFromAnnotations(resourceLocator.getReturnType());
                 newResourceClass.setPath(resourceLocator.getFullpath());
                 newResourceClass.setConstructor(resourceClass.getConstructor());
@@ -108,7 +108,7 @@ public class ResourceClassProcessor {
             } catch (Exception e) {
                 Logger.error(e, "Problem during preintrospection of locator class {0}, skipping this class", resourceLocator.getReturnType().getCanonicalName());
             } finally {
-                Logger.info("{0} subresource locator processing finished");
+                Logger.info("{0} subresource locator processing finished", resourceLocator.getReturnType().getCanonicalName());
             }
         }
     }
@@ -134,7 +134,6 @@ public class ResourceClassProcessor {
         addConsumesParam(methodBuilder, resourceClass, resourceMethod);
         addProducesParam(methodBuilder, resourceClass, resourceMethod);
         addMethodParams(methodBuilder, resourceMethod);
-        addConstructorParams(methodBuilder, resourceClass);
         addPaths(methodBuilder, resourceClass, resourceMethod);
         methodBuilder.parameter(createParameterType(resourceMethod.getParams()));
         removeThisMethodFromResource(resourceMethod, methodBuilder);
@@ -220,18 +219,13 @@ public class ResourceClassProcessor {
     }
 
     void addClassParams(Method.MethodBuilder methodBuilder, ResourceClass resourceClass) {
-        for (FieldParameter fieldParameter : resourceClass.getFields()) {
-            if (RestUtil.isHttpParam(fieldParameter)) {
-                Param param = createParam(fieldParameter);
-                methodBuilder.param(param.getType(), param);
-            }
-        }
-    }
-
-    void addConstructorParams(Method.MethodBuilder methodBuilder, ResourceClass resourceClass) {
-        for (ConstructorParameter constructorParameter : resourceClass.getConstructor().getParams()) {
-            if (RestUtil.isHttpParam(constructorParameter)) {
-                Param param = createParam(constructorParameter);
+        List<Parameter> classParams = new ArrayList<Parameter>();
+        Collections.addAll(classParams, resourceClass.getFields());
+        Collections.addAll(classParams, resourceClass.getConstructor().getParams());
+        Collections.addAll(classParams, resourceClass.getSetters());
+        for (Parameter parameter : classParams) {
+            if (RestUtil.isHttpParam(parameter)) {
+                Param param = createParam(parameter);
                 methodBuilder.param(param.getType(), param);
             }
         }

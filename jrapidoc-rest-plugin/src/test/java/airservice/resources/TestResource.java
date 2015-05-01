@@ -19,6 +19,7 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.container.TimeoutHandler;
 import javax.ws.rs.core.*;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,18 +41,26 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
 
     @DefaultValue("defvaluematrix")
     @DocIsRequired
+    @DocDescription("qwerty")
     @MatrixParam("matrixparam")
     String matrix;
     @DocIsRequired(false)
     @QueryParam("queryparam")
+    @DocDescription("qqq")
     int query;
     @PathParam("pathparam")
-    //zakomentovano jinak to nefunguje, aby fungovalo musim nastavit treba takto: @Path("/rest/test/{pathparam}")
-            int path;
+    @DocDescription("www")
+    @DocIsRequired(true)
+    int path;
     @CookieParam("cookieparam")
+    @DocDescription("eee")
+    @DocIsRequired(true)
     String cookie;
+    @DocDescription("rrr")
+    @DocIsRequired(true)
     @HeaderParam("headerparam")
     String header;
+    @DocDescription("ttt")
     @FormParam("formparam")
     String form;
 
@@ -65,14 +74,21 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
     @QueryParam("fromstringbean")
     FromStringBean fromStringBean;
 
-    /**listbean=a&listbean=okoni*/
+    /**
+     * listbean=a&listbean=okoni
+     */
     @DefaultValue("string list def value")
+    @DocDescription("asd")
     @QueryParam("listbean")
     List<FromStringBean> listbean;
-    /**setbean=a&setbean=okoni*/
+    /**
+     * setbean=a&setbean=okoni
+     */
     @QueryParam("setbean")
     Set<FromStringBean> setbean;
-    /**sortedsetbean=a&sortedsetbean=okoni*/
+    /**
+     * sortedsetbean=a&sortedsetbean=okoni
+     */
     @QueryParam("sortedsetbean")
     SortedSet<FromStringBean> sortedsetbean;
 
@@ -83,10 +99,18 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
     @Context
     private UriInfo context;
 
+    @DocDescription("hdsa")
+    @HeaderParam("headerFromSetter")
+    public void setHeaderFromSetter(BigDecimal headerFromSetter) {
+        this.headerFromSetter = headerFromSetter;
+    }
+
+    private BigDecimal headerFromSetter;
+
     /**
      * Creates a new instance of TestResource
      */
-    public TestResource(@DocIsRequired @QueryParam("queryconst")String query) {
+    public TestResource(@DocDescription("aaa")@DocIsRequired @QueryParam("queryconst") String query) {
         System.out.println(query);
     }
 
@@ -98,8 +122,9 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
     @GET
     @POST
     @Path(value = "/encoded")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response encoded(@QueryParam("text") @Encoded String text, @QueryParam("fromstringbeanparam")FromStringBean f) {
+    public Response encoded(@QueryParam("text") @Encoded String text, @QueryParam("fromstringbeanparam") FromStringBean f) {
 //        System.out.println(text);
 //        for(FromStringBean fsb: listbean){
 //            System.out.println(fsb.toString());
@@ -110,7 +135,7 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
     @GET
     @Path("pathExample/[a-z]{3}")
     @DocPathExample("/pathExample/aaa")
-    public void pathExample(){
+    public void pathExample() {
 
     }
 
@@ -515,17 +540,18 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
 
     /**
      * Pole, kolekce a set jsou to stejne
+     *
      * @param b
      * @return
      */
     @GET
     @Path("asdfg")
     @Produces("application/json")
-    public Response getCollection(@QueryParam("what")boolean b){
-        if(b){
+    public Response getCollection(@QueryParam("what") boolean b) {
+        if (b) {
             System.out.println("array");
             return Response.ok().entity(new DestinationOutput[]{new DestinationOutput().setId(45), new DestinationOutput().setId(78)}).build();
-        }else{
+        } else {
             System.out.println("collection");
             return Response.ok().entity(new ArrayList<DestinationOutput>(Arrays.asList(new DestinationOutput[]{new DestinationOutput().setId(45), new DestinationOutput().setId(78)}))).build();
         }
@@ -534,7 +560,7 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
     @GET
     @Path("serializer")
     @Produces({"application/json", "application/xml", "application/destination+xml"})
-    public Response serializerTest(){
+    public Response serializerTest() {
         DestinationOutput out = new DestinationOutput();
         out.setId(789);
         out.setUri("qwert");
@@ -545,37 +571,39 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
     @POST
     @Path("foo")
     @Consumes("application/json")
-    public void fooo(Destination d){
+    public void fooo(Destination d) {
         return;
     }
 
     @POST
     @DocReturn(http = 200, type = Object.class, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"})
-    public void foo9(){}
+    public void foo9() {
+    }
 
     @POST
     @DocReturns({
             @DocReturn(http = 200, type = Object.class, structure = DocReturn.Structure.ARRAY, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"}),
             @DocReturn(http = 200, type = Object.class, structure = DocReturn.Structure.MAP, headers = {"X-Header", "X-Option"}, cookies = {"sessionid"})
     })
-    public void foo2(){}
-
-    @POST
-    public void foo4(){
+    public void foo2() {
     }
 
     @POST
-    public Response foo3(){
+    public void foo4() {
+    }
+
+    @POST
+    public Response foo3() {
         return null;
     }
 
     @POST
-    public GenericEntity foo5(){
+    public GenericEntity foo5() {
         return null;
     }
 
     @POST
-    public GenericEntity<List<String>> foo6(){
+    public GenericEntity<List<String>> foo6() {
         return null;
     }
 
@@ -598,38 +626,38 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
     @Path("decription")
     @DocDescription("Description of method")
     @DocReturn(http = 200, description = "Description of return option")
-    public void description(@DocDescription("Description of query param")@QueryParam("qp")String s){
+    public void description(@DocDescription("Description of query param") @QueryParam("qp") String s) {
 
     }
 
     @GET
     @Path("aa")
-    public void foo(DestinationEntity d){
+    public void foo(DestinationEntity d) {
 
     }
 
     @GET
     @Path("map")
-    public Map<String, DestinationEntity> map(Map<String, Destination> mde){
+    public Map<String, DestinationEntity> map(Map<String, Destination> mde) {
         return null;
     }
 
     @GET
     @Path("emptyentitybody")
-    public void foo11(){
+    public void foo11() {
 
     }
 
     @POST
     @Path("emptyentitybody")
-    public void foo12(){
+    public void foo12() {
 
     }
 
     @GET
     @Path("getdestination")
     @Produces({"application/json", "application/xml"})
-    public DestinationExample getDestination(){
+    public DestinationExample getDestination() {
         DestinationExample d = new DestinationExample();
         d.setId(54);
         d.setName("Prague");

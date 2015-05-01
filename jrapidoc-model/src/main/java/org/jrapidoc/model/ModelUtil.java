@@ -12,8 +12,6 @@ public class ModelUtil {
 
     static Set<String> numberPrimitiveTypes = new HashSet<String>(Arrays.asList(new String[]{"byte", "short",
             "int", "long", "float", "double"}));
-    static Set<Class<?>> numberTypes = new HashSet<Class<?>>(Arrays.asList(new Class<?>[]{Byte.class,
-            Short.class, Integer.class, Long.class, Float.class, Double.class}));
     static Set<String> booleanPrimitiveTypes = new HashSet<String>(Arrays.asList(new String[]{"boolean"}));
     static Set<Class<?>> booleanTypes = new HashSet<Class<?>>(Arrays.asList(new Class<?>[]{Boolean.class}));
     static Set<String> stringPrimitiveTypes = new HashSet<String>(Arrays.asList(new String[]{"char"}));
@@ -50,6 +48,6 @@ public class ModelUtil {
     }
 
     public static boolean isNumericType(Class<?> clazz) {
-        return numberPrimitiveTypes.contains(clazz.getName()) || numberTypes.contains(clazz);
+        return numberPrimitiveTypes.contains(clazz.getName()) || Number.class.isAssignableFrom(clazz);
     }
 }
