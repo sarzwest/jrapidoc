@@ -26,13 +26,13 @@ public class CookieParam extends Param {
         }
 
         @Override
-        public CookieParamBuilder setTyperef(String typeref) {
-            return(CookieParamBuilder) super.setTyperef(typeref);
+        public CookieParamBuilder setTypeRef(String typeref) {
+            return(CookieParamBuilder) super.setTypeRef(typeref);
         }
 
         @Override
         public CookieParam build() {
-            return new CookieParam(name, isRequired, typeref, Type.COOKIE_PARAM, description);
+            return new CookieParam(name, isRequired, typeRef, Type.COOKIE_PARAM, description);
         }
     }
 }

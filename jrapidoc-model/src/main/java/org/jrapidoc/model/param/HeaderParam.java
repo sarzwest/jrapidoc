@@ -47,13 +47,13 @@ public class HeaderParam extends Param  {
         }
 
         @Override
-        public HeaderParamBuilder setTyperef(String typeref) {
-            return(HeaderParamBuilder) super.setTyperef(typeref);
+        public HeaderParamBuilder setTypeRef(String typeref) {
+            return(HeaderParamBuilder) super.setTypeRef(typeref);
         }
 
         @Override
         public HeaderParam build() {
-            return new HeaderParam(name, isRequired, typeref, options, Type.HEADER_PARAM, description);
+            return new HeaderParam(name, isRequired, typeRef, options, Type.HEADER_PARAM, description);
         }
     }
 }

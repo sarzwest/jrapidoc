@@ -7,14 +7,11 @@ import org.jrapidoc.model.*;
 import org.jrapidoc.model.param.*;
 import org.jrapidoc.plugin.ConfigGroup;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.reflections.Reflections;
 
 import javax.ws.rs.Path;
-import javax.ws.rs.core.MultivaluedHashMap;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -123,7 +120,7 @@ public class TestRestIntrospector {
         Assert.assertEquals("matrixparam", matrixparam.getName());
         Assert.assertEquals("qwerty", matrixparam.getDescription());
         Assert.assertEquals(true, matrixparam.isRequired());
-        Assert.assertEquals("string", matrixparam.getTyperef());
+        Assert.assertEquals("string", matrixparam.getTypeRef());
     }
 
     @Test
@@ -134,7 +131,7 @@ public class TestRestIntrospector {
         Assert.assertEquals("queryparam", queryparam.getName());
         Assert.assertEquals("qqq", queryparam.getDescription());
         Assert.assertEquals(false, queryparam.isRequired());
-        Assert.assertEquals("number", queryparam.getTyperef());
+        Assert.assertEquals("number", queryparam.getTypeRef());
     }
 
     @Test
@@ -145,7 +142,7 @@ public class TestRestIntrospector {
         Assert.assertEquals("pathparam", pathparam.getName());
         Assert.assertEquals("www", pathparam.getDescription());
         Assert.assertEquals(true, pathparam.isRequired());
-        Assert.assertEquals("number", pathparam.getTyperef());
+        Assert.assertEquals("number", pathparam.getTypeRef());
     }
 
     @Test
@@ -156,7 +153,7 @@ public class TestRestIntrospector {
         Assert.assertEquals("cookieparam", cookieparam.getName());
         Assert.assertEquals("eee", cookieparam.getDescription());
         Assert.assertEquals(true, cookieparam.isRequired());
-        Assert.assertEquals("string", cookieparam.getTyperef());
+        Assert.assertEquals("string", cookieparam.getTypeRef());
     }
 
     @Test
@@ -167,7 +164,7 @@ public class TestRestIntrospector {
         Assert.assertEquals("headerparam", headerparam.getName());
         Assert.assertEquals("rrr", headerparam.getDescription());
         Assert.assertEquals(true, headerparam.isRequired());
-        Assert.assertEquals("string", headerparam.getTyperef());
+        Assert.assertEquals("string", headerparam.getTypeRef());
     }
 
     @Test
@@ -178,7 +175,7 @@ public class TestRestIntrospector {
         Assert.assertEquals("formparam", formparam.getName());
         Assert.assertEquals("ttt", formparam.getDescription());
         Assert.assertEquals(null, formparam.isRequired());
-        Assert.assertEquals("string", formparam.getTyperef());
+        Assert.assertEquals("string", formparam.getTypeRef());
     }
 
     @Test
@@ -189,7 +186,7 @@ public class TestRestIntrospector {
         Assert.assertEquals("listbean", listbean.getName());
         Assert.assertEquals("asd", listbean.getDescription());
         Assert.assertEquals(null, listbean.isRequired());
-        Assert.assertEquals("string", listbean.getTyperef());
+        Assert.assertEquals("string", listbean.getTypeRef());
     }
 
     @Test
@@ -200,7 +197,7 @@ public class TestRestIntrospector {
         Assert.assertEquals("queryconst", queryparam.getName());
         Assert.assertEquals("aaa", queryparam.getDescription());
         Assert.assertEquals(true, queryparam.isRequired());
-        Assert.assertEquals("string", queryparam.getTyperef());
+        Assert.assertEquals("string", queryparam.getTypeRef());
     }
 
     @Test
@@ -211,7 +208,7 @@ public class TestRestIntrospector {
         Assert.assertEquals("headerFromSetter", headerparam.getName());
         Assert.assertEquals("hdsa", headerparam.getDescription());
         Assert.assertEquals(null, headerparam.isRequired());
-        Assert.assertEquals("number", headerparam.getTyperef());
+        Assert.assertEquals("number", headerparam.getTypeRef());
     }
 
     @Test

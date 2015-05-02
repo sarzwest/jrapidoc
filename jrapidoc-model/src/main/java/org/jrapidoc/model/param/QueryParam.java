@@ -25,13 +25,13 @@ public class QueryParam extends Param  {
         }
 
         @Override
-        public QueryParamBuilder setTyperef(String typeref) {
-            return(QueryParamBuilder) super.setTyperef(typeref);
+        public QueryParamBuilder setTypeRef(String typeref) {
+            return(QueryParamBuilder) super.setTypeRef(typeref);
         }
 
         @Override
         public Param build() {
-            return new QueryParam(name, isRequired, typeref, Type.QUERY_PARAM, description);
+            return new QueryParam(name, isRequired, typeRef, Type.QUERY_PARAM, description);
         }
     }
 }

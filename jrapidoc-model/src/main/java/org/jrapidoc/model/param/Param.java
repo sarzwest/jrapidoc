@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
-@JsonPropertyOrder({"name", "description", "required", "type", "typeref"})
+@JsonPropertyOrder({"name", "description", "required", "type", "typeRef"})
 public abstract class Param {
 
     public static enum Type {
@@ -25,12 +25,12 @@ public abstract class Param {
     @JsonIgnore
     private Type type;
     private String description;
-    private String typeref;
+    private String typeRef;
 
-    protected Param(String name, Boolean isRequired, String typeref, Type type, String description) {
+    protected Param(String name, Boolean isRequired, String typeRef, Type type, String description) {
         this.name = name;
         this.isRequired = isRequired;
-        this.typeref = typeref;
+        this.typeRef = typeRef;
         this.type = type;
         this.description = description;
     }
@@ -39,8 +39,8 @@ public abstract class Param {
         return isRequired;
     }
 
-    public String getTyperef() {
-        return typeref;
+    public String getTypeRef() {
+        return typeRef;
     }
 
     public String getDescription() {
@@ -71,8 +71,8 @@ public abstract class Param {
         this.description = description;
     }
 
-    public void setTyperef(String typeref) {
-        this.typeref = typeref;
+    public void setTypeRef(String typeRef) {
+        this.typeRef = typeRef;
     }
 
     public static abstract class ParamBuilder{
@@ -80,7 +80,7 @@ public abstract class Param {
         String name;
         Boolean isRequired;
         String description;
-        String typeref;
+        String typeRef;
 
         public ParamBuilder setName(String name) {
             this.name = name;
@@ -97,8 +97,8 @@ public abstract class Param {
             return this;
         }
 
-        public ParamBuilder setTyperef(String typeref) {
-            this.typeref = typeref;
+        public ParamBuilder setTypeRef(String typeRef) {
+            this.typeRef = typeRef;
             return this;
         }
 

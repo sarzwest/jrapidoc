@@ -36,7 +36,7 @@ ApiModel.prototype.loadModel = function (modelUrl) {
         throw new CaughtException(e + "\nwith model URI " + modelUrl);
     }
     if (xmlhttp.status != 200) {
-        throw new CaughtException("Retrieving model finished with http status: " + xmlhttp.status+ "\nwith model URI " + modelUrl);
+        throw new CaughtException("Retrieving model finished with http status: " + xmlhttp.status + "\nwith model URI " + modelUrl);
     }
 };
 
@@ -49,10 +49,28 @@ ApiModel.prototype.checkAndGetModel = function (givenModel) {
     try {
         givenModel = givenModel.replace(/[<]/g, "&lt;").replace(/[>]/g, "&gt;");
         var modelJSON = JSON.parse(givenModel);
+        this.replacePropertyNames(modelJSON);
         return modelJSON;
     } catch (e) {
         Logger.error("Given model could not be parsed as JSON");
         throw new CaughtException("Given model could not be parsed as JSON");
+    }
+};
+
+ApiModel.prototype.replacePropertyNames = function (modelJSON) {
+    for (var key in modelJSON) {
+        var k = key;
+        var value = modelJSON[key];
+        if (typeof value !== "string") {
+            this.replacePropertyNames(modelJSON[key]);
+        }
+        var newKey = Properties.keys[key];
+        delete modelJSON[key];
+        if (newKey != null) {
+            modelJSON[newKey] = value;
+        }else{
+            modelJSON[key] = value;
+        }
     }
 };
 

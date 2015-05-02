@@ -26,13 +26,13 @@ public class FormParam extends Param {
         }
 
         @Override
-        public FormParamBuilder setTyperef(String typeref) {
-            return(FormParamBuilder) super.setTyperef(typeref);
+        public FormParamBuilder setTypeRef(String typeref) {
+            return(FormParamBuilder) super.setTypeRef(typeref);
         }
 
         @Override
         public FormParam build() {
-            return new FormParam(name, isRequired, typeref, Type.FORM_PARAM, description);
+            return new FormParam(name, isRequired, typeRef, Type.FORM_PARAM, description);
         }
     }
 }

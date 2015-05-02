@@ -26,13 +26,13 @@ public class MatrixParam extends Param  {
         }
 
         @Override
-        public MatrixParamBuilder setTyperef(String typeref) {
-            return(MatrixParamBuilder) super.setTyperef(typeref);
+        public MatrixParamBuilder setTypeRef(String typeref) {
+            return(MatrixParamBuilder) super.setTypeRef(typeref);
         }
 
         @Override
         public Param build() {
-            return new MatrixParam(name, isRequired, typeref, Type.MATRIX_PARAM, description);
+            return new MatrixParam(name, isRequired, typeRef, Type.MATRIX_PARAM, description);
         }
     }
 }

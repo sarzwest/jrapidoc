@@ -25,13 +25,13 @@ public class PathParam extends Param  {
         }
 
         @Override
-        public PathParamBuilder setTyperef(String typeref) {
-            return(PathParamBuilder) super.setTyperef(typeref);
+        public PathParamBuilder setTypeRef(String typeref) {
+            return(PathParamBuilder) super.setTypeRef(typeref);
         }
 
         @Override
         public Param build() {
-            return new PathParam(name, isRequired, typeref, Type.PATH_PARAM, description);
+            return new PathParam(name, isRequired, typeRef, Type.PATH_PARAM, description);
         }
     }
 }

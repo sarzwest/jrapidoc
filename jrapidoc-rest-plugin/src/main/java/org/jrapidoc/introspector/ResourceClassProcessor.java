@@ -164,7 +164,7 @@ public class ResourceClassProcessor {
         if (returnOption.getReturnClass() != null &&
                 !returnOption.getReturnClass().equals(Void.class)) {
             Type returnType = typeProvider.createType(returnOption.getParameterized());
-            returnTypes.add(new TransportType.TransportTypeBuilder().type(returnType).description(StringUtils.isEmpty(returnOption.getTypeDescription())?null:returnOption.getTypeDescription()).build());
+            returnTypes.add(new TransportType.TransportTypeBuilder().type(returnType).description(StringUtils.isEmpty(returnOption.getTypeDescription()) ? null : returnOption.getTypeDescription()).build());
         }
         List<HeaderParam> headerParams = createReturnHeaders(returnOption.getHeaders());
         List<CookieParam> cookieParams = createReturnCookies(returnOption.getCookies());
@@ -174,7 +174,7 @@ public class ResourceClassProcessor {
     List<HeaderParam> createReturnHeaders(List<String> headersString) {
         List<HeaderParam> items = new ArrayList<HeaderParam>();
         for (String header : headersString) {
-            items.add(new HeaderParam.HeaderParamBuilder().setName(header).setTyperef(ModelUtil.getSimpleTypeSignature(String.class, null)).build());
+            items.add(new HeaderParam.HeaderParamBuilder().setName(header).setTypeRef(ModelUtil.getSimpleTypeSignature(String.class, null)).build());
         }
         return items;
     }
@@ -182,7 +182,7 @@ public class ResourceClassProcessor {
     List<CookieParam> createReturnCookies(List<String> cookiesString) {
         List<CookieParam> items = new ArrayList<CookieParam>();
         for (String header : cookiesString) {
-            items.add(new CookieParam.CookieParamBuilder().setName(header).setTyperef(ModelUtil.getSimpleTypeSignature(String.class, null)).build());
+            items.add(new CookieParam.CookieParamBuilder().setName(header).setTypeRef(ModelUtil.getSimpleTypeSignature(String.class, null)).build());
         }
         return items;
     }
@@ -249,7 +249,7 @@ public class ResourceClassProcessor {
         }
         paramBuilder.setName(parameter.getParamName());
         Type type = createParameterType(parameter);
-        paramBuilder.setTyperef(type.getTypeRef());
+        paramBuilder.setTypeRef(type.getTypeRef());
         paramBuilder.setDescription(parameter.getDescription());
         paramBuilder.setRequired(parameter.getIsRequired());
         return paramBuilder.build();
