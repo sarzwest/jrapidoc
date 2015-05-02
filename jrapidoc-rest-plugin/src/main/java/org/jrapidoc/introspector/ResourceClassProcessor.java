@@ -161,9 +161,10 @@ public class ResourceClassProcessor {
 
     Return createReturnOption(ReturnOption returnOption) {
         List<TransportType> returnTypes = new ArrayList<TransportType>();
-        if (returnOption.getReturnClass() != null) {
+        if (returnOption.getReturnClass() != null &&
+                !returnOption.getReturnClass().equals(Void.class)) {
             Type returnType = typeProvider.createType(returnOption.getParameterized());
-            returnTypes.add(new TransportType.TransportTypeBuilder().type(returnType).description(returnOption.getDescription()).build());
+            returnTypes.add(new TransportType.TransportTypeBuilder().type(returnType).description(StringUtils.isEmpty(returnOption.getTypeDescription())?null:returnOption.getTypeDescription()).build());
         }
         List<HeaderParam> headerParams = createReturnHeaders(returnOption.getHeaders());
         List<CookieParam> cookieParams = createReturnCookies(returnOption.getCookies());

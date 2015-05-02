@@ -21,13 +21,13 @@ public abstract class Param {
 
     private String name;
     @JsonProperty("required")
-    private boolean isRequired;
+    private Boolean isRequired;
     @JsonIgnore
     private Type type;
     private String description;
     private String typeref;
 
-    protected Param(String name, boolean isRequired, String typeref, Type type, String description) {
+    protected Param(String name, Boolean isRequired, String typeref, Type type, String description) {
         this.name = name;
         this.isRequired = isRequired;
         this.typeref = typeref;
@@ -35,7 +35,7 @@ public abstract class Param {
         this.description = description;
     }
 
-    public boolean isRequired() {
+    public Boolean isRequired() {
         return isRequired;
     }
 
@@ -59,7 +59,7 @@ public abstract class Param {
         this.name = name;
     }
 
-    public void setRequired(boolean isRequired) {
+    public void setRequired(Boolean isRequired) {
         this.isRequired = isRequired;
     }
 
@@ -78,8 +78,7 @@ public abstract class Param {
     public static abstract class ParamBuilder{
 
         String name;
-        /**v nektere metode muze byt required, jinde neni required*/
-        boolean isRequired;
+        Boolean isRequired;
         String description;
         String typeref;
 
@@ -89,11 +88,7 @@ public abstract class Param {
         }
 
         public ParamBuilder setRequired(Boolean isRequired) {
-            boolean isRequiredValue = true;
-            if(isRequired != null){
-                isRequiredValue = isRequired;
-            }
-            this.isRequired = isRequiredValue;
+            this.isRequired = isRequired;
             return this;
         }
 

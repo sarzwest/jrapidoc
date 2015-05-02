@@ -9,7 +9,7 @@ public class HeaderParam extends Param  {
     public static final String ACCEPT = "Accept";
     public static final String CONTENT_TYPE = "Content-Type";
 
-    private HeaderParam(String name, boolean isRequired, String typeref, String[] options, Type type, String description) {
+    private HeaderParam(String name, Boolean isRequired, String typeref, String[] options, Type type, String description) {
         super(name, isRequired, typeref, type, description);
         this.options = options;
     }

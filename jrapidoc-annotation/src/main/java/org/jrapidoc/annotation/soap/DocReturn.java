@@ -22,8 +22,20 @@ public @interface DocReturn {
     int http() default 200;
 
     /**
-     * Description of Java return type
+     * @WebResult Java type from method signature
+     * @return
+     */
+    Class<?> type() default Void.class;
+
+    /**
+     * Description of return option
      * @return
      */
     String description() default "";
+
+    /**
+     * Description of return type
+     * @return
+     */
+    String typeDescription() default "";
 }

@@ -46,7 +46,7 @@ public class SoapIntrospector extends AbstractIntrospector {
         Logger.info("");
     }
 
-    APIModel createModel(Map<String, String> customInfo, List<ConfigGroup> groups, URLClassLoader loader, String typeProviderClass) throws JrapidocExecutionException, JrapidocFailureException {
+    APIModel createModel(Map<String, String> customInfo, List<ConfigGroup> groups, ClassLoader loader, String typeProviderClass) throws JrapidocExecutionException, JrapidocFailureException {
         try {
             TypeProvider typeProvider = getTypeProvider(typeProviderClass);
             SEIProcessor seiProcessor = getSeiClassProcessor(typeProvider, loader);
@@ -72,7 +72,7 @@ public class SoapIntrospector extends AbstractIntrospector {
         return seiProcessor.createServiceGroup(resourceClasses, serviceGroupBuilder);
     }
 
-    void addServiceGroups(List<ConfigGroup> groups, SEIProcessor seiProcessor, URLClassLoader loader, APIModel.APIModelBuilder APIModelBuilder) throws JrapidocExecutionException {
+    void addServiceGroups(List<ConfigGroup> groups, SEIProcessor seiProcessor, ClassLoader loader, APIModel.APIModelBuilder APIModelBuilder) throws JrapidocExecutionException {
         for (ConfigGroup group : groups) {
             Logger.info("Service group {0} processing started", group.getBaseUrl());
             Set<Class<?>> resourceClasses = getScannedClasses(group.getIncludes(), group.getExcludes(), loader, WebService.class);
@@ -83,7 +83,7 @@ public class SoapIntrospector extends AbstractIntrospector {
         }
     }
 
-    SEIProcessor getSeiClassProcessor(TypeProvider typeProvider, URLClassLoader loader) {
+    SEIProcessor getSeiClassProcessor(TypeProvider typeProvider, ClassLoader loader) {
         return new SEIProcessor(typeProvider, loader);
     }
 

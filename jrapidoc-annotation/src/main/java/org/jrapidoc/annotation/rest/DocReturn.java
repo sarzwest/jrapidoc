@@ -43,7 +43,18 @@ public @interface DocReturn {
      * @return
      */
     Structure structure() default Structure.OBJECT;
+
+    /**
+     * Description of return option
+     * @return
+     */
     String description() default "";
+
+    /**
+     * Description of returned type (set in {@link DocReturn#type()})
+     * @return
+     */
+    String typeDescription() default "";
 
     enum Structure {
         /**

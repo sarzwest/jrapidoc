@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @JsonPropertyOrder({"name", "soapBinding", "path", "httpMethodType", "pathExample", "description",
         "headerParams", "pathParams", "queryParams", "matrixParams", "cookieParams",
-        "formParams", "asynchronous", "parameters", "returnOptions"})
+        "formParams", "asynchronous", "parameters", "soapInputHeaders", "returnOptions"})
 public class Method {
 
     @JsonProperty("asynchronous")
@@ -187,6 +187,7 @@ public class Method {
     public String toString() {
         return "Method{" +
                 "path='" + path + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 

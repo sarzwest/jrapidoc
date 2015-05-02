@@ -4,7 +4,7 @@ package org.jrapidoc.model.param;
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
 public class CookieParam extends Param {
-    public CookieParam(String name, boolean isRequired, String typeref, Type type, String description) {
+    public CookieParam(String name, Boolean isRequired, String typeref, Type type, String description) {
         super(name, isRequired, typeref, type, description);
     }
 

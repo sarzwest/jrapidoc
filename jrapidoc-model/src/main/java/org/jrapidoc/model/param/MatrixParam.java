@@ -5,7 +5,7 @@ package org.jrapidoc.model.param;
  */
 public class MatrixParam extends Param  {
 
-    public MatrixParam(String name, boolean isRequired, String typeref, Type type, String description) {
+    public MatrixParam(String name, Boolean isRequired, String typeref, Type type, String description) {
         super(name, isRequired, typeref, type, description);
     }
 

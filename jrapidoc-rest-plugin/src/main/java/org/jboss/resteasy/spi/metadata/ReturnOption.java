@@ -18,6 +18,7 @@ public class ReturnOption {
     Class<?> returnClass;
     DocReturn.Structure structure;
     String description;
+    String typeDescription;
 
     public Class<?> getReturnClass() {
         return returnClass;
@@ -49,6 +50,14 @@ public class ReturnOption {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTypeDescription() {
+        return typeDescription;
+    }
+
+    public void setTypeDescription(String typeDescription) {
+        this.typeDescription = typeDescription;
     }
 
     public List<String> getHeaders() {

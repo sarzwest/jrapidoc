@@ -9,10 +9,12 @@ public class TransportType {
 
     Type type;
     String description;
+    Boolean isRequired;
 
-    private TransportType(Type type, String description) {
+    private TransportType(Type type, String description, Boolean isRequired) {
         this.type = type;
         this.description = description;
+        this.isRequired = isRequired;
     }
 
     public Type getType() {
@@ -23,6 +25,10 @@ public class TransportType {
         return description;
     }
 
+    public Boolean getIsRequired() {
+        return isRequired;
+    }
+
     public void setType(Type type) {
         this.type = type;
     }
@@ -31,9 +37,14 @@ public class TransportType {
         this.description = description;
     }
 
+    public void setIsRequired(Boolean isRequired) {
+        this.isRequired = isRequired;
+    }
+
     public static class TransportTypeBuilder{
         Type type;
         String description;
+        Boolean isRequired;
 
         public TransportTypeBuilder type(Type type) {
             this.type = type;
@@ -45,8 +56,13 @@ public class TransportType {
             return this;
         }
 
+        public TransportTypeBuilder isRequired(Boolean isRequired) {
+            this.isRequired = isRequired;
+            return this;
+        }
+
         public TransportType build(){
-            return new TransportType(type, description);
+            return new TransportType(type, description, isRequired);
         }
 
     }

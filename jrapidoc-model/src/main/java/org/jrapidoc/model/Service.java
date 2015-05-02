@@ -6,12 +6,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.param.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
-@JsonPropertyOrder({ "path", "name", "description", "pathExample", "methods"})
+@JsonPropertyOrder({"path", "name", "description", "pathExample", "methods"})
 public class Service {
 
     private String path;
@@ -90,27 +93,27 @@ public class Service {
         return queryParams;
     }
 
-    private <T extends Param> T getParam(List<T> params, String paramName){
-        for (T p:params){
-            if(p.getName().equals(paramName)){
+    private <T extends Param> T getParam(List<T> params, String paramName) {
+        for (T p : params) {
+            if (p.getName().equals(paramName)) {
                 return p;
             }
         }
         return null;
     }
 
-    public Param getParam(String paramType, String paramName){
-        if(paramType.equals("COOKIE_PARAM")){
+    public Param getParam(String paramType, String paramName) {
+        if (paramType.equals("COOKIE_PARAM")) {
             return getParam(cookieParams, paramName);
-        }else if(paramType.equals("FORM_PARAM")){
+        } else if (paramType.equals("FORM_PARAM")) {
             return getParam(formParams, paramName);
-        }else if(paramType.equals("HEADER_PARAM")){
+        } else if (paramType.equals("HEADER_PARAM")) {
             return getParam(headerParams, paramName);
-        }else if(paramType.equals("MATRIX_PARAM")){
+        } else if (paramType.equals("MATRIX_PARAM")) {
             return getParam(matrixParams, paramName);
-        }else if(paramType.equals("PATH_PARAM")){
+        } else if (paramType.equals("PATH_PARAM")) {
             return getParam(pathParams, paramName);
-        }else if(paramType.equals("QUERY_PARAM")){
+        } else if (paramType.equals("QUERY_PARAM")) {
             return getParam(queryParams, paramName);
         }
         return null;
@@ -136,7 +139,7 @@ public class Service {
         this.name = name;
     }
 
-    public static class ResourceBuilder{
+    public static class ResourceBuilder {
 
         private String path;
         private String pathExample;
@@ -166,12 +169,14 @@ public class Service {
         }
 
         public ResourceBuilder method(Method method) {
-            String key = (StringUtils.isNotEmpty(method.getName()))?method.getName():method.getPath();
-            key += " - " + method.getHttpMethodType();
-            if(key == null){
+            String key = (StringUtils.isNotEmpty(method.getName())) ? method.getName() : method.getPath();
+            if (StringUtils.isNotEmpty(method.getHttpMethodType())) {
+                key += " - " + method.getHttpMethodType();
+            }
+            if (key == null) {
                 Logger.warn("Putting null key into map!!!");
             }
-            if(this.methods.containsKey(key)){
+            if (this.methods.containsKey(key)) {
                 Logger.warn("Method identifier must be unique, but method with identifier {0} already exists!!!", key);
             }
             this.methods.put(key, method);
@@ -185,25 +190,27 @@ public class Service {
 
         public ResourceBuilder param(Param.Type paramType, Param param) {
             if (paramType.equals(Param.Type.COOKIE_PARAM)) {
-                addCookieParam((CookieParam)param);
+                addCookieParam((CookieParam) param);
             } else if (paramType.equals(Param.Type.FORM_PARAM)) {
-                addFormParam((FormParam)param);
+                addFormParam((FormParam) param);
             } else if (paramType.equals(Param.Type.HEADER_PARAM)) {
-                addHeaderParam((HeaderParam)param);
+                addHeaderParam((HeaderParam) param);
             } else if (paramType.equals(Param.Type.MATRIX_PARAM)) {
-                addMatrixParam((MatrixParam)param);
+                addMatrixParam((MatrixParam) param);
             } else if (paramType.equals(Param.Type.PATH_PARAM)) {
-                addPathParam((PathParam)param);
+                addPathParam((PathParam) param);
             } else if (paramType.equals(Param.Type.QUERY_PARAM)) {
-                addQueryParam((QueryParam)param);
+                addQueryParam((QueryParam) param);
             }
             return this;
         }
 
-        /**First try to add more specific value and then try to add less specific value.  */
+        /**
+         * First try to add more specific value and then try to add less specific value.
+         */
         protected void addHeaderParam(HeaderParam headerParam) {
-            for (HeaderParam param:headerParams){
-                if(param.getName().equals(headerParam.getName())){
+            for (HeaderParam param : headerParams) {
+                if (param.getName().equals(headerParam.getName())) {
                     return;
                 }
             }
@@ -230,7 +237,7 @@ public class Service {
             this.queryParams.add(queryParam);
         }
 
-        public Service build(){
+        public Service build() {
 //            for(Method method:methods){
 //
 //            }

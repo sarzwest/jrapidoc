@@ -625,9 +625,9 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
     @POST
     @Path("decription")
     @DocDescription("Description of method")
-    @DocReturn(http = 200, description = "Description of return option")
-    public void description(@DocDescription("Description of query param") @QueryParam("qp") String s) {
-
+    @DocReturn(http = 200, description = "Description of return option", type = DestinationExample.class, typeDescription = "Description of DestinationExample type")
+    public DestinationExample description(@DocDescription("Description of query param") @QueryParam("qp") String s) {
+        return null;
     }
 
     @GET
@@ -663,6 +663,4 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         d.setName("Prague");
         return d;
     }
-
-
 }

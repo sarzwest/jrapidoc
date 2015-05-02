@@ -1,5 +1,6 @@
 package org.jrapidoc.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.param.CookieParam;
 import org.jrapidoc.model.param.HeaderParam;
@@ -12,16 +13,16 @@ import java.util.Map;
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
+@JsonPropertyOrder({"httpStatus", "description", "headerParams", "cookieParams",
+"soapOutputHeaders", "returnTypes"})
 public class Return {
 
     private int httpStatus;
     private Map<String, HeaderParam> headerParams;
     private Map<String, CookieParam> cookieParams;
-    //    private Map<String, TransportType> returnTypes;
     private List<TransportType> returnTypes;
     private String description;
-//    private Map<String, TransportType> soapOutputHeaders;
-private List<TransportType> soapOutputHeaders;
+    private List<TransportType> soapOutputHeaders;
 
     private Return(int httpStatus, Map<String, HeaderParam> headerParams, Map<String, CookieParam> cookieParams, List<TransportType> returnTypes, String description, List<TransportType> soapOutputHeaders) {
         this.httpStatus = httpStatus;
@@ -124,9 +125,8 @@ private List<TransportType> soapOutputHeaders;
 
         public ReturnBuilder returnTypes(List<TransportType> returnTypes) {
             for (TransportType type : returnTypes) {
-//                this.returnTypes.put(type.getType().getTypeRef(), type);
                 this.returnTypes.add(type);
-            }//todo neprepisuje se to tady? Podle me muze byt string, string a to nebude fungovat v soap
+            }
             return this;
         }
 
@@ -137,8 +137,6 @@ private List<TransportType> soapOutputHeaders;
 
         public ReturnBuilder soapOutputHeader(TransportType soapHeader) {
             this.soapOutputHeaders.add(soapHeader);
-//            this.soapOutputHeaders.put(soapHeader.getType().getTypeRef(), soapHeader);
-            //todo stejny jako todo predtim
             return this;
         }
 

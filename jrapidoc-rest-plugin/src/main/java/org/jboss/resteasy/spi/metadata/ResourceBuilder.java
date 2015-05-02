@@ -410,9 +410,9 @@ public class ResourceBuilder {
             return (T) this;
         }
 
-        public T response(int http, String[] headers, String[] cookies, Class<?> type, Type parameterized, DocReturn.Structure structure, String description) {
+        public T response(int http, String[] headers, String[] cookies, Class<?> type, Type parameterized, DocReturn.Structure structure, String description, String typeDescription) {
             ResponseObjectBuilder responseBuilder = new ResponseObjectBuilder();
-            ReturnOption option = responseBuilder.status(http).headers(Arrays.asList(headers)).cookies(Arrays.asList(cookies)).type(type).parameterized(parameterized).structure(structure).description(description).buildReturnOption();
+            ReturnOption option = responseBuilder.status(http).headers(Arrays.asList(headers)).cookies(Arrays.asList(cookies)).type(type).parameterized(parameterized).structure(structure).description(description).typeDescription(typeDescription).buildReturnOption();
             locator.returnOptions.add(option);
             return (T) this;
         }
@@ -590,6 +590,11 @@ public class ResourceBuilder {
 
         public ResponseObjectBuilder description(String description) {
             returnOption.setDescription(description);
+            return this;
+        }
+
+        public ResponseObjectBuilder typeDescription(String typeDescription) {
+            returnOption.setTypeDescription(typeDescription);
             return this;
         }
 
@@ -894,25 +899,25 @@ public class ResourceBuilder {
         if (returnClass.getCanonicalName().equals("void")) {
             emptyResponse(resourceMethodBuilder);
         } else if (returnClass.equals(Response.class)) {
-            resourceMethodBuilder.response(200, new String[]{}, new String[]{}, Object.class, Object.class, null, null);
+            resourceMethodBuilder.response(200, new String[]{}, new String[]{}, Object.class, Object.class, null, null, null);
         } else if (returnClass.equals(GenericEntity.class)) {
             if (parameterized.equals(GenericEntity.class)) {
                 emptyResponse(resourceMethodBuilder);
             } else if (parameterized instanceof ParameterizedType) {
                 ParameterizedType paramType = (ParameterizedType) parameterized;
                 if (paramType.getActualTypeArguments()[0] instanceof Class) {
-                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) paramType.getActualTypeArguments()[0], paramType.getActualTypeArguments()[0], null, null);
+                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) paramType.getActualTypeArguments()[0], paramType.getActualTypeArguments()[0], null, null, null);
                 } else if (paramType.getActualTypeArguments()[0] instanceof ParameterizedType) {
-                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) ((ParameterizedType) paramType.getActualTypeArguments()[0]).getRawType(), paramType.getActualTypeArguments()[0], null, null);
+                    resourceMethodBuilder.response(200, new String[]{}, new String[]{}, (Class) ((ParameterizedType) paramType.getActualTypeArguments()[0]).getRawType(), paramType.getActualTypeArguments()[0], null, null, null);
                 }
             }
         } else {
-            resourceMethodBuilder.response(200, new String[]{}, new String[]{}, returnClass, parameterized, null, null);
+            resourceMethodBuilder.response(200, new String[]{}, new String[]{}, returnClass, parameterized, null, null, null);
         }
     }
 
     static void emptyResponse(ResourceMethodBuilder resourceMethodBuilder) {
-        resourceMethodBuilder.response(204, new String[]{}, new String[]{}, null, null, null, null);
+        resourceMethodBuilder.response(204, new String[]{}, new String[]{}, null, null, null, null, null);
     }
 
     static void createResponse(DocReturn ret, ResourceMethodBuilder resourceMethodBuilder) {
@@ -920,13 +925,13 @@ public class ResourceBuilder {
         DocReturn.Structure structure = ret.structure();
         if (structure == DocReturn.Structure.OBJECT) {
             parameterizedType = ret.type();
-            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), ret.type(), ret.type(), ret.structure(), ret.description());
+            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), ret.type(), ret.type(), ret.structure(), ret.description(), ret.typeDescription());
         } else if (structure == DocReturn.Structure.ARRAY) {
             parameterizedType = ParameterizedTypeImpl.make(List.class, new Type[]{ret.type()}, null);
-            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), List.class, parameterizedType, ret.structure(), ret.description());
+            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), List.class, parameterizedType, ret.structure(), ret.description(), ret.typeDescription());
         } else if (structure == DocReturn.Structure.MAP) {
             parameterizedType = ParameterizedTypeImpl.make(Map.class, new Type[]{String.class, ret.type()}, null);
-            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), Map.class, parameterizedType, ret.structure(), ret.description());
+            resourceMethodBuilder.response(ret.http(), ret.headers(), ret.cookies(), Map.class, parameterizedType, ret.structure(), ret.description(), ret.typeDescription());
         }
     }
 

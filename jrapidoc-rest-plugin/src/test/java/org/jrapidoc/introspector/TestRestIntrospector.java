@@ -3,10 +3,7 @@ package org.jrapidoc.introspector;
 import airservice.resources.TestResource;
 import org.jrapidoc.RestUtil;
 import org.jrapidoc.exception.JrapidocFailureException;
-import org.jrapidoc.model.APIModel;
-import org.jrapidoc.model.Method;
-import org.jrapidoc.model.Service;
-import org.jrapidoc.model.ServiceGroup;
+import org.jrapidoc.model.*;
 import org.jrapidoc.model.param.*;
 import org.jrapidoc.plugin.ConfigGroup;
 import org.junit.Assert;
@@ -50,6 +47,7 @@ public class TestRestIntrospector {
         configGroup = new ConfigGroup();
         configGroup.setBaseUrl(DEFAULT_GROUP);
         configGroup.setIncludes(new ArrayList<String>(Arrays.asList(new String[]{DEFAULT_PACKAGE})));
+
     }
 
     static void createConfigGroups() {
@@ -179,7 +177,7 @@ public class TestRestIntrospector {
 
         Assert.assertEquals("formparam", formparam.getName());
         Assert.assertEquals("ttt", formparam.getDescription());
-        Assert.assertEquals(true, formparam.isRequired());
+        Assert.assertEquals(null, formparam.isRequired());
         Assert.assertEquals("string", formparam.getTyperef());
     }
 
@@ -190,7 +188,7 @@ public class TestRestIntrospector {
 
         Assert.assertEquals("listbean", listbean.getName());
         Assert.assertEquals("asd", listbean.getDescription());
-        Assert.assertEquals(true, listbean.isRequired());
+        Assert.assertEquals(null, listbean.isRequired());
         Assert.assertEquals("string", listbean.getTyperef());
     }
 
@@ -212,7 +210,7 @@ public class TestRestIntrospector {
 
         Assert.assertEquals("headerFromSetter", headerparam.getName());
         Assert.assertEquals("hdsa", headerparam.getDescription());
-        Assert.assertEquals(true, headerparam.isRequired());
+        Assert.assertEquals(null, headerparam.isRequired());
         Assert.assertEquals("number", headerparam.getTyperef());
     }
 
@@ -309,5 +307,14 @@ public class TestRestIntrospector {
 
         Assert.assertEquals("java.lang.Object", methodWithParam.getParameters().get(0).getType().getTypeRef());
         Assert.assertEquals("java.lang.Object", methodWithReturn.getReturnOptions().get(0).getReturnTypes().get(0).getType().getTypeRef());
+    }
+
+    @Test
+    public void testDescription(){
+        Method method = getDefaultService().getMethods().get(DEFAULT_GROUP_DEFAULT_SERVICE + "/decription - POST");
+        Return returnOption = method.getReturnOptions().get(0);
+
+        Assert.assertEquals("Description of return option", returnOption.getDescription());
+        Assert.assertEquals("Description of DestinationExample type", returnOption.getReturnTypes().get(0).getDescription());
     }
 }
