@@ -5,14 +5,16 @@ var Properties = function(){
 
 };
 
-Properties.defaultModelPath = "jrapidoc.rest.model.json";
-Properties.modelRootName = "API documentation model";
+Properties.primaryModelPath = "jrapidoc.rest.model.json";
+Properties.primaryButtonName = "Load REST";
+Properties.secondaryModelPath = "jrapidoc.soap.model.json";
+Properties.secondaryButtonName = "Load SOAP";
+Properties.modelRootName = "API Documentation Model";
 Properties.keys = {
     customInfo:"Informations",
     serviceGroups:"Service groups",
     types:"Data types used in API",
     baseUrl:"Base URL",
-//    description:"Description",
     methodDescription:"Method Description",
     returnDescription:"Return Description",
     serviceDescription:"Service Description",
@@ -42,7 +44,6 @@ Properties.keys = {
     attributes:"Attributes",
     required:"Required",
     pathExample:"Path Example",
-//    name:"Name",
     operationName:"Operation Name",
     serviceName:"Service Name",
     attributeName:"Attribute Name",

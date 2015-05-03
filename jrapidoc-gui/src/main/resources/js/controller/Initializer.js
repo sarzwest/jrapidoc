@@ -13,7 +13,7 @@ Initializer.prototype.initialize = function () {
         window.listener.init();
         window.graphics = new Graphics();
         window.graphics.init();
-        window.apiModel.loadModel(Properties.defaultModelPath);
+        window.apiModel.loadModel(Properties.primaryModelPath);
         window.graphics.show(window.apiModel.modelJSON);
         window.graphics.closeMethodElement();
         window.graphics.createAnchorsToTypes();

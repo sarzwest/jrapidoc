@@ -8,12 +8,26 @@ var Listeners = function () {
 Listeners.prototype.init = function () {
     this.regEvents();
     this.loadListener();
+    this.primaryLoadListener();
+    this.secondaryLoadListener();
 };
 
-Listeners.prototype.loadModel = function (e) {
+Listeners.prototype.loadModelEvent = function (e) {
+    var modelPath = document.querySelector("#modelUrl").value;
+    this.loadModel(modelPath);
+};
+
+Listeners.prototype.loadPrimaryModelEvent = function (e) {
+    this.loadModel(Properties.primaryModelPath);
+};
+
+Listeners.prototype.loadSecondaryModelEvent = function (e) {
+    this.loadModel(Properties.secondaryModelPath);
+};
+
+Listeners.prototype.loadModel = function (modelPath) {
     try {
         ProgressBar.showProgressBar();
-        var modelPath = document.querySelector("#modelUrl").value;
         window.apiModel.loadModel(modelPath);
         window.graphics.show(window.apiModel.modelJSON);
         window.graphics.closeMethodElement();
@@ -30,8 +44,18 @@ Listeners.prototype.loadModel = function (e) {
 };
 
 Listeners.prototype.loadListener = function () {
-    var switchButton = document.querySelector("#loadModel");
-    switchButton.addEventListener("click", this.loadModel);
+    var button = document.querySelector("#loadModel");
+    button.addEventListener("click", this.loadModelEvent.bind(this));
+};
+
+Listeners.prototype.primaryLoadListener = function () {
+    var button = document.querySelector("#primaryLoad");
+    button.addEventListener("click", this.loadPrimaryModelEvent.bind(this));
+};
+
+Listeners.prototype.secondaryLoadListener = function () {
+    var button = document.querySelector("#secondaryLoad");
+    button.addEventListener("click", this.loadSecondaryModelEvent.bind(this));
 };
 
 Listeners.prototype.regEvents = function () {
@@ -47,9 +71,6 @@ Listeners.prototype.regEvents = function () {
                     parent.addClass('open');
                 }
             );
-//            parent.removeClass('closed');
-//            parent.addClass('open');
-//            parent.children(".children").fadeIn(1000);
         } else {
             parent.children(".children").slideToggle("slow");
             parent.children(".children").promise().done(
@@ -58,9 +79,6 @@ Listeners.prototype.regEvents = function () {
                     parent.addClass('closed');
                 }
             );
-//            parent.removeClass('open');
-//            parent.addClass('closed');
-//            parent.children(".children").fadeOut(1000);
         }
     });
 };

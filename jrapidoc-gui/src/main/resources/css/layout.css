@@ -5,7 +5,8 @@ html {
 }
 
 body {
-    background-color: transparent;
+    /*background-color: transparent;*/
+    background-color: #e0ffd2;
     /*font-family: "Helvetica Neue",Arial,sans-serif;*/
     font-family: "Droid Sans Mono",monospace;
     font-size: 12pt;

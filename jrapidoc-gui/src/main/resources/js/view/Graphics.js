@@ -7,7 +7,11 @@ var Graphics = function () {
 
 Graphics.prototype.init = function () {
     var input = document.querySelector("#modelUrl");
-    input.value = Properties.defaultModelPath;
+    input.value = Properties.primaryModelPath;
+    var primaryLoadButton = document.querySelector("#primaryLoad");
+    primaryLoadButton.value = Properties.primaryButtonName;
+    var secondaryLoadButton = document.querySelector("#secondaryLoad");
+    secondaryLoadButton.value = Properties.secondaryButtonName;
 };
 
 Graphics.prototype.setCSSClass = function (obj) {
@@ -37,6 +41,10 @@ Graphics.prototype.setCSSClass = function (obj) {
         return classes + "soapInputHeaders";
     } else if (Properties.keys.soapOutputHeaders == obj.name) {
         return classes + "soapOutputHeaders";
+    } else if (Properties.keys.attributes == obj.name) {
+        return classes + "attributes";
+    } else if (Properties.keys.returnTypes == obj.name) {
+        return classes + "returnTypes";
     }
     return classes;
 };
