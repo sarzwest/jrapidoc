@@ -12,7 +12,7 @@ Graphics.prototype.init = function () {
 
 Graphics.prototype.setCSSClass = function (obj) {
     var classes = "package open object ";
-    if (Properties.keys.info == obj.name) {
+    if (Properties.keys.customInfo == obj.name) {
         return classes + "info";
     } else if (Properties.keys.types == obj.name) {
         return classes + "types";

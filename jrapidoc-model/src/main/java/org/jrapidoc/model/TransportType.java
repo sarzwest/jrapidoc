@@ -7,10 +7,11 @@ import org.jrapidoc.model.object.type.Type;
 /**
  * Created by Tomas "sarzwest" Jiricek on 10.4.15.
  */
-@JsonPropertyOrder({"description", "required", "type"})
+@JsonPropertyOrder({"typeDescription", "required", "type"})
 public class TransportType {
 
     Type type;
+    @JsonProperty("typeDescription")
     String description;
     @JsonProperty("required")
     Boolean isRequired;

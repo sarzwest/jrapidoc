@@ -1,6 +1,7 @@
 package org.jrapidoc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.logger.Logger;
@@ -14,7 +15,7 @@ import java.util.TreeMap;
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
-@JsonPropertyOrder({"path", "name", "description", "pathExample", "methods"})
+@JsonPropertyOrder({"path", "serviceName", "serviceDescription", "pathExample", "methods"})
 public class Service {
 
     private String path;
@@ -32,7 +33,9 @@ public class Service {
     @JsonIgnore
     private List<QueryParam> queryParams = new ArrayList<QueryParam>();
     private Map<String, Method> methods = new TreeMap<String, Method>();
+    @JsonProperty("serviceDescription")
     private String description;
+    @JsonProperty("serviceName")
     private String name;
 
     private Service(String path, String pathExample, List<HeaderParam> headerParams, List<CookieParam> cookieParams, List<FormParam> formParams, List<MatrixParam> matrixParams, List<PathParam> pathParams, List<QueryParam> queryParams, Map<String, Method> methods, String description, String name) {

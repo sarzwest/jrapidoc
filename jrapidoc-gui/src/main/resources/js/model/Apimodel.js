@@ -59,7 +59,6 @@ ApiModel.prototype.checkAndGetModel = function (givenModel) {
 
 ApiModel.prototype.replacePropertyNames = function (modelJSON) {
     for (var key in modelJSON) {
-        var k = key;
         var value = modelJSON[key];
         if (typeof value !== "string") {
             this.replacePropertyNames(modelJSON[key]);

@@ -1,5 +1,6 @@
 package org.jrapidoc.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.jrapidoc.logger.Logger;
 import org.jrapidoc.model.param.CookieParam;
@@ -13,7 +14,7 @@ import java.util.Map;
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
-@JsonPropertyOrder({"httpStatus", "description", "headerParams", "cookieParams",
+@JsonPropertyOrder({"httpStatus", "returnDescription", "headerParams", "cookieParams",
 "soapOutputHeaders", "returnTypes"})
 public class Return {
 
@@ -21,6 +22,7 @@ public class Return {
     private Map<String, HeaderParam> headerParams;
     private Map<String, CookieParam> cookieParams;
     private List<TransportType> returnTypes;
+    @JsonProperty("returnDescription")
     private String description;
     private List<TransportType> soapOutputHeaders;
 

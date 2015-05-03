@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
-@JsonPropertyOrder({"name", "soapBinding", "path", "httpMethodType", "pathExample", "description",
+@JsonPropertyOrder({"operationName", "soapBinding", "path", "httpMethodType", "pathExample", "methodDescription",
         "headerParams", "pathParams", "queryParams", "matrixParams", "cookieParams",
         "formParams", "asynchronous", "parameters", "soapInputHeaders", "returnOptions"})
 public class Method {
@@ -31,7 +31,9 @@ public class Method {
     private List<Return> returnOptions;
     private List<TransportType> parameters;
     private String httpMethodType;
+    @JsonProperty("methodDescription")
     private String description;
+    @JsonProperty("operationName")
     private String name;
     private List<TransportType> soapInputHeaders;
     private SoapBinding soapBinding;

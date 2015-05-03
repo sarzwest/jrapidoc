@@ -2,17 +2,21 @@ package org.jrapidoc.model.object;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 13.1.15.
  */
+@JsonPropertyOrder({"attributeName", "typeRef", "attributeDescription", "required"})
 public class BeanProperty {
 
     public static String ROOT_VARIABLE = "root";
+    @JsonProperty("attributeName")
     String name;
     @JsonIgnore
     Class<?> type;
     String typeRef;
+    @JsonProperty("attributeDescription")
     String description;
     @JsonProperty("required")
     boolean isRequired;

@@ -13,10 +13,9 @@ import java.util.TreeMap;
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
-@JsonPropertyOrder({"info", "serviceGroups", "types"})
+@JsonPropertyOrder({"customInfo", "serviceGroups", "types"})
 public class APIModel {
 
-    @JsonProperty("info")
     private Map<String, String> customInfo;
     private Map<String, ServiceGroup> serviceGroups;
     private Map<String, Type> types;

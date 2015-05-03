@@ -1,5 +1,7 @@
 package org.jrapidoc.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.StringUtils;
 import org.jrapidoc.logger.Logger;
 
@@ -10,9 +12,11 @@ import java.util.TreeMap;
 /**
  * Created by Tomas "sarzwest" Jiricek on 21.4.15.
  */
+@JsonPropertyOrder({"baseUrl", "serviceGroupDescription", "services"})
 public class ServiceGroup {
 
     private String baseUrl;
+    @JsonProperty("serviceGroupDescription")
     private String description;
     private Map<String, Service> services = new TreeMap<String, Service>();
 

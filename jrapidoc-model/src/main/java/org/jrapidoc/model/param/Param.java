@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 /**
  * Created by Tomas "sarzwest" Jiricek on 23.12.14.
  */
-@JsonPropertyOrder({"name", "description", "required", "type", "typeRef"})
+@JsonPropertyOrder({"parameterName", "parameterDescription", "required", "type", "typeRef"})
 public abstract class Param {
 
     public static enum Type {
@@ -19,11 +19,13 @@ public abstract class Param {
         COOKIE_PARAM
     };
 
+    @JsonProperty("parameterName")
     private String name;
     @JsonProperty("required")
     private Boolean isRequired;
     @JsonIgnore
     private Type type;
+    @JsonProperty("parameterDescription")
     private String description;
     private String typeRef;
 
