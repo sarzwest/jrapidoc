@@ -5,30 +5,57 @@ var Graphics = function () {
     this.transforms;
 };
 
-Graphics.prototype.init = function(){
+Graphics.prototype.init = function () {
     var input = document.querySelector("#modelUrl");
     input.value = Properties.defaultModelPath;
 };
 
+Graphics.prototype.setCSSClass = function (obj) {
+    var classes = "package open object ";
+    if (Properties.keys.info == obj.name) {
+        return classes + "info";
+    } else if (Properties.keys.types == obj.name) {
+        return classes + "types";
+    } else if (Properties.keys.serviceGroups == obj.name) {
+        return classes + "serviceGroups";
+    } else if (Properties.keys.services == obj.name) {
+        return classes + "services";
+    } else if (Properties.keys.methods == obj.name) {
+        return classes + "methods";
+    } else if (obj.name == Properties.keys.cookieParams ||
+        obj.name == Properties.keys.formParams ||
+        obj.name == Properties.keys.headerParams ||
+        obj.name == Properties.keys.matrixParams ||
+        obj.name == Properties.keys.pathParams ||
+        obj.name == Properties.keys.queryParams) {
+        return classes + "httpParameters";
+    } else if (Properties.keys.parameters == obj.name) {
+        return classes + "parameters";
+    } else if (Properties.keys.returnOptions == obj.name) {
+        return classes + "returnOptions";
+    } else if (Properties.keys.soapInputHeaders == obj.name) {
+        return classes + "soapInputHeaders";
+    } else if (Properties.keys.soapOutputHeaders == obj.name) {
+        return classes + "soapOutputHeaders";
+    }
+    return classes;
+};
+
 Graphics.prototype.transforms = {
-    'object': {'tag': 'div', 'class': 'package ${show} ${type}', 'children': [
+    'object': {'tag': 'div', 'class': function (obj) {
+        return Graphics.prototype.setCSSClass(obj)
+    }, 'children': [
         {'tag': 'div', 'class': 'header', 'children': [
             {'tag': 'div', 'class': function (obj) {
                 if (Graphics.prototype.getValue(obj.value) !== undefined) return('arrow hide');
                 else return('arrow');
             }},
-                {'tag':'span','class':'name','html':'${name}'},
-//            {'tag': 'span', 'class': 'name', 'html': function (obj) {
-////                return Graphics.prototype.anchor(obj);
-//                    return obj.name;
-//            }},
+            {'tag': 'span', 'class': 'name', 'html': '${name}'},
             {'tag': 'span', 'class': 'value', 'html': function (obj) {
                 var value = Graphics.prototype.getValue(obj.value);
-//                    if (value !== undefined) return(" : " + value);
                 if (value !== undefined) return(" : " + Graphics.prototype.anchorLink(obj));
                 else return('');
             }}
-//                , {'tag':'span','class':'type','html':'${type}'}
         ]},
         {'tag': 'div', 'class': 'children', 'children': function (obj) {
             return(Graphics.prototype.children(obj.value));
@@ -37,7 +64,7 @@ Graphics.prototype.transforms = {
 };
 
 Graphics.prototype.anchorLink = function (obj) {
-    if (obj.name == "typeRef" || obj.name == "includeTypeRef" || obj.name == "keyTypeRef" || obj.name == "valueTypeRef") {
+    if (obj.name == Properties.keys.typeRef || obj.name == Properties.keys.includeTypeRef || obj.name == Properties.keys.keyTypeRef || obj.name == Properties.keys.valueTypeRef) {
         return "<a href='#" + obj.value + "'>" + obj.value + "</a>";
     } else {
         return obj.value;
@@ -48,16 +75,16 @@ Graphics.prototype.anchor = function (obj) {
     return "<span id='" + obj.name + "'>" + obj.name + "</span>";
 };
 
-Graphics.prototype.openTypesElement = function () {
-    var top = document.querySelector("#top");
-    var nodesArray = top.children[0].children[1].children;
-    nodesArray[nodesArray.length - 1].setAttribute("class", "package open object");
+Graphics.prototype.closeMethodElement = function () {
+    var methodList = $(".methods > .children > .package.open.object");
+    methodList.removeClass("open");
+    methodList.addClass("closed");
 };
 
-Graphics.prototype.createAnchorsToTypes = function(){
+Graphics.prototype.createAnchorsToTypes = function () {
     var top = document.querySelector("#top");
     var nodesArray = top.children[0].children[1].children;
-    for(var i = 0;i < nodesArray[nodesArray.length - 1].children[1].children.length;i++){
+    for (var i = 0; i < nodesArray[nodesArray.length - 1].children[1].children.length; i++) {
         var type = nodesArray[nodesArray.length - 1].children[1].children[i];
         var typeRef = type.children[0].children[1].innerHTML;
         type.children[0].children[1].innerHTML = "<span id='" + typeRef + "'>" + typeRef + "</span>";
@@ -106,7 +133,7 @@ Graphics.prototype.convert = function (name, obj, show) {
     switch (type) {
         case 'array':
             //Transform array
-            //Itterrate through the array and add it to the elements array
+            //Iterate through the array and add it to the elements array
             var len = obj.length;
             for (var j = 0; j < len; ++j) {
                 //Concat the return elements from this objects tranformation
@@ -124,7 +151,7 @@ Graphics.prototype.convert = function (name, obj, show) {
             break;
 
         default:
-            //This must be a litteral (or function)
+            //This must be a literal (or function)
             children = obj;
             break;
     }

@@ -29,8 +29,8 @@
 
         .package {
             margin-left: 10px;
-            padding: 3px;
-            border-radius: 2px;
+            padding: 10px 0px 0px 10px;
+            /*border-radius: 2px;*/
             margin-top: 2px;
         }
 
@@ -40,6 +40,11 @@
 
         .name {
             color: gray;
+            font-family: "Open Sans", sans-serif;
+        }
+
+        .value {
+            font-size: 10pt;
         }
 
         .array {
@@ -48,8 +53,8 @@
         }
 
         .object {
-            background-color: #E7F1FE;
-            border: thin solid #7DA2CE;
+            /*background-color: #E7F1FE;*/
+            /*border: thin solid #7DA2CE;*/
         }
 
         .string {
@@ -68,8 +73,9 @@
             display: block;
         }
 
-        .closed .children {
+        .closed > .children {
             display: none;
+            /*display: block;*/
         }
 
         .arrow {
@@ -83,10 +89,12 @@
 
         .open .arrow {
             background-position: -20px 0;
+            /*background-position: 0 0;*/
         }
 
         .closed .arrow {
             background-position: 0 0;
+            /*background-position: -20px 0;*/
         }
 
         .type {
@@ -126,8 +134,92 @@
             text-align: center;
         }
 
-        .inline{
+        .inline {
             display: inline;
+        }
+
+        .info {
+            background-color: #b1ff99;
+        }
+
+        .serviceGroups {
+            background-color: #d0ffa0;
+        }
+
+        .types {
+            background-color: #beffa6;
+        }
+
+        .serviceGroups > .children > .package.open.object:nth-child(even) {
+            background: #e5e3e3;
+        }
+
+        .serviceGroups > .children > .package.open.object:nth-child(odd) {
+            background: #dddbdb;
+        }
+
+        .services > .children > .package.open.object:nth-child(even) {
+            background: #e7e5e5;
+        }
+
+        .services > .children > .package.open.object:nth-child(odd) {
+            background: #edebeb;
+        }
+
+        .methods > .children > .package.open.object:nth-child(even) {
+            background: #DDDBDB;
+        }
+
+        .methods > .children > .package.open.object:nth-child(odd) {
+            background: #e6e4e4;
+        }
+
+        .httpParameters > .children > .package.open.object:nth-child(even) {
+            background: #e6ebeb;
+        }
+
+        .httpParameters > .children > .package.open.object:nth-child(odd) {
+            background: #f0f5f5;
+        }
+
+        .parameters > .children > .package.open.object:nth-child(even) {
+            background: #e6ebeb;
+        }
+
+        .parameters > .children > .package.open.object:nth-child(odd) {
+            background: #f0f5f5
+        }
+
+        .soapInputHeaders > .children > .package.open.object:nth-child(even) {
+            background: #e6ebeb;
+        }
+
+        .soapInputHeaders > .children > .package.open.object:nth-child(odd) {
+            background: #f0f5f5
+        }
+
+        .soapOutputHeaders > .children > .package.open.object:nth-child(even) {
+            background: #e6ebeb;
+        }
+
+        .soapOutputHeaders > .children > .package.open.object:nth-child(odd) {
+            background: #f0f5f5
+        }
+
+        .returnOptions > .children > .package.open.object:nth-child(even) {
+            background: #eceaea;
+        }
+
+        .returnOptions > .children > .package.open.object:nth-child(odd) {
+            background: #dddbdb;
+        }
+
+        .types > .children > .package.open.object:nth-child(even) {
+            background: #DDDBDB;
+        }
+
+        .types > .children > .package.open.object:nth-child(odd) {
+            background: #f0eeee
         }
 
     </style>
@@ -146,7 +238,8 @@
     <h2>Application name</h2>
     <article>
         <div style=";margin-top:20px;">
-            <label class="inline" for="modelUrl">URI: </label><input id="modelUrl" type="text" size="100"><input id="loadModel" type="button" value="Load model">
+            <label class="inline" for="modelUrl">URI: </label><input id="modelUrl" type="text" size="100"><input
+                id="loadModel" type="button" value="Load model">
 
             <div id="top"></div>
         </div>

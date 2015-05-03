@@ -6,9 +6,11 @@ html {
 
 body {
     background-color: transparent;
-    font-family: "Helvetica Neue",Arial,sans-serif;
-    font-size: 10pt;
-    padding: 1px 0 30px;
+    /*font-family: "Helvetica Neue",Arial,sans-serif;*/
+    font-family: "Droid Sans Mono",monospace;
+    font-size: 12pt;
+    /*padding: 1px 100px 30px;*/
+    padding-bottom: 100px;
 }
 
 #page {
@@ -23,7 +25,7 @@ body {
 #header, #page, #footer {
     margin: 0 auto;
     position: relative;
-    width: 830px;
+    width: 1200px;
 }
 
 #header {

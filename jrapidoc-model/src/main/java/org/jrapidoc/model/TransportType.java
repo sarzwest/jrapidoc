@@ -1,14 +1,18 @@
 package org.jrapidoc.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.jrapidoc.model.object.type.Type;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 10.4.15.
  */
+@JsonPropertyOrder({"description", "required", "type"})
 public class TransportType {
 
     Type type;
     String description;
+    @JsonProperty("required")
     Boolean isRequired;
 
     private TransportType(Type type, String description, Boolean isRequired) {

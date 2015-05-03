@@ -15,7 +15,7 @@ Initializer.prototype.initialize = function () {
         window.graphics.init();
         window.apiModel.loadModel(Properties.defaultModelPath);
         window.graphics.show(window.apiModel.modelJSON);
-        window.graphics.openTypesElement();
+        window.graphics.closeMethodElement();
         window.graphics.createAnchorsToTypes();
     }catch (e){
         if(e instanceof CaughtException){

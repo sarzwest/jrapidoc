@@ -16,7 +16,7 @@ Listeners.prototype.loadModel = function (e) {
         var modelPath = document.querySelector("#modelUrl").value;
         window.apiModel.loadModel(modelPath);
         window.graphics.show(window.apiModel.modelJSON);
-        window.graphics.openTypesElement();
+        window.graphics.closeMethodElement();
         window.graphics.createAnchorsToTypes();
     }catch (e){
         if(e instanceof CaughtException){
@@ -40,11 +40,27 @@ Listeners.prototype.regEvents = function () {
         var parent = $(this).parent();
 
         if (parent.hasClass('closed')) {
-            parent.removeClass('closed');
-            parent.addClass('open');
+            parent.children(".children").slideToggle("slow");
+            parent.children(".children").promise().done(
+                function(onFired){
+                    parent.removeClass('closed');
+                    parent.addClass('open');
+                }
+            );
+//            parent.removeClass('closed');
+//            parent.addClass('open');
+//            parent.children(".children").fadeIn(1000);
         } else {
-            parent.removeClass('open');
-            parent.addClass('closed');
+            parent.children(".children").slideToggle("slow");
+            parent.children(".children").promise().done(
+                function(onFired){
+                    parent.removeClass('open');
+                    parent.addClass('closed');
+                }
+            );
+//            parent.removeClass('open');
+//            parent.addClass('closed');
+//            parent.children(".children").fadeOut(1000);
         }
     });
 };
