@@ -54,7 +54,7 @@
 }
 
 .arrow {
-    background-image: url("img/d.png");
+    background-image: url("../img/d.png");
     background-repeat: no-repeat;
     background-color: transparent;
     height: 15px;

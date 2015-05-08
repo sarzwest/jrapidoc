@@ -21,7 +21,7 @@ import java.util.Set;
  */
 public class TestSoapIntrospector {
 
-    public static final String DEFAULT_GROUP = "http://localhost:9080/airservice/rest";
+    public static final String DEFAULT_GROUP = "http://localhost:9080/airservice/soap";
     public static final String DEFAULT_PACKAGE = "airservice.services";
 
     static SoapIntrospector soapIntrospector;

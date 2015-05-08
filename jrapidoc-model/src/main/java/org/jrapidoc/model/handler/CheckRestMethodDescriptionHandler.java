@@ -17,7 +17,8 @@ public class CheckRestMethodDescriptionHandler implements ModelHandler {
             for (Service service : serviceGroup.getServices().values()) {
                 for (Method method : service.getMethods().values()) {
                     if (StringUtils.isEmpty(method.getDescription())) {
-                        Logger.warn("Method {0} has not set description", method.getPath());
+                        Logger.warn("Method {0} has not set description",
+                                method.getPath());
                     }
                 }
             }

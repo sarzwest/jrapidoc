@@ -8,9 +8,10 @@ import java.lang.annotation.Target;
 /**
  * Annotatation can be used for indication whether parameter is required or optional<br/>
  * <br/>
+ * Can be placed on field, method parameter, constructor parameter ana setter method
  * Created by Tomas "sarzwest" Jiricek on 16.4.15.<br/>
  */
-@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DocIsRequired {
     /**

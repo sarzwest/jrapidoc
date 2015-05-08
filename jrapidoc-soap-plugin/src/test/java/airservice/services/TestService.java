@@ -41,7 +41,7 @@ public class TestService {
         try {
             result = first / second;
         } catch (Exception e) {
-            throw new AirserviceFault("zprava v message pro exception", e, new AirserviceException().setMessage("zprava v airexception"));
+            throw new AirserviceFault("message for fault", e, new AirserviceException().setMessage("message in airexception"));
         }
         return result;
     }
@@ -49,17 +49,16 @@ public class TestService {
     @WebMethod(operationName = "explicitName")
     public void testException(int exType) throws SOAPException {
         if (exType == 0) {
-            throw new NumberFormatException("Cislo ve spatnem formatu");
+            throw new NumberFormatException("Number in wrong format");
         }
         if (exType == 1) {
-            throw new WebServiceException("Vyjimka typu WebServiceException");
+            throw new WebServiceException("Exception of type WebServiceException");
         }
         if (exType == 2) {
-            throw new ProtocolException("Vyjimka typu ProtocolException");
+            throw new ProtocolException("Exception of type ProtocolException");
         }
         if (exType == 3) {
             SOAPFault fault = SOAPFactory.newInstance().createFault();
-//            fault.setFaultCode(new QName("A code for identifying the fault"));
             fault.setFaultCode("A code for identifying the fault");
             fault.setFaultString("A human readable explanation of the fault");
             fault.setFaultActor("Information about who caused the fault to happen");
