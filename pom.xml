@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
 
     <description>
-        A Maven plugin used to generate remote API documentation based on JAX-RS and JAX-WS.
+        A Maven plugins used to generate remote API documentation based on JAX-RS and JAX-WS.
     </description>
 
     <scm>
@@ -89,6 +89,20 @@
                             <id>attach-javadocs</id>
                             <goals>
                                 <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
                             </goals>
                         </execution>
                     </executions>
@@ -219,6 +233,10 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
