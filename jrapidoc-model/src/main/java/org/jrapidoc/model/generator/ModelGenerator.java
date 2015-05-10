@@ -35,7 +35,6 @@ public class ModelGenerator {
 
     public static void generateModel(APIModel model, OutputStream output) {
         ObjectMapper mapper = new ObjectMapper();
-//        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.setVisibilityChecker(mapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE)

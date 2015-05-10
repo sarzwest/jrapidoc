@@ -295,7 +295,6 @@ public class SEIProcessor {
     void addTypeFromReturn(Method method, List<TransportType> returnTypes) {
         if (!isHeader(method.getDeclaredAnnotations())) {
             if (!method.getGenericReturnType().equals(Void.TYPE)) {
-//                DocReturn docReturnAnno = getAnnotation(method.getDeclaredAnnotations(), DocReturn.class);
                 DocReturn docReturnAnno = getNonExceptionDocReturn(method);
                 String description = (docReturnAnno == null) ? null : docReturnAnno.typeDescription();
                 TransportType soapOutputParameter = new TransportType.TransportTypeBuilder().description(description).type(createType(method.getGenericReturnType())).build();
@@ -307,7 +306,6 @@ public class SEIProcessor {
     void addHeaderFromReturn(Method method, Return.ReturnBuilder returnBuilder) {
         if (isHeader(method.getDeclaredAnnotations())) {
             if (!method.getGenericReturnType().equals(Void.TYPE)) {
-//                DocReturn docReturnAnno = getAnnotation(method.getDeclaredAnnotations(), DocReturn.class);
                 DocReturn docReturnAnno = getNonExceptionDocReturn(method);
                 String typeDescription = (docReturnAnno == null) ? null : docReturnAnno.typeDescription();
                 TransportType soapOutputHeader = new TransportType.TransportTypeBuilder().description(typeDescription).type(createType(method.getGenericReturnType())).build();

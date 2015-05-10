@@ -31,17 +31,8 @@ public class JacksonToJrapidocProcessor {
         this.objectMapper = objectMapper;
     }
 
-//    ObjectWriter createObjectWriter(JavaType jacksonType){
-//        if(Parent.class.isAssignableFrom(jacksonType.getRawClass())){
-//            objectMapper.setFilters();
-//            return objectMapper.writerWithView().forType(jacksonType);
-//        }else{
-//            return objectMapper.writerFor(jacksonType);
-//        }
-//    }
-
     /**
-     * Z jackson typu vytvori apition typ, bean properties jsou ulozeny v cache
+     * From Jackson type creates a JRAPIDoc type, type is stored in cache
      *
      * @param jacksonType
      * @return
@@ -69,7 +60,7 @@ public class JacksonToJrapidocProcessor {
     }
 
     /**
-     * To stejne jako {@link #getType(com.fasterxml.jackson.databind.type.SimpleType)}
+     * Same as {@link #getType(com.fasterxml.jackson.databind.type.SimpleType)}
      *
      * @param jacksonType
      * @return
@@ -85,29 +76,17 @@ public class JacksonToJrapidocProcessor {
             return cache.get(signature);
         }
         cache.put(signature, type);
-//            ObjectWriter objectWriter = objectMapper.writerFor(jacksonType);
-//            Field prefetchFiled = objectWriter.getClass().getDeclaredField("_prefetch");
-//            prefetchFiled.setAccessible(true);
-//            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchFiled.get(objectWriter);
-//            doIntrospection(prefetch.valueSerializer, type);
         getType(jacksonType.getContentType());
         return type;
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
     }
 
     /**
-     * To stejne jako {@link #getType(com.fasterxml.jackson.databind.type.SimpleType)}
+     * Same as {@link #getType(com.fasterxml.jackson.databind.type.SimpleType)}
      *
      * @param jacksonType
      * @return
      */
     public Type getType(ArrayType jacksonType) {
-//        try {
         String signature = JacksonSignature.createSignature(jacksonType);
         String contentSignature = JacksonSignature.createSignature(jacksonType.getContentType());
         Class<?> contentType = jacksonType.getContentType().getRawClass();
@@ -117,29 +96,17 @@ public class JacksonToJrapidocProcessor {
             return cache.get(signature);
         }
         cache.put(signature, type);
-//            ObjectWriter objectWriter = objectMapper.writerFor(jacksonType);
-//            Field prefetchFiled = objectWriter.getClass().getDeclaredField("_prefetch");
-//            prefetchFiled.setAccessible(true);
-//            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchFiled.get(objectWriter);
-//            doIntrospection(prefetch.valueSerializer, type);
         getType(jacksonType.getContentType());
         return type;
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
     }
 
     /**
-     * To stejne jako {@link #getType(com.fasterxml.jackson.databind.type.SimpleType)}
+     * Same as {@link #getType(com.fasterxml.jackson.databind.type.SimpleType)}
      *
      * @param jacksonType
      * @return
      */
     public Type getType(MapLikeType jacksonType) {
-//        try {
         String signature = JacksonSignature.createSignature(jacksonType);
         JavaType keyType = jacksonType.getKeyType();
         JavaType valueType = jacksonType.getContentType();
@@ -153,25 +120,14 @@ public class JacksonToJrapidocProcessor {
         cache.put(signature, type);
         getType(keyType);
         getType(valueType);
-//            ObjectWriter objectWriter = objectMapper.writerFor(jacksonType);
-//            Field prefetchFiled = objectWriter.getClass().getDeclaredField("_prefetch");
-//            prefetchFiled.setAccessible(true);
-//            ObjectWriter.Prefetch prefetch = (ObjectWriter.Prefetch) prefetchFiled.get(objectWriter);
-//            doIntrospection(prefetch.valueSerializer, type);
         return type;
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
     }
 
     /**
-     * Provadi presmerovani z obecneho typu na konkretni typ
+     * Do redirection from general Jackson type to the concrete one
      *
-     * @param type jackson typ
-     * @return apition typ
+     * @param type jackson type
+     * @return JRAPIDoc type
      */
     public Type getType(JavaType type) {
         if (type instanceof SimpleType) {
@@ -183,18 +139,17 @@ public class JacksonToJrapidocProcessor {
         } else if (type instanceof MapLikeType) {
             return getType((MapLikeType) type);
         }
-        throw new RuntimeException("Sem se to nesmi dostat: " + type);
+        throw new RuntimeException("Unimplemented Jackson type: " + type);
     }
 
     /**
-     * Provadi presmerovani z obecneho jackson serializeru na konkretnejsi
+     * Do redirection from general Jackson serializer to the concrete one
      *
      * @param serializer
      * @param type
      */
     private void doIntrospection(JsonSerializer serializer, Type type) {
         if (serializer == null) {
-            //Object.class has no serializer
             return;
         }
         if (EnumSerializer.class.isAssignableFrom(serializer.getClass())) {
@@ -211,7 +166,7 @@ public class JacksonToJrapidocProcessor {
     }
 
     /**
-     * Prozkoumava serializer pro kolekce
+     * Introspect serializer for collections
      *
      * @param collectionSerializer
      * @param type
@@ -221,7 +176,7 @@ public class JacksonToJrapidocProcessor {
     }
 
     /**
-     * Prozkoumava serializer pro javovske beany
+     * Introspect serializer for java beans
      *
      * @param beanSerializer
      * @param type
@@ -245,7 +200,7 @@ public class JacksonToJrapidocProcessor {
     }
 
     /**
-     * Prozkoumava serializer pro enumerace
+     * Introspect serializer for  enumerations
      *
      * @param enumSerializer
      * @param type
@@ -257,7 +212,7 @@ public class JacksonToJrapidocProcessor {
     }
 
     /**
-     * Prozkoumava serializer pro mapu
+     * Introspect serializer for map
      *
      * @param mapSerializer
      * @param type
@@ -278,7 +233,7 @@ public class JacksonToJrapidocProcessor {
     }
 
     /**
-     * Prozkoumava standardni javovske typy - ty se nemuseji zkoumat, takze nic nedela
+     * Do nothing for this serializer
      *
      * @param stdScalarSerializer
      * @param type

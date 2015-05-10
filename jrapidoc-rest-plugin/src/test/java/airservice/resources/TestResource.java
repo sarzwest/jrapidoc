@@ -114,21 +114,13 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         System.out.println(query);
     }
 
-    /**
-     * @param text kdyz bude obsahovat mezeru, tak se nedekoduje na mezeru, ale
-     *             bude tam %20. Obdobne se nebude dekodovat zbytek
-     * @return
-     */
     @GET
     @POST
     @Path(value = "/encoded")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
     public Response encoded(@QueryParam("text") @Encoded String text, @QueryParam("fromstringbeanparam") FromStringBean f) {
-//        System.out.println(text);
-//        for(FromStringBean fsb: listbean){
-//            System.out.println(fsb.toString());
-//        }
+
         return Response.status(Response.Status.OK).entity("je to ok").build();
     }
 
@@ -139,14 +131,10 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
 
     }
 
-    /**
-     * Anotovany field je nasetovany, nastaven response object
-     */
     @GET
     @Path(value = "/annotatedfield")
     @Produces(MediaType.TEXT_PLAIN)
     public Response annotatedField() {
-//        System.out.println(header);
         return Response.status(Response.Status.OK).entity("je to ok").build();
     }
 
@@ -159,10 +147,7 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         return Response.ok().build();
     }
 
-    /**
-     * GenericEntity priklad. Pouziva se, protoze JAX-RS nemuze korektne
-     * zachytit Listy JAXB objektu
-     */
+
     @GET
     @Path(value = "/retgenericentity")
     @Produces(MediaType.APPLICATION_XML)
@@ -180,9 +165,6 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         return genericEntity;
     }
 
-    /**
-     * Vnorene typy v sobe
-     */
     @GET
     @Path(value = "/retgenericentityinnerdoublelist")
     @Produces(MediaType.APPLICATION_JSON)
@@ -202,13 +184,6 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         return genericEntity;
     }
 
-    /**
-     * Tady jsem si hral s generiky. Trida wrapper v sobe obsahuje generika.
-     *
-     * @param incomeWrap je jedno jak je trida tvorena generiky, nakonec je presne
-     *                   definovana v parametru metody.
-     * @return trosku problem, mozna delat tak, jak to ma Miredot.
-     */
     @POST
     @Path(value = "/rawtype")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -219,9 +194,6 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         return wrapper;
     }
 
-    /**
-     * Metoda bere jako parametr kolekci objektu
-     */
     @POST
     @Path(value = "/reqlist")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -233,18 +205,13 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    /**
-     * PathParam jako parametr metody
-     */
     @GET
     @Path("pathparam/{path}")
     public void getPathParam(@PathParam("path") String path) {
         System.out.println(path);
     }
 
-    /**
-     * QueryParam jako parametr metody
-     */
+
     @GET
     @Path("queryparam")
     public void getQueryParam(@QueryParam("q") String q) {
@@ -252,54 +219,34 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         System.out.println();
     }
 
-    /**
-     * MatrixParam jako parametr metody
-     */
     @POST
     @Path("matrixparam")
     public void getMatrixParam(@MatrixParam("m") List<String> m) {
         System.out.println(m);
     }
 
-    /**
-     * CookieParam jako parametr metody
-     */
+
     @POST
     @Path("cookieparam")
     public void getCookieParam(@CookieParam("c") String c) {
         System.out.println(c);
     }
 
-    /**
-     * HeaderParam jako parametr metody
-     */
+
     @POST
     @Path("headerparam")
     public void getHeaderParam(@HeaderParam("h") String h) {
         System.out.println(h);
     }
 
-    /**
-     * FormParam jako parametr metody
-     */
+
     @POST
     @Path("formparam")
     public void getFormParam(@FormParam("f") String f) {
         System.out.println(f);
     }
 
-    /**
-     * Metoda pouzivajici generika. Muze konzumovat jakykoliv typ, vsechno je
-     * totiz serializovano do likedhashmapy Priklad volani:
-     * <p/>
-     * [ { "destO": { "varInDestChild": "inDestChild" }, "varInWrapper":
-     * "inWrapper" }, { "destO": { "varInDestChild": "inDestChild2" },
-     * "varInWrapper": "inWrapper" } ]
-     *
-     * @param <T>
-     * @param src
-     * @return
-     */
+
     @POST
     @Path(value = "/rawtype2")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -377,12 +324,6 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         return list;
     }
 
-    /**
-     * Metoda vyhazuje WebApplicationException
-     *
-     * @param incomeWrap
-     * @return
-     */
     @POST
     @Path(value = "/exception")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -405,72 +346,31 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         return wrapper;
     }
 
-    /**
-     * Metoda vraci subresourcelocator ktery vraci response
-     *
-     * @return
-     */
-    //@GET - kdyz tu je GET tak to neni subresource locator
     @Path("subresourcelocator")
-    //@Produces(MediaType.APPLICATION_JSON) - toto se vubec nebere v potaz
-    public SubResource getSubResource(/*DestinationInput d - musi byt prazdne jinak nefunguje*/) {
+
+    public SubResource getSubResource() {
         return new SubResource("tadaaa");
     }
 
-    /**
-     * Metoda jak v super class tak v interface, ale bere se ze superclass
-     *
-     * @return
-     */
-    // @ApiOperation(value =
-    // "Metoda jak v super class tak v interface, ale bere se ze superclass")
     @Override
     public Response getInheritance() {
         return Response.ok("toto je inheritance", MediaType.APPLICATION_JSON)
                 .build();
     }
 
-    /**
-     * Metoda v interface
-     *
-     * @return
-     */
-    // @ApiOperation(value = "Metoda v interface")
     @Override
     public Response getInheritance2() {
         return Response.ok("toto je inheritance", MediaType.APPLICATION_JSON)
                 .build();
     }
 
-    /**
-     * Implementovano ze dvou interfacu na stejne urovni - nelze, muselo se
-     * zakomentovat v jednom
-     *
-     * @return
-     */
-    // @ApiOperation(value =
-    // "Implementovano ze dvou interfacu na stejne urovni - nelze, muselo se zakomentovat v jednom")
     @Override
     public Response getInheritance3() {
         return Response.ok("toto je inheritance", MediaType.APPLICATION_JSON)
                 .build();
     }
 
-    /**
-     * Implementovano ze dvou interfacu kazdy na jine urovni - nelze
-     * implementovat interface interfacem
-     *
-     * @return
-     */
-    /*
-     * @Override public Response getInheritance4() { return
-	 * Response.ok("toto je inheritance", MediaType.APPLICATION_JSON).build(); }
-	 */
 
-    /**
-     * @return
-     */
-    // @ApiOperation(value = "Inheritance")
     @Override
     public Response getInheritance5() {
         return Response.ok("toto je inheritance", MediaType.APPLICATION_JSON)
@@ -484,18 +384,12 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         throw new MyException();
     }
 
-    //@ApiOperation(value = "Inheritance")
     @Override
     public Response foo() {
         return Response.ok("toto je inheritance", MediaType.APPLICATION_JSON)
                 .build();
     }
 
-    /**
-     * Zkouska interceptoru
-     *
-     * @return
-     */
     @GET
     @Path("compressed")
     public Response getCompressed() {
@@ -503,11 +397,6 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
                 MediaType.TEXT_PLAIN).build();
     }
 
-    /**
-     * Asynchronni volani
-     *
-     * @param ar
-     */
     @GET
     @Path("async")
     public void async(@Suspended final AsyncResponse ar) {
@@ -538,12 +427,6 @@ public class TestResource extends Class1 implements IFace2, ParentInterface,
         });
     }
 
-    /**
-     * Pole, kolekce a set jsou to stejne
-     *
-     * @param b
-     * @return
-     */
     @GET
     @Path("asdfg")
     @Produces("application/json")

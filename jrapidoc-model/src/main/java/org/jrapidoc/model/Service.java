@@ -241,9 +241,6 @@ public class Service {
         }
 
         public Service build() {
-//            for(Method method:methods){
-//
-//            }
             return new Service(path, pathExample, headerParams, cookieParams, formParams, matrixParams, pathParams, queryParams, methods, description, name);
         }
     }

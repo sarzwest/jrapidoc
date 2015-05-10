@@ -13,9 +13,7 @@ import javax.ws.rs.core.Response;
  * @author Tomas "sarzwest" Jiricek
  */
 public abstract class Class1_1 extends Class1_1_1{
-    
-//    @GET
-//    @Path("11")
+
     @Override
     public abstract Response foo();
 }

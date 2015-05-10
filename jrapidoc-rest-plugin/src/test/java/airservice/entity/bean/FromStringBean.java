@@ -10,11 +10,6 @@ public class FromStringBean implements Comparable {
 
     private String name;
 
-//    public static FromStringBean fromString(String s){
-//        FromStringBean f = new FromStringBean();
-//        f.name = s;
-//        return f;
-//    }bud toto nebo toto
     public static List<FromStringBean> fromString(String s){
         return new ArrayList<FromStringBean>();
     }

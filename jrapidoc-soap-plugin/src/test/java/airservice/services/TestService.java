@@ -32,7 +32,6 @@ public class TestService {
 
     public void test2(@WebParam(header = true) Holder<Destination> ss) {
         System.out.println(ss);
-//        return ss;
     }
 
     @WebMethod

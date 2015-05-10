@@ -11,11 +11,5 @@ package airservice.resources;
  * @author Tomas "sarzwest" Jiricek
  */
 public interface Parent2Interface {
-    
-    /**
-     * Neslo deploynout, protoze metoda byla implementovana dvemi interfaci na stejne urovni
-     */
-    //@GET
-    //@Path("inheritanceinterface2")
-    //public Response getInheritance3();
+
 }

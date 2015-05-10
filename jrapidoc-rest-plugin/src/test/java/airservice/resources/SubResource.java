@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 /**
  * @author Tomas "sarzwest" Jiricek
  */
-//@Produces(MediaType.APPLICATION_XML)
 public class SubResource {
 
     String text;

@@ -18,7 +18,6 @@ public abstract class Class1 extends Class1_1 implements IFace1_2{
 
     @QueryParam("queryparamparent")
     String queryParent;
-//    @GET
-//    @Path("1")
+
     public abstract Response foo();
 }

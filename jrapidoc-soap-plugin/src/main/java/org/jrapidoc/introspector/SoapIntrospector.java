@@ -35,9 +35,6 @@ public class SoapIntrospector extends AbstractIntrospector {
         setUp(groups, output);
         List<ModelHandler> modelHandlers = getModelHandlers(modelHandlerClasses);
         URLClassLoader loader = getProjectUrlClassLoader(urlsForClassloader);
-//        Set<Class<?>> seiClasses = getScannedClasses(include, exclude, loader, WebService.class);
-//        seiClasses = removeInterfaces(seiClasses);
-//        seiClasses = removeExcludedResourceClasses(exclude, seiClasses);
         APIModel apiModel = createModel(customInfo, groups, loader, typeProviderClass);
         processHandlers(modelHandlers, apiModel);
         writeModelToFile(apiModel, output);

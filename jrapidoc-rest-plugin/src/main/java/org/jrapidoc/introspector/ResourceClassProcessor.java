@@ -266,7 +266,6 @@ public class ResourceClassProcessor {
             return typeProvider.createType(Boolean.class);
         }
         return typeProvider.createType(String.class);
-//        return typeProvider.createType(parameter.getGenericType());
     }
 
     private TransportType createParameterType(MethodParameter[] parameters) {

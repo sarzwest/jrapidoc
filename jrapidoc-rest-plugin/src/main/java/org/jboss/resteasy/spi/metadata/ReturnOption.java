@@ -76,21 +76,4 @@ public class ReturnOption {
         return cookies;
     }
 
-//    public List<ReturnType> getReturnTypes() {
-//        return returnTypes;
-//    }
-
-//    public class ReturnType{
-//
-//        Class<?> returnClass;
-//
-//        ReturnType(Class<?> returnClass) {
-//            this.returnClass = returnClass;
-//        }
-//
-//        public Class<?> getReturnClass() {
-//            return returnClass;
-//        }
-//
-//    }
 }
