@@ -15,9 +15,9 @@ HTML, CSS, JavaScript client responsible for presenting API documentation.
 Library containing additional annotations for usage in APIs based on JAX-RS and JAX-WS. Helps with creation more specific and better API documentation.
 
 ###Getting Started
-1. [Configure plugin/s](#####Plugin Configuration)
-<li>Copy [GUI Client](#####Getting GUI Client) to projects `${project.basedir}/src/main/webapp/jrapidoc`</li>
-<li>[Add JRAPIDoc annotations](#####Adding annotations) dependency and annotate remote API with them - optional</li>
+1. Configure plugin/s
+<li>Copy GUI Client to projects `${project.basedir}/src/main/webapp/jrapidoc`</li>
+<li>Add JRAPIDoc annotations dependency and annotate remote API with them - optional</li>
 <li>Run project build</li>
 <li>Take API model file/s from `${project.build.directory}/generated-sources/jrapidoc`</li>
 <li>Put API model file/s to `jrapidoc` directory in WAR file</li>
