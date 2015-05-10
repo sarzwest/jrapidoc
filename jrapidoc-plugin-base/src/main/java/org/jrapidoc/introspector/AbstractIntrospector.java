@@ -80,8 +80,8 @@ public abstract class AbstractIntrospector {
         }
     }
 
-    List<ModelHandler> getModelHandlers(List<String> modelHandlerClasses) throws JrapidocExecutionException {
-        return HandlerFactory.createModelHandlers(modelHandlerClasses);
+    List<ModelHandler> getModelHandlers(List<String> modelHandlerClasses, ClassLoader loader) throws JrapidocExecutionException {
+        return HandlerFactory.createModelHandlers(modelHandlerClasses, loader);
     }
 
     void createOutputDir(File output) throws JrapidocExecutionException {

@@ -33,8 +33,8 @@ public class SoapIntrospector extends AbstractIntrospector {
         Logger.info("Introspection started");
         Logger.info("");
         setUp(groups, output);
-        List<ModelHandler> modelHandlers = getModelHandlers(modelHandlerClasses);
         URLClassLoader loader = getProjectUrlClassLoader(urlsForClassloader);
+        List<ModelHandler> modelHandlers = getModelHandlers(modelHandlerClasses, loader);
         APIModel apiModel = createModel(customInfo, groups, loader, typeProviderClass);
         processHandlers(modelHandlers, apiModel);
         writeModelToFile(apiModel, output);

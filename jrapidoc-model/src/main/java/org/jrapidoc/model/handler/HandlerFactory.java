@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class HandlerFactory {
 
-    public static List<ModelHandler> createModelHandlers(List<String> handlerClassesToLoad) throws JrapidocExecutionException {
+    public static List<ModelHandler> createModelHandlers(List<String> handlerClassesToLoad, ClassLoader loader) throws JrapidocExecutionException {
         try {
             List<ModelHandler> handlers = new ArrayList<ModelHandler>();
             if (handlerClassesToLoad == null || handlerClassesToLoad.isEmpty()) {
@@ -20,7 +20,8 @@ public class HandlerFactory {
             }
             for (String clazzToLoad : handlerClassesToLoad) {
                 Logger.info("Loading class {0}", clazzToLoad);
-                Class<?> handler = Thread.currentThread().getContextClassLoader().loadClass(clazzToLoad);
+//                Class<?> handler = Thread.currentThread().getContextClassLoader().loadClass(clazzToLoad);
+                Class<?> handler = loader.loadClass(clazzToLoad);
                 Logger.debug("Creating new instance from class {0} as ModelHandler", clazzToLoad);
                 handlers.add((ModelHandler) handler.newInstance());
             }
