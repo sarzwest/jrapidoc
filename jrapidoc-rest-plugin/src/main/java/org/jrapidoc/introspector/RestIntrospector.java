@@ -55,7 +55,7 @@ public class RestIntrospector extends AbstractIntrospector {
 
     APIModel createModel(Map<String, String> customInfo, List<ConfigGroup> groups, ClassLoader loader, String typeProviderClass) throws JrapidocFailureException {
         try {
-            TypeProvider typeProvider = getTypeProvider(typeProviderClass);
+            TypeProvider typeProvider = getTypeProvider(typeProviderClass, loader);
             ResourceClassProcessor resourceClassProcessor = getResourceClassProcessor(typeProvider);
             APIModel.APIModelBuilder APIModelBuilder = new APIModel.APIModelBuilder();
             addCustomInfo(customInfo, APIModelBuilder);
@@ -68,8 +68,8 @@ public class RestIntrospector extends AbstractIntrospector {
         }
     }
 
-    TypeProvider getTypeProvider(String typeProviderClass) {
-        return TypeProviderFactory.createTypeProvider((StringUtils.isEmpty(typeProviderClass) ? JacksonJsonProvider.class.getCanonicalName() : typeProviderClass));
+    TypeProvider getTypeProvider(String typeProviderClass, ClassLoader loader) {
+        return TypeProviderFactory.createTypeProvider((StringUtils.isEmpty(typeProviderClass) ? JacksonJsonProvider.class.getCanonicalName() : typeProviderClass), loader);
     }
 
     void addServiceGroups(List<ConfigGroup> groups, ResourceClassProcessor resourceClassProcessor, ClassLoader loader, APIModel.APIModelBuilder APIModelBuilder) {

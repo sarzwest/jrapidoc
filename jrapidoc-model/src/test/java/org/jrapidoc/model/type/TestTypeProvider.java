@@ -17,7 +17,7 @@ public class TestTypeProvider {
     @Test
     public void responseObjectProcessor(){
         JavaType javaType = JacksonUtil.objectMapperInstance().getTypeFactory().constructParametrizedType(Map.class, Map.class, Integer.class, String.class);
-        TypeProvider typeProvider = TypeProviderFactory.createTypeProvider(null);
+        TypeProvider typeProvider = TypeProviderFactory.createTypeProvider(null, null);
 
         Type type = typeProvider.createType(String.class);
         for (String key : JacksonToJrapidocProcessor.cache.keySet()) {

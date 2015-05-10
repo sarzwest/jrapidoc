@@ -8,11 +8,12 @@ import org.jrapidoc.logger.Logger;
  */
 public class TypeProviderFactory {
 
-    public static TypeProvider createTypeProvider(String clazzToLoad) {
+    public static TypeProvider createTypeProvider(String clazzToLoad, ClassLoader loader) {
         try {
             if (StringUtils.isNotEmpty(clazzToLoad)) {
                 Logger.info("Loading class {0}", clazzToLoad);
-                Class<?> providerImpl = Thread.currentThread().getContextClassLoader().loadClass(clazzToLoad);
+//                Class<?> providerImpl = Thread.currentThread().getContextClassLoader().loadClass(clazzToLoad);
+                Class<?> providerImpl = loader.loadClass(clazzToLoad);
                 Logger.debug("Creating new instance from class {0} as TypeProvider", clazzToLoad);
                 return (TypeProvider)providerImpl.newInstance();
             }else{
