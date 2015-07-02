@@ -2,10 +2,10 @@ package airservice.services;
 
 import airservice.entity.destination.Destination;
 import airservice.exception.AirserviceFault;
-import org.jrapidoc.annotation.DocDescription;
-import org.jrapidoc.annotation.rest.DocIsRequired;
-import org.jrapidoc.annotation.soap.DocReturn;
-import org.jrapidoc.annotation.soap.DocReturns;
+import org.projectodd.jrapidoc.annotation.DocDescription;
+import org.projectodd.jrapidoc.annotation.rest.DocIsRequired;
+import org.projectodd.jrapidoc.annotation.soap.DocReturn;
+import org.projectodd.jrapidoc.annotation.soap.DocReturns;
 
 import javax.jws.*;
 import javax.jws.soap.SOAPBinding;

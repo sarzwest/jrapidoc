@@ -1,5 +1,5 @@
-import org.jrapidoc.annotation.rest.DocReturn;
-import org.jrapidoc.annotation.rest.DocReturns;
+import org.projectodd.jrapidoc.annotation.rest.DocReturn;
+import org.projectodd.jrapidoc.annotation.rest.DocReturns;
 
 /**
  * Created by Tomas "sarzwest" Jiricek on 31.3.15.

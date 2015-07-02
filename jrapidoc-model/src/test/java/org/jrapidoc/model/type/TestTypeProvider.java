@@ -1,10 +1,10 @@
-package org.jrapidoc.model.type;
+package org.projectodd.jrapidoc.model.type;
 
 import com.fasterxml.jackson.databind.JavaType;
-import org.jrapidoc.model.object.type.Type;
-import org.jrapidoc.model.type.provider.converter.JacksonToJrapidocProcessor;
-import org.jrapidoc.model.type.provider.TypeProvider;
-import org.jrapidoc.model.type.provider.TypeProviderFactory;
+import org.projectodd.jrapidoc.model.object.type.Type;
+import org.projectodd.jrapidoc.model.type.provider.converter.JacksonToJrapidocProcessor;
+import org.projectodd.jrapidoc.model.type.provider.TypeProvider;
+import org.projectodd.jrapidoc.model.type.provider.TypeProviderFactory;
 import org.junit.Test;
 
 import java.util.Map;

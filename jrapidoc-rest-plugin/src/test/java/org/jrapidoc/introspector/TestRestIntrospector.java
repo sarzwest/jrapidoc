@@ -1,11 +1,11 @@
-package org.jrapidoc.introspector;
+package org.projectodd.jrapidoc.introspector;
 
 import airservice.resources.TestResource;
-import org.jrapidoc.RestUtil;
-import org.jrapidoc.exception.JrapidocFailureException;
-import org.jrapidoc.model.*;
-import org.jrapidoc.model.param.*;
-import org.jrapidoc.plugin.ConfigGroup;
+import org.projectodd.jrapidoc.RestUtil;
+import org.projectodd.jrapidoc.exception.JrapidocFailureException;
+import org.projectodd.jrapidoc.model.*;
+import org.projectodd.jrapidoc.model.param.*;
+import org.projectodd.jrapidoc.plugin.ConfigGroup;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -9,11 +9,11 @@ import org.jboss.resteasy.util.IsHttpMethod;
 import org.jboss.resteasy.util.MethodHashing;
 import org.jboss.resteasy.util.PickConstructor;
 import org.jboss.resteasy.util.Types;
-import org.jrapidoc.annotation.DocDescription;
-import org.jrapidoc.annotation.rest.DocPathExample;
-import org.jrapidoc.annotation.rest.DocReturn;
-import org.jrapidoc.annotation.rest.DocReturns;
-import org.jrapidoc.logger.Logger;
+import org.projectodd.jrapidoc.annotation.DocDescription;
+import org.projectodd.jrapidoc.annotation.rest.DocPathExample;
+import org.projectodd.jrapidoc.annotation.rest.DocReturn;
+import org.projectodd.jrapidoc.annotation.rest.DocReturns;
+import org.projectodd.jrapidoc.logger.Logger;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import javax.ws.rs.*;

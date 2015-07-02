@@ -1,4 +1,4 @@
-package org.jrapidoc;
+package org.projectodd.jrapidoc;
 
 import org.junit.Assert;
 import org.junit.Test;

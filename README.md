@@ -38,9 +38,9 @@ Put code below in WAR module's `pom.xml`. For SOAP Plugin replace `rest` with `s
 #####Plugin Configuration
 ```xml
 <plugin>
-    <groupId>org.jrapidoc</groupId>
+    <groupId>org.projectodd.jrapidoc</groupId>
     <artifactId>jrapidoc-rest-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1</version>
     <executions>
         <execution>
             <id>run</id>
@@ -68,9 +68,9 @@ GUI Clients are distributed in archive files [in this resource](jrapidoc-gui/out
 Add to `pom.xml` code below
 ```xml
 <dependency>
-    <groupId>org.jrapidoc</groupId>
+    <groupId>org.projectodd.jrapidoc</groupId>
     <artifactId>jrapidoc-annotation</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1</version>
 </dependency>
 ```
 #####Annotate your API
@@ -142,7 +142,7 @@ Example API documentation is presented [here](http://sarzwest.github.io/jrapidoc
 Full configuration goes here
 ```xml
 <plugin>
-    <groupId>org.jrapidoc</groupId>
+    <groupId>org.projectodd.jrapidoc</groupId>
     <artifactId>jrapidoc-soap-plugin</artifactId>
     <version>${jrapidoc.version}</version>
     <executions>
@@ -169,7 +169,7 @@ Full configuration goes here
                 </includes>
                 <!--optional-->
                 <excludes>
-                    <exclude>org.jrapidoc.example.service.MessageRPCStyle</exclude>
+                    <exclude>org.projectodd.jrapidoc.example.service.MessageRPCStyle</exclude>
                 </excludes>
             </group>
             <group>
@@ -181,25 +181,25 @@ Full configuration goes here
                 </includes>
                 <!--optional-->
                 <excludes>
-                    <exclude>org.jrapidoc.example.service.Simple</exclude>
-                    <exclude>org.jrapidoc.example.service.WithJRAPIDocAnnotations</exclude>
+                    <exclude>org.projectodd.jrapidoc.example.service.Simple</exclude>
+                    <exclude>org.projectodd.jrapidoc.example.service.WithJRAPIDocAnnotations</exclude>
                     <exclude>also.package.name.can.be.placed.here</exclude>
                 </excludes>
             </group>
         </groups>
         <!--optional-->
         <modelHandlers>
-            <modelHandler>org.jrapidoc.example.custom.AvoidSoapOneWayMethodsHandler</modelHandler>
+            <modelHandler>org.projectodd.jrapidoc.example.custom.AvoidSoapOneWayMethodsHandler</modelHandler>
         </modelHandlers>
         <!--optional, here can be placed one of type provider class, which is responsible for creating data types -->
-        <!--for REST is default type provider org.jrapidoc.model.type.provider.JacksonJsonProvider-->
-        <!--for SOAP is default type provider org.jrapidoc.model.type.provider.JacksonJaxbProvider-->
-        <!--<typeProviderClass>org.jrapidoc.model.type.provider.JacksonJaxbJsonProvider</typeProviderClass>-->
-        <!--<typeProviderClass>org.jrapidoc.model.type.provider.JacksonJaxbProvider</typeProviderClass>-->
-        <!--<typeProviderClass>org.jrapidoc.model.type.provider.JacksonJsonJaxbProvider</typeProviderClass>-->
-        <!--<typeProviderClass>org.jrapidoc.model.type.provider.JacksonJsonProvider</typeProviderClass>-->
+        <!--for REST is default type provider org.projectodd.jrapidoc.model.type.provider.JacksonJsonProvider-->
+        <!--for SOAP is default type provider org.projectodd.jrapidoc.model.type.provider.JacksonJaxbProvider-->
+        <!--<typeProviderClass>org.projectodd.jrapidoc.model.type.provider.JacksonJaxbJsonProvider</typeProviderClass>-->
+        <!--<typeProviderClass>org.projectodd.jrapidoc.model.type.provider.JacksonJaxbProvider</typeProviderClass>-->
+        <!--<typeProviderClass>org.projectodd.jrapidoc.model.type.provider.JacksonJsonJaxbProvider</typeProviderClass>-->
+        <!--<typeProviderClass>org.projectodd.jrapidoc.model.type.provider.JacksonJsonProvider</typeProviderClass>-->
         <!--You can also implement your own type provider. If needed, you have to inherit class below-->
-        <!--<typeProviderClass>org.jrapidoc.model.type.provider.TypeProvider</typeProviderClass>-->
+        <!--<typeProviderClass>org.projectodd.jrapidoc.model.type.provider.TypeProvider</typeProviderClass>-->
     </configuration>
 </plugin>
 ```

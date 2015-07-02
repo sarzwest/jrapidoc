@@ -6,14 +6,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jrapidoc</groupId>
+        <groupId>org.projectodd.jrapidoc</groupId>
         <artifactId>jrapidoc-pom</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1</version>
         <relativePath>../</relativePath>
     </parent>
 
     <artifactId>jrapidoc-rest-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>maven-plugin</packaging>
 
     <build>
@@ -32,7 +32,7 @@
                             <goal>helpmojo</goal>
                         </goals>
                         <configuration>
-                            <helpPackageName>org.jrapidoc.plugin.generated</helpPackageName>
+                            <helpPackageName>org.projectodd.jrapidoc.plugin.generated</helpPackageName>
                         </configuration>
                     </execution>
                     <execution>
@@ -52,11 +52,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.jrapidoc</groupId>
+            <groupId>org.projectodd.jrapidoc</groupId>
             <artifactId>jrapidoc-plugin-base</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jrapidoc</groupId>
+            <groupId>org.projectodd.jrapidoc</groupId>
             <artifactId>jrapidoc-annotation</artifactId>
         </dependency>
         <dependency>

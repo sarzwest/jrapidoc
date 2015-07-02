@@ -1,4 +1,4 @@
-package org.jrapidoc.model.type;
+package org.projectodd.jrapidoc.model.type;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
